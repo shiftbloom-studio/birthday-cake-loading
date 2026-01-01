@@ -1,0 +1,49 @@
+:root {
+  font-family: "Inter", system-ui, sans-serif;
+  color: #0b1320;
+  background: #f8f5f0;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.container {
+  padding: 3rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+header {
+  margin-bottom: 2rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 10px 20px rgba(11, 19, 32, 0.08);
+}
+
+.card.rich {
+  background: linear-gradient(135deg, #ffcf8a, #ff8bd2);
+  color: #20111f;
+}
+
+.badge {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #fff3e8;
+  margin-bottom: 2rem;
+}
