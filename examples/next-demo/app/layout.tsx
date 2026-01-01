@@ -1,5 +1,7 @@
 import "./styles.css";
 import { Providers } from "./providers";
+import { headers } from "next/headers";
+import { getServerCakeBootstrapFromHeaders } from "@birthday-cake/loading/server";
 
 export const metadata = {
   title: "Birthday-Cake Loading Demo",
@@ -7,10 +9,11 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const bootstrap = getServerCakeBootstrapFromHeaders(headers());
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers bootstrap={bootstrap}>{children}</Providers>
       </body>
     </html>
   );

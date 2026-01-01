@@ -1,6 +1,4 @@
-"use client";
-
-import React, { Suspense, useMemo } from "react";
+import React from "react";
 import type { CakeFeatureKey, CakeTier } from "./types";
 import { useCake } from "./context";
 import { tierAtLeast } from "./tier";
@@ -28,25 +26,25 @@ export const CakeLayer = ({
   return allowed ? <>{children}</> : (fallback as React.ReactElement | null);
 };
 
-export interface CakeLazyProps {
+export interface CakeLazyProps<P extends object = Record<string, never>> {
   minTier?: CakeTier;
   feature?: CakeFeatureKey;
-  loader: () => Promise<{ default: React.ComponentType<any> }>;
+  loader: () => Promise<{ default: React.ComponentType<P> }>;
   fallback?: React.ReactNode;
-  props?: Record<string, unknown>;
+  props?: P;
 }
 
-export const CakeLazy = ({
+export const CakeLazy = <P extends object = Record<string, never>>({
   minTier = "rich",
   feature,
   loader,
   fallback = null,
   props
-}: CakeLazyProps) => {
+}: CakeLazyProps<P>) => {
   const { tier, features, ready } = useCake();
   const allowed = feature ? features[feature] : tierAtLeast(tier, minTier);
 
-  const LazyComponent = useMemo(() => {
+  const LazyComponent = React.useMemo((): React.LazyExoticComponent<React.ComponentType<P>> | null => {
     if (!allowed) {
       return null;
     }
@@ -58,8 +56,11 @@ export const CakeLazy = ({
   }
 
   return (
-    <Suspense fallback={fallback}>
-      <LazyComponent {...props} />
-    </Suspense>
+    <React.Suspense fallback={fallback}>
+      {React.createElement(
+        LazyComponent as unknown as React.ComponentType<P>,
+        props ?? ({} as P)
+      )}
+    </React.Suspense>
   );
 };

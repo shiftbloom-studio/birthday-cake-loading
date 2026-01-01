@@ -1,5 +1,6 @@
 export type {
   CakeConfig,
+  CakeBootstrap,
   CakeFeatureKey,
   CakeFeatures,
   CakeSignals,
@@ -21,3 +22,7 @@ export {
   useCakeTier
 } from "./context";
 export { CakeLayer, CakeLazy } from "./layer";
+export { CakeUpgrade } from "./upgrade";
+export type { CakeUpgradeContainerTag, CakeUpgradeProps, CakeUpgradeStrategy } from "./upgrade";
+export { CakeDevTools } from "./devtools";
+export type { CakeDevToolsProps } from "./devtools";

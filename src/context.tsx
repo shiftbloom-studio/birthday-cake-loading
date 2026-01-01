@@ -1,7 +1,5 @@
-"use client";
-
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import type { CakeConfig, CakeContextValue, CakeSignals, CakeState, CakeTier } from "./types";
+import React from "react";
+import type { CakeBootstrap, CakeConfig, CakeContextValue, CakeSignals, CakeState, CakeTier } from "./types";
 import { DEFAULT_CONFIG } from "./config";
 import { detectSignals, subscribeToSignalChanges } from "./signals";
 import { resolveCakeTier } from "./tier";
@@ -21,7 +19,7 @@ const DEFAULT_STATE: CakeState = {
   ready: false
 };
 
-const CakeContext = createContext<CakeContextValue>({
+const CakeContext = React.createContext<CakeContextValue>({
   ...DEFAULT_STATE,
   refresh: () => undefined,
   setTierOverride: () => undefined
@@ -30,8 +28,20 @@ const CakeContext = createContext<CakeContextValue>({
 export interface CakeProviderProps {
   children: React.ReactNode;
   config?: Partial<CakeConfig>;
+  /**
+   * Optional server/bootstrap values (e.g. from Client Hints headers).
+   * Prefer this over `initialSignals` / `initialTier` for SSR consistency.
+   */
+  bootstrap?: CakeBootstrap;
   initialSignals?: CakeSignals;
   initialTier?: CakeTier;
+  /**
+   * If false, BCL will not automatically call `refresh()` on mount.
+   * Useful for tests and for apps that want fully manual control.
+   *
+   * Default: true
+   */
+  autoDetect?: boolean;
   onChange?: (state: CakeState) => void;
 }
 
@@ -66,19 +76,29 @@ const computeState = (
 export const CakeProvider = ({
   children,
   config,
+  bootstrap,
   initialSignals,
   initialTier,
+  autoDetect = true,
   onChange
 }: CakeProviderProps) => {
-  const mergedConfig = useMemo(() => mergeConfig(config), [config]);
-  const [state, setState] = useState<CakeState>(() => {
-    if (initialTier) {
-      return computeState(initialSignals ?? {}, mergedConfig, initialTier);
+  const mergedConfig = React.useMemo(() => mergeConfig(config), [config]);
+  const [state, setState] = React.useState<CakeState>(() => {
+    const bootstrapSignals = bootstrap?.signals ?? initialSignals ?? {};
+    const bootstrapTier = bootstrap?.tier ?? initialTier;
+
+    if (bootstrapTier) {
+      return {
+        signals: bootstrapSignals,
+        tier: bootstrapTier,
+        features: resolveCakeFeatures(bootstrapTier, bootstrapSignals, mergedConfig),
+        ready: true
+      };
     }
     return { ...DEFAULT_STATE, signals: initialSignals ?? {} };
   });
 
-  const refresh = useCallback(() => {
+  const refresh = React.useCallback(() => {
     const nextSignals = detectSignals();
     const override = getTierOverride();
     const nextState = computeState(nextSignals, mergedConfig, override);
@@ -86,7 +106,7 @@ export const CakeProvider = ({
     onChange?.(nextState);
   }, [mergedConfig, onChange]);
 
-  const setTierOverride = useCallback(
+  const setTierOverride = React.useCallback(
     (tier?: CakeTier) => {
       persistTierOverride(tier);
       refresh();
@@ -94,11 +114,14 @@ export const CakeProvider = ({
     [refresh]
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
+    if (!autoDetect) {
+      return;
+    }
     refresh();
-  }, [refresh]);
+  }, [autoDetect, refresh]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!mergedConfig.watchSignals) {
       return undefined;
     }
@@ -106,7 +129,7 @@ export const CakeProvider = ({
     return subscribeToSignalChanges(refresh);
   }, [mergedConfig.watchSignals, refresh]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (typeof document === "undefined") {
       return;
     }
@@ -115,12 +138,39 @@ export const CakeProvider = ({
     html.dataset.bclTier = state.tier;
     html.dataset.bclReady = String(state.ready);
     html.dataset.bclMotion = String(state.features.motion);
+    html.dataset.bclSmoothScroll = String(state.features.smoothScroll);
     html.dataset.bclAudio = String(state.features.audio);
     html.dataset.bclPrivacy = String(state.features.privacyBanner);
+    html.dataset.bclRichImages = String(state.features.richImages);
     html.dataset.bclSaveData = String(Boolean(state.signals.saveData));
+
+    if (state.override) {
+      html.dataset.bclOverride = state.override;
+    } else {
+      delete html.dataset.bclOverride;
+    }
+
+    if (state.signals.effectiveType) {
+      html.dataset.bclEct = state.signals.effectiveType;
+    } else {
+      delete html.dataset.bclEct;
+    }
   }, [state]);
 
-  const value: CakeContextValue = useMemo(
+  React.useEffect(() => {
+    if (!mergedConfig.debug) {
+      return;
+    }
+    if (typeof window === "undefined") {
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).__BCL__ = state;
+    // eslint-disable-next-line no-console
+    console.debug("[@birthday-cake/loading]", state);
+  }, [mergedConfig.debug, state]);
+
+  const value: CakeContextValue = React.useMemo(
     () => ({
       ...state,
       refresh,
@@ -132,12 +182,12 @@ export const CakeProvider = ({
   return <CakeContext.Provider value={value}>{children}</CakeContext.Provider>;
 };
 
-export const useCake = () => useContext(CakeContext);
+export const useCake = () => React.useContext(CakeContext);
 
-export const useCakeTier = () => useContext(CakeContext).tier;
+export const useCakeTier = () => React.useContext(CakeContext).tier;
 
-export const useCakeFeatures = () => useContext(CakeContext).features;
+export const useCakeFeatures = () => React.useContext(CakeContext).features;
 
-export const useCakeSignals = () => useContext(CakeContext).signals;
+export const useCakeSignals = () => React.useContext(CakeContext).signals;
 
-export const useCakeReady = () => useContext(CakeContext).ready;
+export const useCakeReady = () => React.useContext(CakeContext).ready;

@@ -1,5 +1,5 @@
 {
-  "name": "@birthday-cake/loading",
+  "name": "@birthday-cake-loading",
   "version": "0.1.0",
   "description": "Capability-based progressive enhancement for React and Next.js marketing experiences.",
   "keywords": [
@@ -20,6 +20,12 @@
   },
   "license": "MIT",
   "author": "",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -34,6 +40,16 @@
       "types": "./dist/server.d.ts",
       "import": "./dist/server.js",
       "require": "./dist/server.cjs"
+    },
+    "./upgrade": {
+      "types": "./dist/upgrade.d.ts",
+      "import": "./dist/upgrade.js",
+      "require": "./dist/upgrade.cjs"
+    },
+    "./devtools": {
+      "types": "./dist/devtools.d.ts",
+      "import": "./dist/devtools.js",
+      "require": "./dist/devtools.cjs"
     }
   },
   "files": [
@@ -44,10 +60,15 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
+    "postbuild": "node scripts/ensure-use-client.mjs",
     "dev": "tsup --watch",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish",
     "test": "jest",
+    "test:ci": "jest --ci",
     "test:watch": "jest --watch",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
@@ -55,8 +76,12 @@
     "react-dom": ">=18"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.9",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.21",

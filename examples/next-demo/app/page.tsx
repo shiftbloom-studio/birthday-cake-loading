@@ -1,4 +1,5 @@
-import { CakeLayer, CakeLazy, useCakeFeatures, useCakeTier } from "@birthday-cake/loading";
+import { CakeLayer, useCakeFeatures, useCakeTier } from "@birthday-cake/loading";
+import { CakeUpgrade } from "@birthday-cake/loading/upgrade";
 
 const TierBadge = () => {
   const tier = useCakeTier();
@@ -29,8 +30,9 @@ export default function Page() {
           <div className="card rich">Rich hero content</div>
         </CakeLayer>
       </section>
-      <CakeLazy
+      <CakeUpgrade
         minTier="rich"
+        strategy="idle"
         loader={() => import("./rich-section")}
         fallback={<div className="card">Lazy fallback content</div>}
       />

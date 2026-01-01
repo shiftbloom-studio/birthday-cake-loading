@@ -24,6 +24,17 @@ export interface CakeSignals {
   userAgentMobile?: boolean;
 }
 
+export interface CakeBootstrap {
+  /**
+   * Optional precomputed signals (e.g. from Client Hints headers on the server).
+   */
+  signals?: CakeSignals;
+  /**
+   * Optional precomputed tier (e.g. from `getServerTier(signals)`).
+   */
+  tier?: CakeTier;
+}
+
 export interface CakeFeatures {
   motion: boolean;
   smoothScroll: boolean;

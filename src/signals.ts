@@ -43,7 +43,7 @@ export const detectSignals = (): CakeSignals => {
     effectiveType: connection?.effectiveType as CakeSignals["effectiveType"],
     downlinkMbps: connection?.downlink,
     rttMs: connection?.rtt,
-    deviceMemoryGB: navigator.deviceMemory,
+    deviceMemoryGB: (navigator as Navigator & { deviceMemory?: number }).deviceMemory,
     hardwareConcurrency: navigator.hardwareConcurrency,
     devicePixelRatio: window.devicePixelRatio,
     screenWidth: window.screen?.width,
@@ -67,13 +67,75 @@ export const subscribeToSignalChanges = (callback: () => void) => {
     ? window.matchMedia("(prefers-reduced-data: reduce)")
     : null;
 
-  connection?.addEventListener?.("change", callback);
-  reducedMotionQuery?.addEventListener?.("change", callback);
-  reducedDataQuery?.addEventListener?.("change", callback);
+  const addMediaListener = (mql: MediaQueryList | null, cb: () => void) => {
+    if (!mql) {
+      return;
+    }
+    // Safari < 14
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const anyMql = mql as any;
+    if (typeof mql.addEventListener === "function") {
+      mql.addEventListener("change", cb);
+    } else if (typeof anyMql.addListener === "function") {
+      anyMql.addListener(cb);
+    }
+  };
+
+  const removeMediaListener = (mql: MediaQueryList | null, cb: () => void) => {
+    if (!mql) {
+      return;
+    }
+    // Safari < 14
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const anyMql = mql as any;
+    if (typeof mql.removeEventListener === "function") {
+      mql.removeEventListener("change", cb);
+    } else if (typeof anyMql.removeListener === "function") {
+      anyMql.removeListener(cb);
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const anyConnection = connection as any;
+  if (typeof connection?.addEventListener === "function") {
+    connection.addEventListener("change", callback);
+  } else if (typeof anyConnection?.onchange !== "undefined") {
+    anyConnection.onchange = callback;
+  }
+
+  addMediaListener(reducedMotionQuery, callback);
+  addMediaListener(reducedDataQuery, callback);
+
+  let resizeRaf: number | null = null;
+  const onResize = () => {
+    if (resizeRaf !== null) {
+      return;
+    }
+    resizeRaf = window.requestAnimationFrame(() => {
+      resizeRaf = null;
+      callback();
+    });
+  };
+
+  window.addEventListener("resize", onResize);
+  window.addEventListener("orientationchange", onResize);
 
   return () => {
-    connection?.removeEventListener?.("change", callback);
-    reducedMotionQuery?.removeEventListener?.("change", callback);
-    reducedDataQuery?.removeEventListener?.("change", callback);
+    if (typeof connection?.removeEventListener === "function") {
+      connection.removeEventListener("change", callback);
+    } else if (typeof anyConnection?.onchange !== "undefined") {
+      anyConnection.onchange = null;
+    }
+
+    removeMediaListener(reducedMotionQuery, callback);
+    removeMediaListener(reducedDataQuery, callback);
+
+    window.removeEventListener("resize", onResize);
+    window.removeEventListener("orientationchange", onResize);
+
+    if (resizeRaf !== null) {
+      window.cancelAnimationFrame(resizeRaf);
+      resizeRaf = null;
+    }
   };
 };

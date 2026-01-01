@@ -12,10 +12,10 @@ test("resolveCakeTier returns base for saveData", () => {
 });
 
 test("resolveCakeTier returns lite for low memory", () => {
-  expect(resolveCakeTier({ deviceMemoryGB: 2 })).toBe("lite");
+  expect(resolveCakeTier({ deviceMemoryGB: 4 })).toBe("lite");
 });
 
-test("resolveCakeTier returns rich when signals are capable", () => {
+test("resolveCakeTier returns ultra when signals are very capable", () => {
   expect(resolveCakeTier({ deviceMemoryGB: 8, hardwareConcurrency: 8 })).toBe("ultra");
 });
 

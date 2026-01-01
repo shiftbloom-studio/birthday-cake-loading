@@ -23,7 +23,7 @@ npm install @birthday-cake/loading
 import {
   CakeProvider,
   CakeLayer,
-  CakeLazy,
+  CakeUpgrade,
   useCakeFeatures,
   useCakeTier
 } from "@birthday-cake/loading";
@@ -41,8 +41,9 @@ export default function Page() {
         <CakeLayer minTier="rich" fallback={<div>Static hero</div>}>
           <div>Animated hero</div>
         </CakeLayer>
-        <CakeLazy
+        <CakeUpgrade
           minTier="rich"
+          strategy="idle"
           loader={() => import("./rich-gallery")}
           fallback={<div>Static gallery</div>}
         />
@@ -58,7 +59,7 @@ export default function Page() {
 1. **Signals** — read best‑effort device/network/user‑preference signals (connection, memory, cores, reduced‑motion).
 2. **Tiering** — map signals into `base | lite | rich | ultra` with conservative downgrade rules.
 3. **Features** — derive feature flags from tier + signals.
-4. **Layers** — lazy‑load heavy enhancements using `CakeLayer`/`CakeLazy` or your own code splitting.
+4. **Layers** — gate and lazy‑load enhancements using `CakeLayer`, `CakeLazy`, or `CakeUpgrade`.
 
 ## API
 
@@ -70,7 +71,9 @@ export default function Page() {
     tiering: { lowMemoryGB: 4 },
     features: { allowMotionOnLite: false }
   }}
+  // SSR/first paint hint (NOT a persistent override)
   initialTier="base"
+  autoDetect={true}
   onChange={(state) => console.log(state)}
 >
   {children}
@@ -78,7 +81,9 @@ export default function Page() {
 ```
 
 - `config`: override tier + feature heuristics.
-- `initialTier`: useful for SSR/initial paint.
+- `bootstrap`: `{ signals, tier }` from the server (see `getServerCakeBootstrapFromHeaders` below).
+- `initialTier`: useful for SSR/initial paint (it will re‑detect on mount by default).
+- `autoDetect`: set `false` for fully manual control (or tests).
 - `onChange`: subscribe to tier changes.
 
 ### Hooks
@@ -105,13 +110,45 @@ export default function Page() {
 />
 ```
 
+`CakeUpgrade` is like `CakeLazy`, but also lets you pick *when* to upgrade:
+
+```tsx
+import { CakeUpgrade } from "@birthday-cake/loading/upgrade";
+
+<CakeUpgrade
+  minTier="rich"
+  strategy={{ type: "visible", rootMargin: "200px" }}
+  loader={() => import("./RichSection")}
+  fallback={<BaseSection />}
+/>;
+```
+
 ### Server helpers
 
 ```ts
-import { getServerSignalsFromHeaders, getServerTier } from "@birthday-cake/loading/server";
+import { getServerCakeBootstrapFromHeaders } from "@birthday-cake/loading/server";
 
-const signals = getServerSignalsFromHeaders(headers);
-const tier = getServerTier(signals);
+const bootstrap = getServerCakeBootstrapFromHeaders(headers);
+```
+
+Pass that into the provider (e.g. Next.js App Router):
+
+```tsx
+// app/layout.tsx (server)
+import { headers } from "next/headers";
+import { getServerCakeBootstrapFromHeaders } from "@birthday-cake/loading/server";
+import { Providers } from "./providers";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const bootstrap = getServerCakeBootstrapFromHeaders(headers());
+  return (
+    <html lang="en">
+      <body>
+        <Providers bootstrap={bootstrap}>{children}</Providers>
+      </body>
+    </html>
+  );
+}
 ```
 
 ## Debugging & overrides
@@ -121,9 +158,13 @@ BCL writes attributes on `<html>`:
 - `data-bcl-tier`
 - `data-bcl-ready`
 - `data-bcl-motion`
+- `data-bcl-smooth-scroll`
 - `data-bcl-audio`
 - `data-bcl-privacy`
+- `data-bcl-rich-images`
 - `data-bcl-save-data`
+- `data-bcl-override` (when set)
+- `data-bcl-ect` (effective connection type, when available)
 
 Force a tier for the current session:
 
@@ -131,6 +172,14 @@ Force a tier for the current session:
 import { setTierOverride } from "@birthday-cake/loading";
 
 setTierOverride("base");
+```
+
+You can also mount an in-app dev panel:
+
+```tsx
+import { CakeDevTools } from "@birthday-cake/loading/devtools";
+
+<CakeDevTools />;
 ```
 
 ## Example (Next.js App Router)
