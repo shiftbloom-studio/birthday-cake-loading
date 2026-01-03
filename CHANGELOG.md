@@ -1,13 +1,18 @@
-# @birthday-cake-loading
+# birthday-cake-loading
+
+## 0.2.0
+
+### Minor Changes
+
+- Add `CakeUpgrade` (strategy-based progressive enhancement), SSR bootstrap helpers, DevTools overlay, stronger signal watching, improved exports, and expanded tests.
+- Harden server header parsing (supports Next.js `headers()` objects, parses reduced-data + viewport height), make tier overrides resilient to storage errors, add repo lint config + CI checks, and ship a Vercel-ready Next.js demo.
+
+### Patch Changes
+
+- 0be4247: Update README with improved documentation, usage examples, and package name corrections.
 
 ## 0.1.1
 
 ### Patch Changes
 
 - Update README with improved documentation, usage examples, and package name corrections.
-
-## 0.2.0
-
-### Minor Changes
-
-- cf8bdb8: Add `CakeUpgrade` (strategy-based progressive enhancement), SSR bootstrap helpers, DevTools overlay, stronger signal watching, improved exports, and expanded tests.
