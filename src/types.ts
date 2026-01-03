@@ -67,11 +67,24 @@ export interface CakeFeatureConfig {
   audioRequiresUnmetered: boolean;
 }
 
+export type CakeWatchtowerSensitivity = "low" | "medium" | "high";
+
+export interface CakeWatchtowerConfig {
+  enabled: boolean;
+  sensitivity: CakeWatchtowerSensitivity;
+  /**
+   * Optional list of watch keys to downgrade when jank is detected.
+   * If omitted, any layer/upgrade with a watch key is eligible.
+   */
+  targets?: string[];
+}
+
 export interface CakeConfig {
   tiering: CakeTierConfig;
   features: CakeFeatureConfig;
   debug?: boolean;
   watchSignals?: boolean;
+  watchtower?: Partial<CakeWatchtowerConfig>;
 }
 
 export interface CakeState {
@@ -83,6 +96,7 @@ export interface CakeState {
 }
 
 export interface CakeContextValue extends CakeState {
+  config: CakeConfig;
   refresh: () => void;
   setTierOverride: (tier?: CakeTier) => void;
 }

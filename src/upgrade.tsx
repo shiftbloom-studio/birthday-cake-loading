@@ -2,6 +2,7 @@ import React from "react";
 import type { CakeFeatureKey, CakeTier } from "./types";
 import { useCake } from "./context";
 import { isCakeAllowed } from "./access";
+import { CakeWatchSwap, useCakeWatchtower } from "./watchtower";
 
 export type CakeUpgradeStrategy =
   | "immediate"
@@ -54,6 +55,7 @@ export interface CakeUpgradeProps<P extends object = Record<string, never>> {
   loader: () => Promise<{ default: React.ComponentType<P> }>;
   fallback?: React.ReactNode;
   props?: P;
+  watchKey?: string;
   /**
    * When to actually load/activate the enhanced layer once it becomes allowed.
    *
@@ -74,13 +76,15 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
   loader,
   fallback = null,
   props,
+  watchKey,
   strategy,
   containerAs = "div",
   containerProps
 }: CakeUpgradeProps<P>) => {
   const { tier, features, ready } = useCake();
   const allowed = isCakeAllowed(tier, features, { feature, minTier });
-  const canUpgrade = ready && allowed;
+  const { downgrade } = useCakeWatchtower(watchKey);
+  const canUpgrade = ready && allowed && !downgrade;
 
   const normalized = React.useMemo(() => normalizeStrategy(strategy), [strategy]);
   const LazyComponent = React.useMemo(
@@ -156,20 +160,28 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
 
   const shouldRender = canUpgrade && (normalized.type === "immediate" || triggered);
 
-  if (shouldRender && LazyComponent) {
-    return (
+  const primary =
+    shouldRender && LazyComponent ? (
       <React.Suspense fallback={fallback}>
         {React.createElement(
           LazyComponent as unknown as React.ComponentType<P>,
           props ?? ({} as P)
         )}
       </React.Suspense>
-    );
+    ) : null;
+
+  if (primary && (!watchKey || !fallback)) {
+    return primary;
   }
 
   const needsTarget = normalized.type === "visible" || normalized.type === "interaction";
   if (!needsTarget) {
-    return fallback as React.ReactElement | null;
+    if (watchKey && fallback) {
+      return (
+        <CakeWatchSwap showPrimary={Boolean(primary)} primary={primary} fallback={fallback} />
+      );
+    }
+    return primary ?? (fallback as React.ReactElement | null);
   }
 
   const baseProps = containerProps ?? {};
@@ -201,14 +213,32 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
       : undefined;
 
   const Container = containerAs;
+  const mergedProps = {
+    ...baseProps,
+    ...interactionProps
+  };
+
+  if (watchKey && fallback) {
+    return (
+      <CakeWatchSwap
+        showPrimary={Boolean(primary)}
+        primary={primary}
+        fallback={fallback}
+        containerAs={Container}
+        containerProps={mergedProps}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        containerRef={normalized.type === "visible" ? (setTarget as any) : undefined}
+      />
+    );
+  }
+
   return (
     <Container
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={normalized.type === "visible" ? (setTarget as any) : undefined}
-      {...baseProps}
-      {...interactionProps}
+      {...mergedProps}
     >
-      {fallback}
+      {primary ?? fallback}
     </Container>
   );
 };

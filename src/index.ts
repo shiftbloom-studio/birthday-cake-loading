@@ -6,7 +6,9 @@ export type {
   CakeSignals,
   CakeState,
   CakeTier,
-  CakeTierConfig
+  CakeTierConfig,
+  CakeWatchtowerConfig,
+  CakeWatchtowerSensitivity
 } from "./types";
 export { CAKE_TIERS, CONNECTION_TYPES, isCakeTier, isConnectionType } from "./types";
 export { DEFAULT_CONFIG } from "./config";
@@ -17,6 +19,7 @@ export { CAKE_TIER_OVERRIDE_KEY, getTierOverride, setTierOverride } from "./over
 export {
   CakeProvider,
   useCake,
+  useCakeConfig,
   useCakeFeatures,
   useCakeReady,
   useCakeSignals,
@@ -27,3 +30,4 @@ export { CakeUpgrade } from "./upgrade";
 export type { CakeUpgradeContainerTag, CakeUpgradeProps, CakeUpgradeStrategy } from "./upgrade";
 export { CakeDevTools } from "./devtools";
 export type { CakeDevToolsProps } from "./devtools";
+export { CakeWatch, CakeWatchtower } from "./watchtower";
