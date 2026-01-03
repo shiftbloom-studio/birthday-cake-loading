@@ -167,7 +167,7 @@ export const CakeProvider = ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (window as any).__BCL__ = state;
     // eslint-disable-next-line no-console
-    console.debug("[@birthday-cake/loading]", state);
+    console.debug("[birthday-cake-loading]", state);
   }, [mergedConfig.debug, state]);
 
   const value: CakeContextValue = React.useMemo(

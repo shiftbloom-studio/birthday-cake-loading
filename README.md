@@ -1,4 +1,4 @@
-# @birthday-cake-loading
+# birthday-cake-loading
 
 Birthday‑Cake Loading (BCL) is a capability‑adaptive progressive enhancement toolkit for React and Next.js. It ships a tiny baseline runtime, detects device/network/user‑preference signals, and lazily upgrades experiences only when the runtime has enough budget.
 
@@ -14,7 +14,7 @@ Birthday‑Cake Loading (BCL) is a capability‑adaptive progressive enhancement
 ## Quickstart
 
 ```bash
-npm install @birthday-cake-loading
+npm install birthday-cake-loading
 ```
 
 ```tsx
@@ -26,7 +26,8 @@ import {
   CakeUpgrade,
   useCakeFeatures,
   useCakeTier
-} from "@birthday-cake-loading";
+} from "birthday-cake-loading";
+} from "birthday-cake-loading";
 
 const MotionLayer = () => {
   const { motion } = useCakeFeatures();
@@ -113,7 +114,7 @@ export default function Page() {
 `CakeUpgrade` is like `CakeLazy`, but also lets you pick *when* to upgrade:
 
 ```tsx
-import { CakeUpgrade } from "@birthday-cake-loading/upgrade";
+import { CakeUpgrade } from "birthday-cake-loading/upgrade";
 
 <CakeUpgrade
   minTier="rich"
@@ -126,7 +127,7 @@ import { CakeUpgrade } from "@birthday-cake-loading/upgrade";
 ### Server helpers
 
 ```ts
-import { getServerCakeBootstrapFromHeaders } from "@birthday-cake-loading/server";
+import { getServerCakeBootstrapFromHeaders } from "birthday-cake-loading/server";
 
 const bootstrap = getServerCakeBootstrapFromHeaders(headers);
 ```
@@ -136,7 +137,7 @@ Pass that into the provider (e.g. Next.js App Router):
 ```tsx
 // app/layout.tsx (server)
 import { headers } from "next/headers";
-import { getServerCakeBootstrapFromHeaders } from "@birthday-cake-loading/server";
+import { getServerCakeBootstrapFromHeaders } from "birthday-cake-loading/server";
 import { Providers } from "./providers";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -169,7 +170,7 @@ BCL writes attributes on `<html>`:
 Force a tier for the current session:
 
 ```ts
-import { setTierOverride } from "@birthday-cake-loading";
+import { setTierOverride } from "birthday-cake-loading";
 
 setTierOverride("base");
 ```
@@ -177,7 +178,7 @@ setTierOverride("base");
 You can also mount an in-app dev panel:
 
 ```tsx
-import { CakeDevTools } from "@birthday-cake-loading/devtools";
+import { CakeDevTools } from "birthday-cake-loading/devtools";
 
 <CakeDevTools />;
 ```

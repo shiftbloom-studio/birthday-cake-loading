@@ -1,8 +1,8 @@
 "use client";
 
-import type { CakeBootstrap } from "@birthday-cake/loading";
-import { CakeProvider } from "@birthday-cake/loading";
-import { CakeDevTools } from "@birthday-cake/loading/devtools";
+import type { CakeBootstrap } from "birthday-cake-loading";
+import { CakeProvider } from "birthday-cake-loading";
+import { CakeDevTools } from "birthday-cake-loading/devtools";
 
 export const Providers = ({
   children,

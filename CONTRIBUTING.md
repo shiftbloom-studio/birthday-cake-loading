@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve **@birthday-cake/loading**!
+Thanks for helping improve **birthday-cake-loading**!
 
 ## Local development
 

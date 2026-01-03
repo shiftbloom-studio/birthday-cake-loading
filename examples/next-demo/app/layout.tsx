@@ -1,7 +1,7 @@
 import "./styles.css";
 import { Providers } from "./providers";
 import { headers } from "next/headers";
-import { getServerCakeBootstrapFromHeaders } from "@birthday-cake/loading/server";
+import { getServerCakeBootstrapFromHeaders } from "birthday-cake-loading/server";
 
 export const metadata = {
   title: "Birthday-Cake Loading Demo",
