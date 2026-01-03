@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping improve **birthday-cake-loading**!
+Thanks for helping improve **@shiftbloom-studio/birthday-cake-loading**!
 
 ## Local development
 
@@ -35,4 +35,3 @@ This creates a file in `.changeset/` describing your change and the semver bump.
   - `npm run typecheck`
   - `npm test`
   - `npm run build`
-

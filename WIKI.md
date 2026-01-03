@@ -1,6 +1,6 @@
 # Birthday-Cake Loading (BCL) Repository Wiki
 
-Comprehensive reference for the `birthday-cake-loading` monorepo: architecture, public API, internals, scripts, and examples.
+Comprehensive reference for the `@shiftbloom-studio/birthday-cake-loading` monorepo: architecture, public API, internals, scripts, and examples.
 
 ## Table of Contents
 
@@ -90,10 +90,10 @@ Signals → Tier → Features → Layer/Upgrade gating
 
 The package is published as a single npm package with multiple entry points.
 
-- `birthday-cake-loading` → main runtime and React components (`src/index.ts`)
-- `birthday-cake-loading/server` → server/client-hints helpers (`src/server.ts`)
-- `birthday-cake-loading/upgrade` → `CakeUpgrade` component (`src/upgrade.tsx`)
-- `birthday-cake-loading/devtools` → `CakeDevTools` panel (`src/devtools.tsx`)
+- `@shiftbloom-studio/birthday-cake-loading` → main runtime and React components (`src/index.ts`)
+- `@shiftbloom-studio/birthday-cake-loading/server` → server/client-hints helpers (`src/server.ts`)
+- `@shiftbloom-studio/birthday-cake-loading/upgrade` → `CakeUpgrade` component (`src/upgrade.tsx`)
+- `@shiftbloom-studio/birthday-cake-loading/devtools` → `CakeDevTools` panel (`src/devtools.tsx`)
 
 Build output is generated via `tsup` into `dist/` (ESM + CJS + types).
 
@@ -165,7 +165,7 @@ Useful when you need baseline content immediately, then upgrade only after idle,
 
 ### Server Helpers
 
-From `birthday-cake-loading/server` (`src/server.ts`):
+From `@shiftbloom-studio/birthday-cake-loading/server` (`src/server.ts`):
 
 - `getServerSignalsFromHeaders(headers)`
 - `getServerTier(signals, config?)`
@@ -184,7 +184,7 @@ From `src/override.ts` and `src/context.tsx`:
 
 ### DevTools
 
-From `birthday-cake-loading/devtools` (`src/devtools.tsx`):
+From `@shiftbloom-studio/birthday-cake-loading/devtools` (`src/devtools.tsx`):
 
 - `<CakeDevTools>` provides a floating panel for viewing signals, features, and tier.
 - Supports runtime tier override and refresh.
