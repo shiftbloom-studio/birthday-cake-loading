@@ -8,12 +8,12 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/react": "^4.0.0",
+    "@astrojs/react": "^4.4.2",
     "@birthday-cake-loading/astro": "0.2.0",
-    "astro": "^5.13.1",
+    "astro": "^5.16.6",
     "birthday-cake-loading": "0.2.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   }
 }
 

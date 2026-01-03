@@ -87,11 +87,11 @@
     "@birthday-cake-loading/react": "0.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.21",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
-    "vite": "^6.0.0"
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
   }
 }
 

@@ -49,10 +49,10 @@
     "@birthday-cake-loading/core": "0.2.0"
   },
   "devDependencies": {
-    "@remix-run/node": "^2.17.1",
-    "@remix-run/react": "^2.17.1",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.5"
+    "@remix-run/node": "^2.17.2",
+    "@remix-run/react": "^2.17.2",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   }
 }
 

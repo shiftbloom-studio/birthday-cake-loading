@@ -55,12 +55,12 @@
     "@birthday-cake-loading/core": "0.2.0"
   },
   "devDependencies": {
-    "@angular/common": "^20.0.0",
-    "@angular/core": "^20.0.0",
-    "@angular/platform-browser": "^20.0.0",
+    "@angular/common": "^21.0.6",
+    "@angular/core": "^21.0.6",
+    "@angular/platform-browser": "^21.0.6",
     "rxjs": "^7.8.2",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.5"
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   }
 }
 
