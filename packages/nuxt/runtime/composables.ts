@@ -3,7 +3,15 @@ import { useNuxtApp } from "#app";
 import type { CakeFeatures, CakeSignals, CakeTier } from "@birthday-cake-loading/core";
 
 type BclApi = {
-  state: { value: { tier: CakeTier; features: CakeFeatures; signals: CakeSignals; ready: boolean; override?: CakeTier } };
+  state: {
+    value: {
+      tier: CakeTier;
+      features: CakeFeatures;
+      signals: CakeSignals;
+      ready: boolean;
+      override?: CakeTier;
+    };
+  };
   refresh: () => void;
   setTierOverride: (tier?: CakeTier) => void;
 };
@@ -18,7 +26,7 @@ const useBcl = (): BclApi => {
   return api;
 };
 
-export const useCake = () => computed(() => useBcl().state.value);
+export const useCake = () => useBcl().state;
 export const useCakeTier = () => computed(() => useBcl().state.value.tier);
 export const useCakeFeatures = () => computed(() => useBcl().state.value.features);
 export const useCakeSignals = () => computed(() => useBcl().state.value.signals);

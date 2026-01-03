@@ -1,0 +1,60 @@
+{
+  "name": "@birthday-cake-loading/astro",
+  "version": "0.2.0",
+  "description": "Astro integration for birthday-cake-loading (middleware + locals bootstrap + helpers).",
+  "keywords": [
+    "astro",
+    "progressive-enhancement",
+    "performance",
+    "bcl"
+  ],
+  "homepage": "https://github.com/shiftbloom-studio/birthday-cake-loading#readme",
+  "bugs": {
+    "url": "https://github.com/shiftbloom-studio/birthday-cake-loading/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shiftbloom-studio/birthday-cake-loading.git"
+  },
+  "license": "GPL-3.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./middleware": {
+      "types": "./dist/middleware.d.ts",
+      "import": "./dist/middleware.js",
+      "require": "./dist/middleware.cjs"
+    },
+    "./components/CakeBootstrap.astro": "./components/CakeBootstrap.astro"
+  },
+  "files": [
+    "dist",
+    "components"
+  ],
+  "sideEffects": false,
+  "peerDependencies": {
+    "astro": ">=3"
+  },
+  "dependencies": {
+    "@birthday-cake-loading/core": "0.2.0"
+  },
+  "devDependencies": {
+    "astro": "^5.13.1",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}
+

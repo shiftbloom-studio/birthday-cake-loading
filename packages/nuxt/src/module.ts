@@ -27,13 +27,17 @@ export default defineNuxtModule<BirthdayCakeLoadingNuxtOptions>({
   setup(options, nuxt) {
     const resolver = createResolver(import.meta.url);
 
+    nuxt.options.runtimeConfig.public = nuxt.options.runtimeConfig.public || {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (nuxt.options.runtimeConfig.public as any).birthdayCakeLoading = {
+      // Keep this intentionally small; adapters can add more later.
+      applyHtmlDataset: options.applyHtmlDataset !== false
+    };
+
     // Runtime plugin: exposes composables and provides the runtime state.
     addPlugin({
       src: resolver.resolve("../runtime/plugin"),
-      mode: "all",
-      options: {
-        applyHtmlDataset: options.applyHtmlDataset !== false
-      }
+      mode: "all"
     });
 
     // Optional: server middleware that runs on every request.

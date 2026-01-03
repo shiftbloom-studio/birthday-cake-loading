@@ -1,8 +1,9 @@
 import { defineNuxtPlugin, useState } from "#app";
-import { computed, readonly, shallowRef } from "vue";
+import { computed, shallowRef } from "vue";
 import type { CakeBootstrap, CakeState, CakeTier } from "@birthday-cake-loading/core";
 import { createCakeRuntime } from "@birthday-cake-loading/core/runtime";
 import { applyCakeDatasetAttributes } from "@birthday-cake-loading/core/dom";
+import { useRuntimeConfig } from "#imports";
 
 export default defineNuxtPlugin((nuxtApp) => {
   // Server middleware stores bootstrap on the request context.
@@ -38,9 +39,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   stateRef.value = runtime.getState();
 
   // Apply <html data-bcl-*> attributes on the client.
-  // nuxtApp.$config is not available in all contexts, so use plugin options.
+  const runtimeConfig = useRuntimeConfig();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const applyHtmlDataset = Boolean((nuxtApp as any).$config?.public?.birthdayCakeLoading?.applyHtmlDataset ?? true);
+  const applyHtmlDataset = Boolean((runtimeConfig.public as any)?.birthdayCakeLoading?.applyHtmlDataset ?? true);
   if (process.client && applyHtmlDataset) {
     applyCakeDatasetAttributes(stateRef.value);
     runtime.subscribe((s) => applyCakeDatasetAttributes(s));
