@@ -59,8 +59,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsup",
-    "postbuild": "node scripts/ensure-use-client.mjs",
+    "build": "node scripts/build.mjs",
     "dev": "tsup --watch",
     "changeset": "changeset",
     "version": "changeset version",
