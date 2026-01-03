@@ -82,7 +82,7 @@ export const useCakeWatchtower = (watchKey?: string) => {
     getWatchtowerSnapshot
   );
   const targeted =
-    Boolean(watchKey) && (!snapshot.targets || snapshot.targets.includes(watchKey));
+    Boolean(watchKey) && (!snapshot.targets || snapshot.targets.includes(watchKey ?? ""));
   return {
     enabled: snapshot.enabled,
     janky: snapshot.janky,
