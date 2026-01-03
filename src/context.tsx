@@ -5,6 +5,7 @@ import { detectSignals, subscribeToSignalChanges } from "./signals";
 import { resolveCakeTier } from "./tier";
 import { resolveCakeFeatures } from "./features";
 import { getTierOverride, setTierOverride as persistTierOverride } from "./override";
+import { applySignalMatrix } from "./signal-matrix";
 
 const DEFAULT_STATE: CakeState = {
   signals: {},
@@ -60,6 +61,10 @@ const mergeConfig = (config?: Partial<CakeConfig>): CakeConfig => ({
   watchtower: {
     ...DEFAULT_CONFIG.watchtower,
     ...config?.watchtower
+  },
+  advanced: {
+    ...DEFAULT_CONFIG.advanced,
+    ...config?.advanced
   }
 });
 
@@ -68,7 +73,8 @@ const computeState = (
   config: CakeConfig,
   override?: CakeTier
 ): CakeState => {
-  const tier = override ?? resolveCakeTier(signals, config);
+  const resolvedTier = override ?? resolveCakeTier(signals, config);
+  const tier = override ? resolvedTier : applySignalMatrix(resolvedTier, signals, config);
   return {
     signals,
     tier,

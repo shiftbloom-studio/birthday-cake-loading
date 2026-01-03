@@ -79,9 +79,49 @@ export interface CakeWatchtowerConfig {
   targets?: string[];
 }
 
+
+export interface CakeSignalMatrixCondition {
+  prefersReducedMotion?: boolean;
+  prefersReducedData?: boolean;
+  saveData?: boolean;
+  userAgentMobile?: boolean;
+  effectiveType?: ConnectionType | ConnectionType[];
+  maxDeviceMemoryGB?: number;
+  minDeviceMemoryGB?: number;
+  maxHardwareConcurrency?: number;
+  minHardwareConcurrency?: number;
+  maxDevicePixelRatio?: number;
+  minDevicePixelRatio?: number;
+  maxScreenWidth?: number;
+  minScreenWidth?: number;
+  maxScreenHeight?: number;
+  minScreenHeight?: number;
+  maxDownlinkMbps?: number;
+  minRttMs?: number;
+}
+
+export interface CakeSignalMatrixAdjustment {
+  setTier?: CakeTier;
+  maxTier?: CakeTier;
+  minTier?: CakeTier;
+}
+
+export interface CakeSignalMatrixRule {
+  id: string;
+  description?: string;
+  when: CakeSignalMatrixCondition;
+  adjust: CakeSignalMatrixAdjustment;
+}
+
+export interface CakeAdvancedConfig {
+  signalMatrix?: boolean;
+  signalMatrixRules?: CakeSignalMatrixRule[];
+}
+
 export interface CakeConfig {
   tiering: CakeTierConfig;
   features: CakeFeatureConfig;
+  advanced?: CakeAdvancedConfig;
   debug?: boolean;
   watchSignals?: boolean;
   watchtower?: Partial<CakeWatchtowerConfig>;

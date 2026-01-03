@@ -6,6 +6,13 @@
 
 - Add the opt-in CakeWatchtower runtime jank guard with watch-key targeting and fallback swaps.
 
+
+## 0.2.4
+
+### Patch Changes
+
+- a9131e1: Add an optional, config-gated Signal Matrix with coarse privacy-safe rules and override support for tier adjustments.
+
 ## 0.2.0
 
 ### Minor Changes

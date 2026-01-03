@@ -17,7 +17,10 @@ export const DEFAULT_CONFIG: CakeConfig = {
   },
   watchtower: {
     enabled: false,
-    sensitivity: "medium"
+    sensitivity: "medium" 
+  },
+  advanced: {
+    signalMatrix: false
   },
   debug: false,
   watchSignals: true

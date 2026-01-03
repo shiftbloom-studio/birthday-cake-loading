@@ -1,5 +1,9 @@
 export type {
   CakeConfig,
+  CakeSignalMatrixAdjustment,
+  CakeSignalMatrixCondition,
+  CakeSignalMatrixRule,
+  CakeAdvancedConfig,
   CakeBootstrap,
   CakeFeatureKey,
   CakeFeatures,
@@ -14,6 +18,7 @@ export { CAKE_TIERS, CONNECTION_TYPES, isCakeTier, isConnectionType } from "./ty
 export { DEFAULT_CONFIG } from "./config";
 export { detectSignals, subscribeToSignalChanges } from "./signals";
 export { resolveCakeTier, tierAtLeast } from "./tier";
+export { applySignalMatrix, getSignalMatrixRules } from "./signal-matrix";
 export { resolveCakeFeatures } from "./features";
 export { CAKE_TIER_OVERRIDE_KEY, getTierOverride, setTierOverride } from "./override";
 export {
