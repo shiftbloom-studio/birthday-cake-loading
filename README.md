@@ -101,6 +101,33 @@ flowchart LR
   Tiering --> UI[Layered UI]
 ```
 
+## 🧩 Optional Signal Matrix (privacy-safe tuning)
+
+For known device/browser quirks (ex: animation issues on certain mobile setups), BCL can apply
+an **optional, coarse signal matrix** that nudges tiers without invasive fingerprinting.
+
+```tsx
+<CakeProvider
+  config={{
+    advanced: {
+      signalMatrix: true,
+      signalMatrixRules: [
+        {
+          id: "custom-low-memory-mobile",
+          when: { userAgentMobile: true, maxDeviceMemoryGB: 3 },
+          adjust: { maxTier: "lite" }
+        }
+      ]
+    }
+  }}
+>
+  {children}
+</CakeProvider>
+```
+
+The built-in matrix uses only **non-unique** signals (reduced motion/data, coarse
+memory/CPU, mobile hint, and network class) and can be overridden by ID.
+
 ## 🔌 Server bootstrap (Next.js)
 
 ```ts
