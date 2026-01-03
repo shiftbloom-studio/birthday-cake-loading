@@ -175,9 +175,7 @@ export const CakeProvider = ({
     if (typeof window === "undefined") {
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).__BCL__ = state;
-    // eslint-disable-next-line no-console
+    window.__BCL__ = state;
     console.debug("[birthday-cake-loading]", state);
   }, [mergedConfig.debug, state]);
 

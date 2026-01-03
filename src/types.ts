@@ -140,3 +140,9 @@ export interface CakeContextValue extends CakeState {
   refresh: () => void;
   setTierOverride: (tier?: CakeTier) => void;
 }
+
+declare global {
+  interface Window {
+    __BCL__?: CakeState;
+  }
+}

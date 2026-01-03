@@ -1,6 +1,7 @@
 import type {
   CakeConfig,
   CakeSignalMatrixRule,
+  CakeSignalMatrixCondition,
   CakeSignals,
   CakeTier
 } from "./types";
@@ -89,131 +90,87 @@ const matchesEffectiveType = (
   return value === expected;
 };
 
-const matchesRule = (signals: CakeSignals, rule: CakeSignalMatrixRule) => {
-  const { when } = rule;
-
+const matchesCommonConditions = (signals: CakeSignals, when: CakeSignalMatrixCondition) => {
   if (
     typeof when.prefersReducedMotion === "boolean" &&
     !matchesBoolean(signals.prefersReducedMotion, when.prefersReducedMotion)
-  ) {
-    return false;
-  }
+  ) return false;
 
   if (
     typeof when.prefersReducedData === "boolean" &&
     !matchesBoolean(signals.prefersReducedData, when.prefersReducedData)
-  ) {
-    return false;
-  }
+  ) return false;
 
   if (
     typeof when.saveData === "boolean" &&
     !matchesBoolean(signals.saveData, when.saveData)
-  ) {
-    return false;
-  }
+  ) return false;
 
   if (
     typeof when.userAgentMobile === "boolean" &&
     !matchesBoolean(signals.userAgentMobile, when.userAgentMobile)
-  ) {
-    return false;
-  }
-
-  if (!matchesEffectiveType(signals.effectiveType, when.effectiveType)) {
-    return false;
-  }
-
-  if (
-    typeof when.minDeviceMemoryGB === "number" ||
-    typeof when.maxDeviceMemoryGB === "number"
-  ) {
-    if (
-      !matchesNumber(
-        signals.deviceMemoryGB,
-        when.minDeviceMemoryGB,
-        when.maxDeviceMemoryGB
-      )
-    ) {
-      return false;
-    }
-  }
-
-  if (
-    typeof when.minHardwareConcurrency === "number" ||
-    typeof when.maxHardwareConcurrency === "number"
-  ) {
-    if (
-      !matchesNumber(
-        signals.hardwareConcurrency,
-        when.minHardwareConcurrency,
-        when.maxHardwareConcurrency
-      )
-    ) {
-      return false;
-    }
-  }
-
-  if (
-    typeof when.minDevicePixelRatio === "number" ||
-    typeof when.maxDevicePixelRatio === "number"
-  ) {
-    if (
-      !matchesNumber(
-        signals.devicePixelRatio,
-        when.minDevicePixelRatio,
-        when.maxDevicePixelRatio
-      )
-    ) {
-      return false;
-    }
-  }
-
-  if (
-    typeof when.minScreenWidth === "number" ||
-    typeof when.maxScreenWidth === "number"
-  ) {
-    if (
-      !matchesNumber(
-        signals.screenWidth,
-        when.minScreenWidth,
-        when.maxScreenWidth
-      )
-    ) {
-      return false;
-    }
-  }
-
-  if (
-    typeof when.minScreenHeight === "number" ||
-    typeof when.maxScreenHeight === "number"
-  ) {
-    if (
-      !matchesNumber(
-        signals.screenHeight,
-        when.minScreenHeight,
-        when.maxScreenHeight
-      )
-    ) {
-      return false;
-    }
-  }
-
-  if (typeof when.maxDownlinkMbps === "number") {
-    if (
-      !matchesNumber(signals.downlinkMbps, undefined, when.maxDownlinkMbps)
-    ) {
-      return false;
-    }
-  }
-
-  if (typeof when.minRttMs === "number") {
-    if (!matchesNumber(signals.rttMs, when.minRttMs, undefined)) {
-      return false;
-    }
-  }
+  ) return false;
 
   return true;
+};
+
+const matchesDeviceConditions = (signals: CakeSignals, when: CakeSignalMatrixCondition) => {
+  if (
+    (typeof when.minDeviceMemoryGB === "number" || typeof when.maxDeviceMemoryGB === "number") &&
+    !matchesNumber(signals.deviceMemoryGB, when.minDeviceMemoryGB, when.maxDeviceMemoryGB)
+  ) return false;
+
+  if (
+    (typeof when.minHardwareConcurrency === "number" || typeof when.maxHardwareConcurrency === "number") &&
+    !matchesNumber(signals.hardwareConcurrency, when.minHardwareConcurrency, when.maxHardwareConcurrency)
+  ) return false;
+
+  if (
+    (typeof when.minDevicePixelRatio === "number" || typeof when.maxDevicePixelRatio === "number") &&
+    !matchesNumber(signals.devicePixelRatio, when.minDevicePixelRatio, when.maxDevicePixelRatio)
+  ) return false;
+
+  return true;
+};
+
+const matchesScreenConditions = (signals: CakeSignals, when: CakeSignalMatrixCondition) => {
+  if (
+    (typeof when.minScreenWidth === "number" || typeof when.maxScreenWidth === "number") &&
+    !matchesNumber(signals.screenWidth, when.minScreenWidth, when.maxScreenWidth)
+  ) return false;
+
+  if (
+    (typeof when.minScreenHeight === "number" || typeof when.maxScreenHeight === "number") &&
+    !matchesNumber(signals.screenHeight, when.minScreenHeight, when.maxScreenHeight)
+  ) return false;
+
+  return true;
+};
+
+const matchesNetworkConditions = (signals: CakeSignals, when: CakeSignalMatrixCondition) => {
+  if (!matchesEffectiveType(signals.effectiveType, when.effectiveType)) return false;
+
+  if (
+    typeof when.maxDownlinkMbps === "number" &&
+    !matchesNumber(signals.downlinkMbps, undefined, when.maxDownlinkMbps)
+  ) return false;
+
+  if (
+    typeof when.minRttMs === "number" &&
+    !matchesNumber(signals.rttMs, when.minRttMs, undefined)
+  ) return false;
+
+  return true;
+};
+
+const matchesRule = (signals: CakeSignals, rule: CakeSignalMatrixRule) => {
+  const { when } = rule;
+  return (
+    matchesCommonConditions(signals, when) &&
+    matchesNetworkConditions(signals, when) &&
+    matchesDeviceConditions(signals, when) &&
+    matchesScreenConditions(signals, when)
+  );
 };
 
 const clampTier = (tier: CakeTier, minTier?: CakeTier, maxTier?: CakeTier) => {
@@ -235,10 +192,13 @@ const mergeRules = (
     return defaults;
   }
   const merged = [...defaults];
+
+
+  // Update existing rules or add new ones
   for (const override of overrides) {
-    const index = merged.findIndex((rule) => rule.id === override.id);
-    if (index >= 0) {
-      merged[index] = override;
+    const startIdx = defaults.findIndex(r => r.id === override.id);
+    if (startIdx >= 0) {
+      merged[startIdx] = override;
     } else {
       merged.push(override);
     }
@@ -279,3 +239,4 @@ export const getSignalMatrixRules = (
   config: CakeConfig = DEFAULT_CONFIG
 ): CakeSignalMatrixRule[] =>
   mergeRules(DEFAULT_SIGNAL_MATRIX_RULES, config.advanced?.signalMatrixRules);
+

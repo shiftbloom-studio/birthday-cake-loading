@@ -109,3 +109,15 @@ test("getServerSignalsFromHeaders drops invalid numeric and ect values", () => {
   expect(signals.screenWidth).toBeUndefined();
   expect(signals.screenHeight).toBeUndefined();
 });
+
+test("getServerSignalsFromHeaders handles partial/malformed preference headers", () => {
+  const signals = getServerSignalsFromHeaders({
+    "sec-ch-ua-mobile": "invalid",
+    "sec-ch-prefers-reduced-motion": "no-preference",
+    "sec-ch-prefers-reduced-data": "garbage"
+  });
+
+  expect(signals.userAgentMobile).toBeUndefined();
+  expect(signals.prefersReducedMotion).toBe(false);
+  expect(signals.prefersReducedData).toBeUndefined();
+});
