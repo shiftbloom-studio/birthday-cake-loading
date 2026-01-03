@@ -1,0 +1,61 @@
+{
+  "name": "@birthday-cake-loading/core",
+  "version": "0.2.0",
+  "description": "Framework-agnostic core for birthday-cake-loading (signals, tiering, features, SSR bootstrap).",
+  "keywords": [
+    "progressive-enhancement",
+    "performance",
+    "accessibility",
+    "bcl"
+  ],
+  "homepage": "https://github.com/shiftbloom-studio/birthday-cake-loading#readme",
+  "bugs": {
+    "url": "https://github.com/shiftbloom-studio/birthday-cake-loading/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shiftbloom-studio/birthday-cake-loading.git"
+  },
+  "license": "GPL-3.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js",
+      "require": "./dist/server.cjs"
+    },
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js",
+      "require": "./dist/runtime.cjs"
+    },
+    "./dom": {
+      "types": "./dist/dom.d.ts",
+      "import": "./dist/dom.js",
+      "require": "./dist/dom.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "devDependencies": {
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}
+
