@@ -1,4 +1,24 @@
-# birthday-cake-loading
+# @shiftbloom-studio/birthday-cake-loading
+
+> ⚠️ **Package rename:** `birthday-cake-loading` has moved to `@shiftbloom-studio/birthday-cake-loading`.
+
+## Maintainer rename checklist
+
+1. Publish the scoped package.
+   ```bash
+   npm publish --access public
+   ```
+2. Deprecate the old package to notify consumers.
+   ```bash
+   npm deprecate birthday-cake-loading "This package has moved to @shiftbloom-studio/birthday-cake-loading. Please update your dependencies."
+   ```
+3. (Optional) Publish a compatibility bridge on the old name that re-exports the new package.
+
+   **index.js**
+   ```js
+   export * from "@shiftbloom-studio/birthday-cake-loading";
+   export { default } from "@shiftbloom-studio/birthday-cake-loading";
+   ```
 
 Birthday‑Cake Loading (BCL) is a capability‑adaptive progressive enhancement toolkit for React and Next.js. It ships a tiny baseline runtime, detects device/network/user‑preference signals, and lazily upgrades experiences only when the runtime has enough budget.
 
@@ -14,7 +34,7 @@ Birthday‑Cake Loading (BCL) is a capability‑adaptive progressive enhancement
 ## Quickstart
 
 ```bash
-npm install birthday-cake-loading
+npm install @shiftbloom-studio/birthday-cake-loading
 ```
 
 ```tsx
@@ -26,7 +46,7 @@ import {
   CakeUpgrade,
   useCakeFeatures,
   useCakeTier
-} from "birthday-cake-loading";
+} from "@shiftbloom-studio/birthday-cake-loading";
 
 const MotionLayer = () => {
   const { motion } = useCakeFeatures();
@@ -113,7 +133,7 @@ export default function Page() {
 `CakeUpgrade` is like `CakeLazy`, but also lets you pick *when* to upgrade:
 
 ```tsx
-import { CakeUpgrade } from "birthday-cake-loading/upgrade";
+import { CakeUpgrade } from "@shiftbloom-studio/birthday-cake-loading/upgrade";
 
 <CakeUpgrade
   minTier="rich"
@@ -126,7 +146,7 @@ import { CakeUpgrade } from "birthday-cake-loading/upgrade";
 ### Server helpers
 
 ```ts
-import { getServerCakeBootstrapFromHeaders } from "birthday-cake-loading/server";
+import { getServerCakeBootstrapFromHeaders } from "@shiftbloom-studio/birthday-cake-loading/server";
 
 const bootstrap = getServerCakeBootstrapFromHeaders(headers);
 ```
@@ -136,7 +156,7 @@ Pass that into the provider (e.g. Next.js App Router):
 ```tsx
 // app/layout.tsx (server)
 import { headers } from "next/headers";
-import { getServerCakeBootstrapFromHeaders } from "birthday-cake-loading/server";
+import { getServerCakeBootstrapFromHeaders } from "@shiftbloom-studio/birthday-cake-loading/server";
 import { Providers } from "./providers";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -169,7 +189,7 @@ BCL writes attributes on `<html>`:
 Force a tier for the current session:
 
 ```ts
-import { setTierOverride } from "birthday-cake-loading";
+import { setTierOverride } from "@shiftbloom-studio/birthday-cake-loading";
 
 setTierOverride("base");
 ```
@@ -177,7 +197,7 @@ setTierOverride("base");
 You can also mount an in-app dev panel:
 
 ```tsx
-import { CakeDevTools } from "birthday-cake-loading/devtools";
+import { CakeDevTools } from "@shiftbloom-studio/birthday-cake-loading/devtools";
 
 <CakeDevTools />;
 ```
@@ -189,7 +209,7 @@ See `examples/next-demo` for a minimal demo showcasing tiered content and lazy e
 ### Deploy the demo on Vercel
 
 - **Root Directory**: `examples/next-demo`
-- The demo includes a `middleware.ts` that sets `Accept-CH` + `Permissions-Policy` so browsers can send **Client Hints** (improves server bootstrap via `birthday-cake-loading/server`).
+- The demo includes a `middleware.ts` that sets `Accept-CH` + `Permissions-Policy` so browsers can send **Client Hints** (improves server bootstrap via `@shiftbloom-studio/birthday-cake-loading/server`).
 
 ## Testing
 
