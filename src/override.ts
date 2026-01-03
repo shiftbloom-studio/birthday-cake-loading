@@ -2,11 +2,26 @@ import type { CakeTier } from "./types";
 
 export const CAKE_TIER_OVERRIDE_KEY = "bcl_tier_override";
 
+const canUseSessionStorage = () => {
+  try {
+    return typeof sessionStorage !== "undefined";
+  } catch {
+    return false;
+  }
+};
+
 export const getTierOverride = (): CakeTier | undefined => {
-  if (typeof sessionStorage === "undefined") {
+  if (!canUseSessionStorage()) {
     return undefined;
   }
-  const stored = sessionStorage.getItem(CAKE_TIER_OVERRIDE_KEY);
+
+  let stored: string | null = null;
+  try {
+    stored = sessionStorage.getItem(CAKE_TIER_OVERRIDE_KEY);
+  } catch {
+    return undefined;
+  }
+
   if (!stored) {
     return undefined;
   }
@@ -17,12 +32,16 @@ export const getTierOverride = (): CakeTier | undefined => {
 };
 
 export const setTierOverride = (tier?: CakeTier) => {
-  if (typeof sessionStorage === "undefined") {
+  if (!canUseSessionStorage()) {
     return;
   }
-  if (!tier) {
-    sessionStorage.removeItem(CAKE_TIER_OVERRIDE_KEY);
-    return;
+  try {
+    if (!tier) {
+      sessionStorage.removeItem(CAKE_TIER_OVERRIDE_KEY);
+      return;
+    }
+    sessionStorage.setItem(CAKE_TIER_OVERRIDE_KEY, tier);
+  } catch {
+    // Ignore storage errors (e.g. private mode, disabled storage).
   }
-  sessionStorage.setItem(CAKE_TIER_OVERRIDE_KEY, tier);
 };

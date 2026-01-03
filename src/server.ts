@@ -3,14 +3,24 @@ import { DEFAULT_CONFIG } from "./config";
 import { resolveCakeTier } from "./tier";
 import { resolveCakeFeatures } from "./features";
 
+type HeadersLike =
+  | Headers
+  // e.g. Next.js ReadonlyHeaders
+  | { get: (key: string) => string | null }
+  | Record<string, string | string[] | undefined>;
+
 const readHeader = (
-  headers: Headers | Record<string, string | string[] | undefined>,
+  headers: HeadersLike,
   key: string
 ): string | undefined => {
-  if (headers instanceof Headers) {
-    return headers.get(key) ?? undefined;
+  // Prefer the Web Headers API when available (covers Next.js `headers()` too).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const anyHeaders = headers as any;
+  if (anyHeaders && typeof anyHeaders.get === "function") {
+    return anyHeaders.get(key) ?? undefined;
   }
-  const value = headers[key.toLowerCase()] ?? headers[key];
+  const record = headers as Record<string, string | string[] | undefined>;
+  const value = record[key.toLowerCase()] ?? record[key];
   if (Array.isArray(value)) {
     return value[0];
   }
@@ -18,17 +28,21 @@ const readHeader = (
 };
 
 export const getServerSignalsFromHeaders = (
-  headers: Headers | Record<string, string | string[] | undefined>
+  headers: HeadersLike
 ): CakeSignals => {
-  const saveData = readHeader(headers, "save-data") === "on";
+  const saveDataHeader = readHeader(headers, "save-data");
+  const saveData = typeof saveDataHeader === "string" ? saveDataHeader === "on" : undefined;
+
   const secChUaMobile = readHeader(headers, "sec-ch-ua-mobile");
   const secChPrefersReducedMotion = readHeader(headers, "sec-ch-prefers-reduced-motion");
+  const secChPrefersReducedData = readHeader(headers, "sec-ch-prefers-reduced-data");
   const effectiveType = readHeader(headers, "ect") as CakeSignals["effectiveType"];
   const downlink = Number(readHeader(headers, "downlink"));
   const rtt = Number(readHeader(headers, "rtt"));
   const deviceMemory = Number(readHeader(headers, "device-memory"));
   const dpr = Number(readHeader(headers, "dpr"));
   const viewportWidth = Number(readHeader(headers, "viewport-width"));
+  const viewportHeight = Number(readHeader(headers, "viewport-height"));
 
   const userAgentMobile =
     secChUaMobile === "?1" ? true : secChUaMobile === "?0" ? false : undefined;
@@ -42,6 +56,15 @@ export const getServerSignalsFromHeaders = (
           : undefined
       : undefined;
 
+  const prefersReducedData =
+    typeof secChPrefersReducedData === "string"
+      ? secChPrefersReducedData.includes("reduce")
+        ? true
+        : secChPrefersReducedData.includes("no-preference")
+          ? false
+          : undefined
+      : undefined;
+
   return {
     saveData,
     effectiveType: effectiveType || undefined,
@@ -50,8 +73,10 @@ export const getServerSignalsFromHeaders = (
     deviceMemoryGB: Number.isNaN(deviceMemory) ? undefined : deviceMemory,
     devicePixelRatio: Number.isNaN(dpr) ? undefined : dpr,
     screenWidth: Number.isNaN(viewportWidth) ? undefined : viewportWidth,
+    screenHeight: Number.isNaN(viewportHeight) ? undefined : viewportHeight,
     userAgentMobile,
-    prefersReducedMotion
+    prefersReducedMotion,
+    prefersReducedData
   };
 };
 
@@ -67,7 +92,7 @@ export const getServerFeatures = (
 ) => resolveCakeFeatures(tier, signals, config);
 
 export const getServerCakeBootstrapFromHeaders = (
-  headers: Headers | Record<string, string | string[] | undefined>,
+  headers: HeadersLike,
   config: CakeConfig = DEFAULT_CONFIG
 ) => {
   const signals = getServerSignalsFromHeaders(headers);
