@@ -1,5 +1,11 @@
 # @shiftbloom-studio/birthday-cake-loading
 
+## 0.2.4
+
+### Patch Changes
+
+- a9131e1: Add an optional, config-gated Signal Matrix with coarse privacy-safe rules and override support for tier adjustments.
+
 ## 0.2.0
 
 ### Minor Changes
