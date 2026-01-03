@@ -1,202 +1,135 @@
-# @shiftbloom-studio/birthday-cake-loading
+# 🎂 **Birthday-Cake Loading (BCL)**
 
-Birthday‑Cake Loading (BCL) is a capability‑adaptive progressive enhancement toolkit for React and Next.js. It ships a tiny baseline runtime, detects device/network/user‑preference signals, and lazily upgrades experiences only when the runtime has enough budget.
+**Capability-first progressive enhancement for React + Next.js.**
 
-> **Baseline first:** your content should be correct and usable without animation, smooth scrolling, or audio.
+**Why BCL?**
+- ⚡ **Fast time-to-content** with baseline-first rendering.
+- 🧁 **True progressive enhancement** (upgrade only when the device can afford it).
+- ♿ **Accessibility-first** with reduced-motion/data respect built in.
+- 🌿 **Respects user preferences** (`Save-Data`, `prefers-reduced-*`).
+- 🪶 **Tiny runtime** and tree-shakeable exports.
+- ✅ **Next.js-ready** with a zero-config feel.
 
-## Why BCL?
+[![npm version](https://img.shields.io/npm/v/@shiftbloom-studio/birthday-cake-loading.svg)](https://www.npmjs.com/package/@shiftbloom-studio/birthday-cake-loading)
+[![npm downloads](https://img.shields.io/npm/dm/@shiftbloom-studio/birthday-cake-loading.svg)](https://www.npmjs.com/package/@shiftbloom-studio/birthday-cake-loading)
+[![license](https://img.shields.io/npm/l/@shiftbloom-studio/birthday-cake-loading.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/shiftbloom-studio/birthday-cake-loading?style=social)](https://github.com/shiftbloom-studio/birthday-cake-loading)
+[![CI](https://img.shields.io/github/actions/workflow/status/shiftbloom-studio/birthday-cake-loading/ci.yml)](https://github.com/shiftbloom-studio/birthday-cake-loading/actions)
 
-- **Fast time‑to‑content:** base tier stays lean and JS‑light.
-- **Conservative detection:** missing signals never penalize; strong signals downgrade.
-- **Accessible by default:** respects `prefers-reduced-motion`, `prefers-reduced-data`, and Save‑Data.
-- **Next.js ready:** works with the App Router + client components.
-
-## Quickstart
+## 🚀 Quickstart
 
 ```bash
 npm install @shiftbloom-studio/birthday-cake-loading
 ```
 
 ```tsx
-"use client"; 
+"use client";
 
 import {
   CakeProvider,
   CakeLayer,
   CakeUpgrade,
-  useCakeFeatures,
-  useCakeTier
+  useCakeFeatures
 } from "@shiftbloom-studio/birthday-cake-loading";
 
-const MotionLayer = () => {
+const MotionStatus = () => {
   const { motion } = useCakeFeatures();
-  return <div>Motion enabled: {String(motion)}</div>;
+  return <p>Motion: {String(motion)}</p>;
 };
 
 export default function Page() {
   return (
     <CakeProvider>
       <main>
-        <h1>Marketing Landing</h1>
         <CakeLayer minTier="rich" fallback={<div>Static hero</div>}>
           <div>Animated hero</div>
         </CakeLayer>
+
         <CakeUpgrade
-          minTier="rich"
           strategy="idle"
+          minTier="rich"
           loader={() => import("./rich-gallery")}
           fallback={<div>Static gallery</div>}
         />
-        <MotionLayer />
+
+        <MotionStatus />
       </main>
     </CakeProvider>
   );
 }
 ```
 
-## Architecture overview
+## ✨ Key Features
 
-1. **Signals** — read best‑effort device/network/user‑preference signals (connection, memory, cores, reduced‑motion).
-2. **Tiering** — map signals into `base | lite | rich | ultra` with conservative downgrade rules.
-3. **Features** — derive feature flags from tier + signals.
-4. **Layers** — gate and lazy‑load enhancements using `CakeLayer`, `CakeLazy`, or `CakeUpgrade`.
+| Feature | What you get | Why it matters |
+| --- | --- | --- |
+| Tiering (`base → ultra`) | Signal-driven capability buckets | Predictable, conservative upgrades |
+| Feature flags | `motion`, `richImages`, `audio`, etc. | Easy gating without bespoke logic |
+| SSR/Client Hints | `@shiftbloom-studio/birthday-cake-loading/server` helpers | Fast first paint, consistent tiering |
+| `CakeLayer` + `CakeUpgrade` | Render/lazy-load by tier | Smooth progressive enhancement |
+| Overrides + DevTools | Session override + in-app panel | QA and demos become trivial |
 
-## API
+## 🆚 Comparison
 
-### `CakeProvider`
+| Approach | Bundle impact | Accessibility | Progressive enhancement | Server-first |
+| --- | --- | --- | --- | --- |
+| BCL | **Tiny** | **Built-in** | **Automatic** | **Yes** |
+| Manual feature flags | Medium | Manual | Manual | Optional |
+| Device sniffing | Medium | Inconsistent | Risky | Optional |
+| “Everything on” | Large | Often skipped | None | No |
 
-```tsx
-<CakeProvider
-  config={{
-    tiering: { lowMemoryGB: 4 },
-    features: { allowMotionOnLite: false }
-  }}
-  // SSR/first paint hint (NOT a persistent override)
-  initialTier="base"
-  autoDetect={true}
-  onChange={(state) => console.log(state)}
->
-  {children}
-</CakeProvider>
+## 🧠 How tiering decides
+
+```mermaid
+flowchart TD
+  A[Signals: data saver, memory, CPU, network] --> B{Save-Data or very low memory?}
+  B -- yes --> C[base]
+  B -- no --> D{Low memory/cores or constrained network?}
+  D -- yes --> E[lite]
+  D -- no --> F{High memory + high cores?}
+  F -- yes --> G[ultra]
+  F -- no --> H[rich]
 ```
 
-- `config`: override tier + feature heuristics.
-- `bootstrap`: `{ signals, tier }` from the server (see `getServerCakeBootstrapFromHeaders` below).
-- `initialTier`: useful for SSR/initial paint (it will re‑detect on mount by default).
-- `autoDetect`: set `false` for fully manual control (or tests).
-- `onChange`: subscribe to tier changes.
+## 📡 Signal flow
 
-### Hooks
-
-- `useCake()` → full state `{ tier, features, signals, ready }`.
-- `useCakeTier()` → current tier.
-- `useCakeFeatures()` → feature flags.
-- `useCakeSignals()` → raw signals.
-- `useCakeReady()` → ready flag (signals captured).
-
-### Gating components
-
-```tsx
-<CakeLayer minTier="rich" fallback={<BaseHero />}>
-  <RichHero />
-</CakeLayer>
+```mermaid
+flowchart LR
+  Headers[Client Hints / Headers] --> Server[server helpers]
+  Server --> Provider[CakeProvider bootstrap]
+  Provider --> Tiering[Tier + Features]
+  Tiering --> UI[Layered UI]
 ```
 
-```tsx
-<CakeLazy
-  feature="motion"
-  loader={() => import("./AnimatedLayer")}
-  fallback={<BaseHero />}
-/>
-```
-
-`CakeUpgrade` is like `CakeLazy`, but also lets you pick *when* to upgrade:
-
-```tsx
-import { CakeUpgrade } from "@shiftbloom-studio/birthday-cake-loading/upgrade";
-
-<CakeUpgrade
-  minTier="rich"
-  strategy={{ type: "visible", rootMargin: "200px" }}
-  loader={() => import("./RichSection")}
-  fallback={<BaseSection />}
-/>;
-```
-
-### Server helpers
+## 🔌 Server bootstrap (Next.js)
 
 ```ts
 import { getServerCakeBootstrapFromHeaders } from "@shiftbloom-studio/birthday-cake-loading/server";
 
-const bootstrap = getServerCakeBootstrapFromHeaders(headers);
+const bootstrap = getServerCakeBootstrapFromHeaders(headers());
 ```
 
-Pass that into the provider (e.g. Next.js App Router):
-
 ```tsx
-// app/layout.tsx (server)
+// app/layout.tsx
 import { headers } from "next/headers";
 import { getServerCakeBootstrapFromHeaders } from "@shiftbloom-studio/birthday-cake-loading/server";
-import { Providers } from "./providers";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const bootstrap = getServerCakeBootstrapFromHeaders(headers());
   return (
     <html lang="en">
-      <body>
-        <Providers bootstrap={bootstrap}>{children}</Providers>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
 ```
 
-## Debugging & overrides
-
-BCL writes attributes on `<html>`:
-
-- `data-bcl-tier`
-- `data-bcl-ready`
-- `data-bcl-motion`
-- `data-bcl-smooth-scroll`
-- `data-bcl-audio`
-- `data-bcl-privacy`
-- `data-bcl-rich-images`
-- `data-bcl-save-data`
-- `data-bcl-override` (when set)
-- `data-bcl-ect` (effective connection type, when available)
-
-Force a tier for the current session:
-
-```ts
-import { setTierOverride } from "@shiftbloom-studio/birthday-cake-loading";
-
-setTierOverride("base");
-```
-
-You can also mount an in-app dev panel:
-
-```tsx
-import { CakeDevTools } from "@shiftbloom-studio/birthday-cake-loading/devtools";
-
-<CakeDevTools />;
-```
-
-## Example (Next.js App Router)
-
-See `examples/next-demo` for a minimal demo showcasing tiered content and lazy enhancements.
-
-### Deploy the demo on Vercel
-
-- **Root Directory**: `examples/next-demo`
-- The demo includes a `middleware.ts` that sets `Accept-CH` + `Permissions-Policy` so browsers can send **Client Hints** (improves server bootstrap via `@shiftbloom-studio/birthday-cake-loading/server`).
-
-## Testing
+## 🧪 Testing
 
 ```bash
 npm test
 ```
 
-## License
+## 📜 License
 
 GPL-3.0

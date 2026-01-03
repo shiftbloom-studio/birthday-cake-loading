@@ -1,6 +1,14 @@
-export type CakeTier = "base" | "lite" | "rich" | "ultra";
+export const CAKE_TIERS = ["base", "lite", "rich", "ultra"] as const;
+export type CakeTier = (typeof CAKE_TIERS)[number];
 
-export type ConnectionType = "slow-2g" | "2g" | "3g" | "4g";
+export const CONNECTION_TYPES = ["slow-2g", "2g", "3g", "4g"] as const;
+export type ConnectionType = (typeof CONNECTION_TYPES)[number];
+
+export const isCakeTier = (value: string): value is CakeTier =>
+  (CAKE_TIERS as readonly string[]).includes(value);
+
+export const isConnectionType = (value?: string): value is ConnectionType =>
+  typeof value === "string" && (CONNECTION_TYPES as readonly string[]).includes(value);
 
 export type CakeFeatureKey =
   | "motion"

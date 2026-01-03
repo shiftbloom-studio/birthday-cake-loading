@@ -6,7 +6,7 @@ const shared = {
   sourcemap: true,
   treeshake: true,
   splitting: false,
-  minify: false
+  minify: true
 } as const;
 
 export default defineConfig([

@@ -1,4 +1,5 @@
 import type { CakeTier } from "./types";
+import { isCakeTier } from "./types";
 
 export const CAKE_TIER_OVERRIDE_KEY = "bcl_tier_override";
 
@@ -25,10 +26,7 @@ export const getTierOverride = (): CakeTier | undefined => {
   if (!stored) {
     return undefined;
   }
-  if (stored === "base" || stored === "lite" || stored === "rich" || stored === "ultra") {
-    return stored;
-  }
-  return undefined;
+  return isCakeTier(stored) ? stored : undefined;
 };
 
 export const setTierOverride = (tier?: CakeTier) => {

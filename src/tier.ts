@@ -1,10 +1,18 @@
 import type { CakeConfig, CakeSignals, CakeTier } from "./types";
+import { isConnectionType } from "./types";
 import { DEFAULT_CONFIG } from "./config";
 
-const is2G = (effectiveType?: string) =>
+const TIER_RANK: Record<CakeTier, number> = {
+  base: 0,
+  lite: 1,
+  rich: 2,
+  ultra: 3
+};
+
+const is2G = (effectiveType?: CakeSignals["effectiveType"]) =>
   effectiveType === "slow-2g" || effectiveType === "2g";
 
-const is3G = (effectiveType?: string) => effectiveType === "3g";
+const is3G = (effectiveType?: CakeSignals["effectiveType"]) => effectiveType === "3g";
 
 export const resolveCakeTier = (
   signals: CakeSignals,
@@ -12,7 +20,9 @@ export const resolveCakeTier = (
 ): CakeTier => {
   const tiering = config.tiering;
   const saveData = Boolean(signals.saveData ?? signals.prefersReducedData);
-  const effectiveType = signals.effectiveType;
+  const effectiveType = isConnectionType(signals.effectiveType)
+    ? signals.effectiveType
+    : undefined;
   const downlink = signals.downlinkMbps;
   const rtt = signals.rttMs;
 
@@ -50,6 +60,5 @@ export const resolveCakeTier = (
 };
 
 export const tierAtLeast = (tier: CakeTier, minimum: CakeTier) => {
-  const tiers: CakeTier[] = ["base", "lite", "rich", "ultra"];
-  return tiers.indexOf(tier) >= tiers.indexOf(minimum);
+  return TIER_RANK[tier] >= TIER_RANK[minimum];
 };
