@@ -8,8 +8,8 @@ export const metadata = {
   description: "Progressive enhancement demo for birthday-cake-loading"
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const bootstrap = getServerCakeBootstrapFromHeaders(headers());
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const bootstrap = getServerCakeBootstrapFromHeaders(await headers());
   return (
     <html lang="en">
       <body>

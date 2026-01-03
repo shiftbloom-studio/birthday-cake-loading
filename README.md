@@ -186,6 +186,11 @@ import { CakeDevTools } from "birthday-cake-loading/devtools";
 
 See `examples/next-demo` for a minimal demo showcasing tiered content and lazy enhancements.
 
+### Deploy the demo on Vercel
+
+- **Root Directory**: `examples/next-demo`
+- The demo includes a `middleware.ts` that sets `Accept-CH` + `Permissions-Policy` so browsers can send **Client Hints** (improves server bootstrap via `birthday-cake-loading/server`).
+
 ## Testing
 
 ```bash
