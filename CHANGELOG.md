@@ -1,4 +1,4 @@
-# birthday-cake-loading
+# @shiftbloom-studio/birthday-cake-loading
 
 ## 0.2.0
 
