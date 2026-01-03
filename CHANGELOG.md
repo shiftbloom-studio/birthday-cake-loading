@@ -1,11 +1,16 @@
 # @shiftbloom-studio/birthday-cake-loading
 
+## 0.2.6
+
+### Patch Changes
+
+- e57c51b: Add the opt-in CakeWatchtower runtime jank guard with watch-key targeting and fallback swaps.
+
 ## 0.2.5
 
 ### Patch Changes
 
 - Add the opt-in CakeWatchtower runtime jank guard with watch-key targeting and fallback swaps.
-
 
 ## 0.2.4
 
