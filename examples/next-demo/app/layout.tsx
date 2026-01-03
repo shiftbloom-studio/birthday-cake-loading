@@ -5,7 +5,7 @@ import { getServerCakeBootstrapFromHeaders } from "birthday-cake-loading/server"
 
 export const metadata = {
   title: "Birthday-Cake Loading Demo",
-  description: "Progressive enhancement demo for @birthday-cake/loading"
+  description: "Progressive enhancement demo for birthday-cake-loading"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
