@@ -18,7 +18,7 @@ npm install birthday-cake-loading
 ```
 
 ```tsx
-"use client";
+"use client"; 
 
 import {
   CakeProvider,
