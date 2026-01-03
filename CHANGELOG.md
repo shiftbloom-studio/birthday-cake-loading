@@ -1,5 +1,11 @@
 # @shiftbloom-studio/birthday-cake-loading
 
+## 0.2.8
+
+### Patch Changes
+
+- bc4dd37: Refactor core logic (signal-matrix, server), improve type safety (Window interface), and add comprehensive tests.
+
 ## 0.2.6
 
 ### Patch Changes
