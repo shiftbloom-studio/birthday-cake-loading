@@ -15,6 +15,9 @@ export const DEFAULT_CONFIG: CakeConfig = {
     allowRichImagesOnBase: false,
     audioRequiresUnmetered: true
   },
+  advanced: {
+    signalMatrix: false
+  },
   debug: false,
   watchSignals: true
 };
