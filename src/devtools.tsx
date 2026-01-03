@@ -1,8 +1,7 @@
 import React from "react";
 import type { CakeTier } from "./types";
+import { CAKE_TIERS } from "./types";
 import { useCake } from "./context";
-
-const TIERS: CakeTier[] = ["base", "lite", "rich", "ultra"];
 
 export interface CakeDevToolsProps {
   initiallyOpen?: boolean;
@@ -83,7 +82,7 @@ export const CakeDevTools = ({ initiallyOpen = false, position = "bottom-left" }
                 }}
               >
                 <option value="auto">auto</option>
-                {TIERS.map((t) => (
+                {CAKE_TIERS.map((t) => (
                   <option key={t} value={t}>
                     {t}
                   </option>
@@ -141,4 +140,3 @@ export const CakeDevTools = ({ initiallyOpen = false, position = "bottom-left" }
     </div>
   );
 };
-

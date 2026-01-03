@@ -1,5 +1,5 @@
-import { CakeLayer, useCakeFeatures, useCakeTier } from "birthday-cake-loading";
-import { CakeUpgrade } from "birthday-cake-loading/upgrade";
+import { CakeLayer, useCakeFeatures, useCakeTier } from "@shiftbloom-studio/birthday-cake-loading";
+import { CakeUpgrade } from "@shiftbloom-studio/birthday-cake-loading/upgrade";
 
 const TierBadge = () => {
   const tier = useCakeTier();
