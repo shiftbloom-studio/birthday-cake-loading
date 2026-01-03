@@ -18,7 +18,7 @@
     "type": "git",
     "url": "git+https://github.com/shiftbloom-studio/birthday-cake-loading.git"
   },
-  "license": "GPL-3.0",
+  "license": "Apache-2.0",
   "author": "",
   "publishConfig": {
     "access": "public"
