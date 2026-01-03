@@ -8,6 +8,7 @@ export type {
   CakeTier,
   CakeTierConfig
 } from "./types";
+export { CAKE_TIERS, CONNECTION_TYPES, isCakeTier, isConnectionType } from "./types";
 export { DEFAULT_CONFIG } from "./config";
 export { detectSignals, subscribeToSignalChanges } from "./signals";
 export { resolveCakeTier, tierAtLeast } from "./tier";
