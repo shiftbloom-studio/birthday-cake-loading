@@ -15,6 +15,10 @@ export const DEFAULT_CONFIG: CakeConfig = {
     allowRichImagesOnBase: false,
     audioRequiresUnmetered: true
   },
+  watchtower: {
+    enabled: false,
+    sensitivity: "medium" 
+  },
   advanced: {
     signalMatrix: false
   },

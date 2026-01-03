@@ -27,6 +27,7 @@ npm install @shiftbloom-studio/birthday-cake-loading
 
 import {
   CakeProvider,
+  CakeWatch,
   CakeLayer,
   CakeUpgrade,
   useCakeFeatures
@@ -39,15 +40,19 @@ const MotionStatus = () => {
 
 export default function Page() {
   return (
-    <CakeProvider>
+    <CakeProvider
+      config={{ watchtower: { enabled: true, sensitivity: "medium", targets: ["hero", "gallery"] } }}
+    >
+      <CakeWatch />
       <main>
-        <CakeLayer minTier="rich" fallback={<div>Static hero</div>}>
+        <CakeLayer minTier="rich" watchKey="hero" fallback={<div>Static hero</div>}>
           <div>Animated hero</div>
         </CakeLayer>
 
         <CakeUpgrade
           strategy="idle"
           minTier="rich"
+          watchKey="gallery"
           loader={() => import("./rich-gallery")}
           fallback={<div>Static gallery</div>}
         />
@@ -134,6 +139,27 @@ memory/CPU, mobile hint, and network class) and can be overridden by ID.
 import { getServerCakeBootstrapFromHeaders } from "@shiftbloom-studio/birthday-cake-loading/server";
 
 const bootstrap = getServerCakeBootstrapFromHeaders(headers());
+```
+
+## 🛰️ CakeWatchtower (runtime jank guard)
+
+`CakeWatch` is an opt-in component that listens for frame drops + long tasks. When jank is
+detected, it can temporarily downgrade specific rich layers to their static fallbacks (no layout
+flicker by default thanks to opacity swaps).
+
+```tsx
+import { CakeProvider, CakeWatch, CakeLayer } from "@shiftbloom-studio/birthday-cake-loading";
+
+export default function App() {
+  return (
+    <CakeProvider config={{ watchtower: { enabled: true, sensitivity: "medium" } }}>
+      <CakeWatch />
+      <CakeLayer watchKey="particles" fallback={<div>Static background</div>}>
+        <div>Particles + motion</div>
+      </CakeLayer>
+    </CakeProvider>
+  );
+}
 ```
 
 ```tsx

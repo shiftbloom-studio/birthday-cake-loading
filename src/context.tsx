@@ -22,6 +22,7 @@ const DEFAULT_STATE: CakeState = {
 
 const CakeContext = React.createContext<CakeContextValue>({
   ...DEFAULT_STATE,
+  config: DEFAULT_CONFIG,
   refresh: () => undefined,
   setTierOverride: () => undefined
 });
@@ -56,6 +57,10 @@ const mergeConfig = (config?: Partial<CakeConfig>): CakeConfig => ({
   features: {
     ...DEFAULT_CONFIG.features,
     ...config?.features
+  },
+  watchtower: {
+    ...DEFAULT_CONFIG.watchtower,
+    ...config?.watchtower
   },
   advanced: {
     ...DEFAULT_CONFIG.advanced,
@@ -179,10 +184,11 @@ export const CakeProvider = ({
   const value: CakeContextValue = React.useMemo(
     () => ({
       ...state,
+      config: mergedConfig,
       refresh,
       setTierOverride
     }),
-    [state, refresh, setTierOverride]
+    [state, mergedConfig, refresh, setTierOverride]
   );
 
   return <CakeContext.Provider value={value}>{children}</CakeContext.Provider>;
@@ -197,3 +203,5 @@ export const useCakeFeatures = () => React.useContext(CakeContext).features;
 export const useCakeSignals = () => React.useContext(CakeContext).signals;
 
 export const useCakeReady = () => React.useContext(CakeContext).ready;
+
+export const useCakeConfig = () => React.useContext(CakeContext).config;
