@@ -1,5 +1,11 @@
 # @birthday-cake-loading
 
+## 0.1.2
+
+### Patch Changes
+
+- 0be4247: Update README with improved documentation, usage examples, and package name corrections.
+
 ## 0.1.1
 
 ### Patch Changes
