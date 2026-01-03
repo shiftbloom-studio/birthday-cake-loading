@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { CakeProvider, useCake, useCakeTier } from "../src";
+import { CakeProvider, useCake, useCakeTier } from "../src/context";
 
 const TierDisplay = () => {
   const tier = useCakeTier();

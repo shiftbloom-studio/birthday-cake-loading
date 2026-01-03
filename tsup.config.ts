@@ -6,15 +6,7 @@ const shared = {
   sourcemap: true,
   treeshake: true,
   splitting: false,
-  minify: false,
-  external: [
-    "react",
-    "react-dom",
-    "@birthday-cake-loading/react",
-    "@birthday-cake-loading/react/upgrade",
-    "@birthday-cake-loading/react/devtools",
-    "@birthday-cake-loading/core/server"
-  ]
+  minify: false
 } as const;
 
 export default defineConfig([

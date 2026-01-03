@@ -1,6 +1,7 @@
 import React from "react";
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { CakeProvider, CakeUpgrade } from "../src";
+import { CakeProvider } from "../src/context";
+import { CakeUpgrade } from "../src/upgrade";
 
 const Enhanced = () => <div data-testid="enhanced">enhanced</div>;
 
