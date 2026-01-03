@@ -1,6 +1,5 @@
-import { resolveCakeTier } from "../src/tier";
-import { resolveCakeFeatures } from "../src/features";
-import type { CakeSignals } from "../src/types";
+import { resolveCakeFeatures, resolveCakeTier } from "../src";
+import type { CakeSignals } from "../src";
 
 const baseSignals: CakeSignals = {
   saveData: true,

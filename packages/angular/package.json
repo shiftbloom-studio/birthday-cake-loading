@@ -1,0 +1,66 @@
+{
+  "name": "@birthday-cake-loading/angular",
+  "version": "0.2.0",
+  "description": "Angular (Universal/SSR) adapter for birthday-cake-loading (providers + TransferState helpers + server middleware).",
+  "keywords": [
+    "angular",
+    "angular-universal",
+    "ssr",
+    "progressive-enhancement",
+    "performance",
+    "bcl"
+  ],
+  "homepage": "https://github.com/shiftbloom-studio/birthday-cake-loading#readme",
+  "bugs": {
+    "url": "https://github.com/shiftbloom-studio/birthday-cake-loading/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shiftbloom-studio/birthday-cake-loading.git"
+  },
+  "license": "GPL-3.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js",
+      "require": "./dist/server.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "peerDependencies": {
+    "@angular/core": ">=16",
+    "@angular/common": ">=16",
+    "@angular/platform-browser": ">=16",
+    "rxjs": ">=7"
+  },
+  "dependencies": {
+    "@birthday-cake-loading/core": "0.2.0"
+  },
+  "devDependencies": {
+    "@angular/common": "^21.0.6",
+    "@angular/core": "^21.0.6",
+    "@angular/platform-browser": "^21.0.6",
+    "rxjs": "^7.8.2",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}
+

@@ -1,0 +1,13 @@
+---
+// Passes BCL bootstrap (from middleware) to any island/components via a callback slot.
+// Usage:
+// <CakeBootstrap>
+//   {(bootstrap) => <MyIsland bootstrap={bootstrap} />}
+// </CakeBootstrap>
+const bootstrap = (Astro.locals as any)?.bcl?.bootstrap;
+const html = Astro.slots.has("default")
+  ? await Astro.slots.render("default", [bootstrap])
+  : "";
+---
+<Fragment set:html={html} />
+

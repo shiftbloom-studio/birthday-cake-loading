@@ -1,4 +1,11 @@
 node_modules
+dist
+.DS_Store
+
+# SvelteKit packaging artifacts (generated)
+.svelte-kit
+
+node_modules
 .next
 dist
 coverage

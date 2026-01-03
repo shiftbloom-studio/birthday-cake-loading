@@ -1,0 +1,60 @@
+{
+  "name": "@birthday-cake-loading/nuxt",
+  "version": "0.2.0",
+  "description": "Nuxt module for birthday-cake-loading (Client Hints headers + SSR bootstrap + Vue composables).",
+  "keywords": [
+    "nuxt",
+    "vue",
+    "progressive-enhancement",
+    "performance",
+    "bcl"
+  ],
+  "homepage": "https://github.com/shiftbloom-studio/birthday-cake-loading#readme",
+  "bugs": {
+    "url": "https://github.com/shiftbloom-studio/birthday-cake-loading/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shiftbloom-studio/birthday-cake-loading.git"
+  },
+  "license": "GPL-3.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "module",
+  "main": "dist/module.cjs",
+  "module": "dist/module.js",
+  "types": "dist/module.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/module.d.ts",
+      "import": "./dist/module.js",
+      "require": "./dist/module.cjs"
+    },
+    "./runtime": {
+      "types": "./dist/runtime/index.d.ts",
+      "import": "./dist/runtime/index.js",
+      "require": "./dist/runtime/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "peerDependencies": {
+    "nuxt": ">=3",
+    "vue": ">=3"
+  },
+  "dependencies": {
+    "@birthday-cake-loading/core": "0.2.0"
+  },
+  "devDependencies": {
+    "@nuxt/kit": "^4.2.2",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}
+
