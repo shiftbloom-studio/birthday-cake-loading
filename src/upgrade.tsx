@@ -1,7 +1,7 @@
 import React from "react";
 import type { CakeFeatureKey, CakeTier } from "./types";
 import { useCake } from "./context";
-import { tierAtLeast } from "./tier";
+import { isCakeAllowed } from "./access";
 
 export type CakeUpgradeStrategy =
   | "immediate"
@@ -79,13 +79,14 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
   containerProps
 }: CakeUpgradeProps<P>) => {
   const { tier, features, ready } = useCake();
-  const allowed = feature ? features[feature] : tierAtLeast(tier, minTier);
+  const allowed = isCakeAllowed(tier, features, { feature, minTier });
   const canUpgrade = ready && allowed;
 
   const normalized = React.useMemo(() => normalizeStrategy(strategy), [strategy]);
   const LazyComponent = React.useMemo(
-    (): React.LazyExoticComponent<React.ComponentType<P>> => React.lazy(loader),
-    [loader]
+    (): React.LazyExoticComponent<React.ComponentType<P>> | null =>
+      canUpgrade ? React.lazy(loader) : null,
+    [canUpgrade, loader]
   );
 
   const [target, setTarget] = React.useState<HTMLElement | null>(null);
@@ -155,7 +156,7 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
 
   const shouldRender = canUpgrade && (normalized.type === "immediate" || triggered);
 
-  if (shouldRender) {
+  if (shouldRender && LazyComponent) {
     return (
       <React.Suspense fallback={fallback}>
         {React.createElement(
@@ -211,4 +212,3 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
     </Container>
   );
 };
-

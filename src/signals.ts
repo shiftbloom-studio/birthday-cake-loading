@@ -1,4 +1,5 @@
 import type { CakeSignals } from "./types";
+import { isConnectionType } from "./types";
 
 export const hasWindow = () => typeof window !== "undefined";
 
@@ -38,9 +39,11 @@ export const detectSignals = (): CakeSignals => {
   const uaData = (navigator as Navigator & { userAgentData?: { mobile?: boolean } })
     .userAgentData;
 
+  const effectiveType = connection?.effectiveType;
+
   return {
     saveData: connection?.saveData,
-    effectiveType: connection?.effectiveType as CakeSignals["effectiveType"],
+    effectiveType: isConnectionType(effectiveType) ? effectiveType : undefined,
     downlinkMbps: connection?.downlink,
     rttMs: connection?.rtt,
     deviceMemoryGB: (navigator as Navigator & { deviceMemory?: number }).deviceMemory,

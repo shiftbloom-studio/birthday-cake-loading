@@ -1,7 +1,7 @@
 import React from "react";
 import type { CakeFeatureKey, CakeTier } from "./types";
 import { useCake } from "./context";
-import { tierAtLeast } from "./tier";
+import { isCakeAllowed } from "./access";
 
 export interface CakeLayerProps {
   minTier?: CakeTier;
@@ -17,7 +17,7 @@ export const CakeLayer = ({
   children
 }: CakeLayerProps) => {
   const { tier, features, ready } = useCake();
-  const allowed = feature ? features[feature] : tierAtLeast(tier, minTier);
+  const allowed = isCakeAllowed(tier, features, { feature, minTier });
 
   if (!ready) {
     return fallback as React.ReactElement | null;
@@ -42,7 +42,7 @@ export const CakeLazy = <P extends object = Record<string, never>>({
   props
 }: CakeLazyProps<P>) => {
   const { tier, features, ready } = useCake();
-  const allowed = feature ? features[feature] : tierAtLeast(tier, minTier);
+  const allowed = isCakeAllowed(tier, features, { feature, minTier });
 
   const LazyComponent = React.useMemo((): React.LazyExoticComponent<React.ComponentType<P>> | null => {
     if (!allowed) {

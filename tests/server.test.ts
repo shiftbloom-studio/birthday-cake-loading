@@ -44,6 +44,30 @@ test("getServerCakeBootstrapFromHeaders computes tier", () => {
   expect(bootstrap.tier).toBe("base");
 });
 
+test("getServerCakeBootstrapFromHeaders respects config overrides", () => {
+  const bootstrap = getServerCakeBootstrapFromHeaders(
+    { "device-memory": "4" },
+    {
+      tiering: {
+        lowMemoryGB: 2,
+        veryLowMemoryGB: 1,
+        lowCpuCores: 2,
+        ultraMemoryGB: 16,
+        ultraCpuCores: 16,
+        minDownlinkMbps: 0.5,
+        maxRttMs: 600
+      },
+      features: {
+        allowMotionOnLite: false,
+        allowRichImagesOnBase: false,
+        audioRequiresUnmetered: true
+      }
+    }
+  );
+
+  expect(bootstrap.tier).toBe("rich");
+});
+
 test("getServerSignalsFromHeaders supports headers-like objects (e.g. Next.js ReadonlyHeaders)", () => {
   const signals = getServerSignalsFromHeaders(
     new FakeHeaders({
@@ -66,3 +90,22 @@ test("getServerSignalsFromHeaders supports headers-like objects (e.g. Next.js Re
   expect(signals.devicePixelRatio).toBe(2);
 });
 
+test("getServerSignalsFromHeaders drops invalid numeric and ect values", () => {
+  const signals = getServerSignalsFromHeaders({
+    ect: "fast",
+    downlink: "nope",
+    rtt: "NaN",
+    "device-memory": "unknown",
+    dpr: "nope",
+    "viewport-width": "x",
+    "viewport-height": "y"
+  });
+
+  expect(signals.effectiveType).toBeUndefined();
+  expect(signals.downlinkMbps).toBeUndefined();
+  expect(signals.rttMs).toBeUndefined();
+  expect(signals.deviceMemoryGB).toBeUndefined();
+  expect(signals.devicePixelRatio).toBeUndefined();
+  expect(signals.screenWidth).toBeUndefined();
+  expect(signals.screenHeight).toBeUndefined();
+});

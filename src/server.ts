@@ -1,4 +1,5 @@
 import type { CakeConfig, CakeSignals, CakeTier } from "./types";
+import { isConnectionType } from "./types";
 import { DEFAULT_CONFIG } from "./config";
 import { resolveCakeTier } from "./tier";
 import { resolveCakeFeatures } from "./features";
@@ -27,6 +28,14 @@ const readHeader = (
   return value;
 };
 
+const parseNumber = (value?: string): number | undefined => {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+};
+
 export const getServerSignalsFromHeaders = (
   headers: HeadersLike
 ): CakeSignals => {
@@ -36,13 +45,14 @@ export const getServerSignalsFromHeaders = (
   const secChUaMobile = readHeader(headers, "sec-ch-ua-mobile");
   const secChPrefersReducedMotion = readHeader(headers, "sec-ch-prefers-reduced-motion");
   const secChPrefersReducedData = readHeader(headers, "sec-ch-prefers-reduced-data");
-  const effectiveType = readHeader(headers, "ect") as CakeSignals["effectiveType"];
-  const downlink = Number(readHeader(headers, "downlink"));
-  const rtt = Number(readHeader(headers, "rtt"));
-  const deviceMemory = Number(readHeader(headers, "device-memory"));
-  const dpr = Number(readHeader(headers, "dpr"));
-  const viewportWidth = Number(readHeader(headers, "viewport-width"));
-  const viewportHeight = Number(readHeader(headers, "viewport-height"));
+  const effectiveTypeHeader = readHeader(headers, "ect");
+  const effectiveType = isConnectionType(effectiveTypeHeader) ? effectiveTypeHeader : undefined;
+  const downlink = parseNumber(readHeader(headers, "downlink"));
+  const rtt = parseNumber(readHeader(headers, "rtt"));
+  const deviceMemory = parseNumber(readHeader(headers, "device-memory"));
+  const dpr = parseNumber(readHeader(headers, "dpr"));
+  const viewportWidth = parseNumber(readHeader(headers, "viewport-width"));
+  const viewportHeight = parseNumber(readHeader(headers, "viewport-height"));
 
   const userAgentMobile =
     secChUaMobile === "?1" ? true : secChUaMobile === "?0" ? false : undefined;
@@ -67,13 +77,13 @@ export const getServerSignalsFromHeaders = (
 
   return {
     saveData,
-    effectiveType: effectiveType || undefined,
-    downlinkMbps: Number.isNaN(downlink) ? undefined : downlink,
-    rttMs: Number.isNaN(rtt) ? undefined : rtt,
-    deviceMemoryGB: Number.isNaN(deviceMemory) ? undefined : deviceMemory,
-    devicePixelRatio: Number.isNaN(dpr) ? undefined : dpr,
-    screenWidth: Number.isNaN(viewportWidth) ? undefined : viewportWidth,
-    screenHeight: Number.isNaN(viewportHeight) ? undefined : viewportHeight,
+    effectiveType,
+    downlinkMbps: downlink,
+    rttMs: rtt,
+    deviceMemoryGB: deviceMemory,
+    devicePixelRatio: dpr,
+    screenWidth: viewportWidth,
+    screenHeight: viewportHeight,
     userAgentMobile,
     prefersReducedMotion,
     prefersReducedData
