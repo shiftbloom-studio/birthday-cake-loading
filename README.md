@@ -27,7 +27,6 @@ import {
   useCakeFeatures,
   useCakeTier
 } from "birthday-cake-loading";
-} from "birthday-cake-loading";
 
 const MotionLayer = () => {
   const { motion } = useCakeFeatures();
