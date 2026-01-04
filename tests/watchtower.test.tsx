@@ -54,7 +54,7 @@ beforeEach(() => {
   if (global.performance) {
     global.performance.now = () => currentTime;
   } else {
-    // @ts-ignore
+    // @ts-expect-error
     global.performance = { now: () => currentTime };
   }
 });
