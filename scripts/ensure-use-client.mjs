@@ -21,7 +21,7 @@ const prependIfMissing = async (filePath) => {
   } catch {
     return;
   }
-
+ 
   if (
     content.startsWith(DIRECTIVE_LINE_DOUBLE) ||
     content.startsWith(DIRECTIVE_LINE_SINGLE) ||
