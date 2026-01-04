@@ -5,3 +5,7 @@ coverage
 .DS_Store
 .env.local
 .env
+
+# OpenMemory - IDE/Assistant specific rules
+AGENTS.md
+AGENTS.md
