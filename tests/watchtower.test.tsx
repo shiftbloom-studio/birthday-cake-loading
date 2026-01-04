@@ -6,14 +6,13 @@ import { CakeWatchtower, useCakeWatchtower } from "../src/watchtower";
 
 // --- Mocks ---
 
-// Mock PerformanceObserver
 class MockPerformanceObserver {
   callback: PerformanceObserverCallback;
   constructor(callback: PerformanceObserverCallback) {
     this.callback = callback;
   }
-  observe() {}
-  disconnect() {}
+  observe() { }
+  disconnect() { }
   trigger(entries: Partial<PerformanceEntry>[]) {
     this.callback(
       {
@@ -25,60 +24,117 @@ class MockPerformanceObserver {
     );
   }
 }
-global.PerformanceObserver = MockPerformanceObserver as unknown as typeof PerformanceObserver;
 
-// Mock requestAnimationFrame
-const originalRaf = global.requestAnimationFrame;
-const originalCancelRaf = global.cancelAnimationFrame;
-let rafCallback: ((time: number) => void) | null = null;
-let lastRafId = 0;
+// Helper to simulate frame drops and time passing
+const createFrameSimulator = (
+  rafCallbackRef: { current: ((time: number) => void) | null },
+  timeRef: { current: number }
+) => {
+  return {
+    advanceTime: async (ms: number) => {
+      // Advance time and trigger a frame if a callback is registered
+      timeRef.current += ms;
 
-// Mock performance.now
-const originalPerformanceNow = global.performance?.now;
-let currentTime = 0;
+      // We must wrap the callback execution in act() because it might trigger state updates
+      await act(async () => {
+        if (rafCallbackRef.current) {
+          rafCallbackRef.current(timeRef.current);
+        }
 
-beforeEach(() => {
-  jest.useFakeTimers();
-  
-  // RAF mock that stores the callback
-  global.requestAnimationFrame = (cb) => {
-    rafCallback = cb;
-    return ++lastRafId;
+        // Also advance Jest timers for any setTimeout/setInterval usage
+        jest.advanceTimersByTime(ms);
+      });
+    },
+
+    triggerJank: async () => {
+      // Simulate a long freeze
+      // Initial frame
+      await act(async () => {
+        if (rafCallbackRef.current) rafCallbackRef.current(timeRef.current);
+      });
+
+      // Advance a lot of time without firing frames in between (simulating a freeze)
+      timeRef.current += 2001;
+
+      // Firing the next frame after the long delay
+      await act(async () => {
+        if (rafCallbackRef.current) rafCallbackRef.current(timeRef.current);
+      });
+    }
   };
-  global.cancelAnimationFrame = () => {
-    rafCallback = null;
-  };
-
-  // Time mock
-  currentTime = 0;
-  if (global.performance) {
-    global.performance.now = () => currentTime;
-  } else {
-    // @ts-expect-error invalid operation
-    global.performance = { now: () => currentTime };
-  }
-});
-
-afterEach(() => {
-  jest.useRealTimers();
-  global.requestAnimationFrame = originalRaf;
-  global.cancelAnimationFrame = originalCancelRaf;
-  if (global.performance && originalPerformanceNow) {
-    global.performance.now = originalPerformanceNow;
-  }
-});
-
-const TestComponent = ({ watchKey }: { watchKey?: string }) => {
-  const { janky, downgrade } = useCakeWatchtower(watchKey);
-  return (
-    <div>
-      <div data-testid="status">{janky ? "JANKY" : "SMOOTH"}</div>
-      <div data-testid="downgrade">{downgrade ? "DOWNGRADED" : "NORMAL"}</div>
-    </div>
-  );
 };
 
 describe("CakeWatchtower", () => {
+  let rafCallback: ((time: number) => void) | null = null;
+  let currentTime = 0;
+
+  // Spies
+  let rafSpy: jest.SpyInstance;
+  let cancelRafSpy: jest.SpyInstance;
+  let performanceNowSpy: jest.SpyInstance;
+
+  // Refs for helper (so it accesses the current variable scope)
+  const rafCallbackRef = { get current() { return rafCallback; } };
+  const timeRef = {
+    get current() { return currentTime; },
+    set current(val) { currentTime = val; }
+  };
+
+  const simulator = createFrameSimulator(rafCallbackRef, timeRef);
+
+  beforeAll(() => {
+    // Safely assign PerformanceObserver if it doesn't exist
+    if (!window.PerformanceObserver) {
+      window.PerformanceObserver = MockPerformanceObserver as unknown as typeof PerformanceObserver;
+    }
+  });
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+
+    // Reset state
+    rafCallback = null;
+    currentTime = 0;
+
+    // Mock requestAnimationFrame using spyOn
+    rafSpy = jest.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      rafCallback = cb as (time: number) => void;
+      return 1; // dummy ID
+    });
+
+    cancelRafSpy = jest.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {
+      rafCallback = null;
+    });
+
+    // Mock performance.now
+    // Check if performance exists, otherwise we might need to mock global.performance (rare in jsdom)
+    if (!window.performance) {
+      // Fallback for environments without performance
+      Object.defineProperty(window, 'performance', {
+        writable: true,
+        value: { now: () => currentTime }
+      });
+    }
+
+    performanceNowSpy = jest.spyOn(performance, "now").mockImplementation(() => currentTime);
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+    jest.restoreAllMocks();
+    rafCallback = null;
+  });
+
+  const TestComponent = ({ watchKey }: { watchKey?: string }) => {
+    const { janky, downgrade } = useCakeWatchtower(watchKey);
+    return (
+      <div>
+        <div data-testid="status">{janky ? "JANKY" : "SMOOTH"}</div>
+        <div data-testid="downgrade">{downgrade ? "DOWNGRADED" : "NORMAL"}</div>
+      </div>
+    );
+  };
+
   test("should not trigger jank by default", () => {
     render(
       <CakeProvider config={{ watchtower: { enabled: true } }}>
@@ -98,96 +154,50 @@ describe("CakeWatchtower", () => {
       </CakeProvider>
     );
 
-    // High sensitivity: FPS threshold 55. Window 2000ms.
-    // Loop logic:
-    // Frame 1: start
-    // Frame 2: elapsed = now - windowStart. if elapsed >= window, calc FPS.
-    
-    // Simulate initial frame
-    act(() => {
-        if (rafCallback) rafCallback(currentTime);
-    });
-
-    // Advance time by 2001ms
-    currentTime += 2001; 
-    
-    // Simulate next frame callback. 
-    // Frame count will be 1 (only this frame since start). 
-    // Elapsed = 2001ms.
-    // FPS = (1 * 1000) / 2001 = ~0.5 FPS.
-    // This is < 55, so it should trigger jank.
-    
-    await act(async () => {
-        if (rafCallback) rafCallback(currentTime);
-    });
+    await simulator.triggerJank();
 
     expect(screen.getByTestId("status")).toHaveTextContent("JANKY");
   });
-  
+
   test("should recover from jank after cooldown", async () => {
     render(
-        <CakeProvider config={{ watchtower: { enabled: true, sensitivity: "high" } }}>
-          <CakeWatchtower />
-          <TestComponent />
-        </CakeProvider>
-      );
-  
-      // Trigger Jank
-      act(() => {
-          if (rafCallback) rafCallback(currentTime);
-      });
-      currentTime += 2001;
-      await act(async () => {
-          if (rafCallback) rafCallback(currentTime);
-      });
-      
-      expect(screen.getByTestId("status")).toHaveTextContent("JANKY");
+      <CakeProvider config={{ watchtower: { enabled: true, sensitivity: "high" } }}>
+        <CakeWatchtower />
+        <TestComponent />
+      </CakeProvider>
+    );
 
-      // Recovery MS for high is 3500ms
-      // Advance time past recovery
-      act(() => {
-          jest.advanceTimersByTime(3600);
-      });
+    await simulator.triggerJank();
+    expect(screen.getByTestId("status")).toHaveTextContent("JANKY");
 
-      expect(screen.getByTestId("status")).toHaveTextContent("SMOOTH");
+    // Recovery MS for high is 3500ms
+    await simulator.advanceTime(3600);
+
+    expect(screen.getByTestId("status")).toHaveTextContent("SMOOTH");
   });
 
   test("should downgrade targeted components when janky", async () => {
     render(
-        <CakeProvider config={{ watchtower: { enabled: true, sensitivity: "high", targets: ["hero"] } }}>
-          <CakeWatchtower />
-          <TestComponent watchKey="hero" />
-        </CakeProvider>
+      <CakeProvider config={{ watchtower: { enabled: true, sensitivity: "high", targets: ["hero"] } }}>
+        <CakeWatchtower />
+        <TestComponent watchKey="hero" />
+      </CakeProvider>
     );
 
-    // Trigger Jank
-    act(() => {
-        if (rafCallback) rafCallback(currentTime);
-    });
-    currentTime += 2001;
-    await act(async () => {
-        if (rafCallback) rafCallback(currentTime);
-    });
+    await simulator.triggerJank();
 
     expect(screen.getByTestId("downgrade")).toHaveTextContent("DOWNGRADED");
   });
 
   test("should NOT downgrade non-targeted components when janky", async () => {
     render(
-        <CakeProvider config={{ watchtower: { enabled: true, sensitivity: "high", targets: ["hero"] } }}>
-          <CakeWatchtower />
-          <TestComponent watchKey="footer" />
-        </CakeProvider>
+      <CakeProvider config={{ watchtower: { enabled: true, sensitivity: "high", targets: ["hero"] } }}>
+        <CakeWatchtower />
+        <TestComponent watchKey="footer" />
+      </CakeProvider>
     );
 
-    // Trigger Jank
-    act(() => {
-        if (rafCallback) rafCallback(currentTime);
-    });
-    currentTime += 2001;
-    await act(async () => {
-        if (rafCallback) rafCallback(currentTime);
-    });
+    await simulator.triggerJank();
 
     expect(screen.getByTestId("downgrade")).toHaveTextContent("NORMAL");
   });
