@@ -142,15 +142,29 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
         setTriggered(true);
         return;
       }
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((e) => e.isIntersecting)) {
-            setTriggered(true);
-            observer.disconnect();
-          }
-        },
-        { rootMargin: normalized.rootMargin, threshold: normalized.threshold }
-      );
+      const observerOptions = {
+        rootMargin: normalized.rootMargin,
+        threshold: normalized.threshold
+      };
+      const hasObserverOptions =
+        observerOptions.rootMargin !== undefined ||
+        observerOptions.threshold !== undefined;
+      const observer = hasObserverOptions
+        ? new IntersectionObserver(
+            (entries) => {
+              if (entries.some((e) => e.isIntersecting)) {
+                setTriggered(true);
+                observer.disconnect();
+              }
+            },
+            observerOptions
+          )
+        : new IntersectionObserver((entries) => {
+            if (entries.some((e) => e.isIntersecting)) {
+              setTriggered(true);
+              observer.disconnect();
+            }
+          });
       observer.observe(target);
       return () => observer.disconnect();
     }
