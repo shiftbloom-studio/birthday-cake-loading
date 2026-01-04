@@ -2,7 +2,6 @@ import { detectSignals } from "../src/signals";
 
 describe("Browser Compatibility (Hostile Environment)", () => {
   const originalNavigator = global.navigator;
-  const originalWindow = global.window;
 
   beforeEach(() => {
     // Reset to a clean state before each test
@@ -13,10 +12,6 @@ describe("Browser Compatibility (Hostile Environment)", () => {
     // Restore globals
     Object.defineProperty(global, "navigator", {
       value: originalNavigator,
-      writable: true,
-    });
-    Object.defineProperty(global, "window", {
-      value: originalWindow,
       writable: true,
     });
   });
