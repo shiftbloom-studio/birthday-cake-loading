@@ -68,11 +68,6 @@ describe("CakeWatchtower", () => {
   let rafCallback: ((time: number) => void) | null = null;
   let currentTime = 0;
 
-  // Spies
-  let rafSpy: jest.SpyInstance;
-  let cancelRafSpy: jest.SpyInstance;
-  let performanceNowSpy: jest.SpyInstance;
-
   // Refs for helper (so it accesses the current variable scope)
   const rafCallbackRef = { get current() { return rafCallback; } };
   const timeRef = {
@@ -97,12 +92,12 @@ describe("CakeWatchtower", () => {
     currentTime = 0;
 
     // Mock requestAnimationFrame using spyOn
-    rafSpy = jest.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+    jest.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
       rafCallback = cb as (time: number) => void;
       return 1; // dummy ID
     });
 
-    cancelRafSpy = jest.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {
+    jest.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {
       rafCallback = null;
     });
 
@@ -116,7 +111,7 @@ describe("CakeWatchtower", () => {
       });
     }
 
-    performanceNowSpy = jest.spyOn(performance, "now").mockImplementation(() => currentTime);
+    jest.spyOn(performance, "now").mockImplementation(() => currentTime);
   });
 
   afterEach(() => {
