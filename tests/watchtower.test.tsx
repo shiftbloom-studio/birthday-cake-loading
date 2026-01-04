@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { CakeProvider } from "../src/context";
-import { CakeWatchtower, useCakeWatchtower, CakeWatchSwap } from "../src/watchtower";
+import { CakeWatchtower, useCakeWatchtower } from "../src/watchtower";
 
 // --- Mocks ---
 
@@ -54,7 +54,7 @@ beforeEach(() => {
   if (global.performance) {
     global.performance.now = () => currentTime;
   } else {
-    // @ts-expect-error
+    // @ts-expect-error invalid operation
     global.performance = { now: () => currentTime };
   }
 });
