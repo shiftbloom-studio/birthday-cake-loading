@@ -9,7 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@shiftbloom-studio/birthday-cake-loading": "^0.2.4",
+    "@shiftbloom-studio/birthday-cake-loading": "^0.2.8",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3"

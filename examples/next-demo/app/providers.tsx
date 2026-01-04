@@ -1,7 +1,7 @@
 "use client";
 
 import type { CakeBootstrap } from "@shiftbloom-studio/birthday-cake-loading";
-import { CakeProvider } from "@shiftbloom-studio/birthday-cake-loading";
+import { CakeProvider, CakeWatch } from "@shiftbloom-studio/birthday-cake-loading";
 import { CakeDevTools } from "@shiftbloom-studio/birthday-cake-loading/devtools";
 
 export const Providers = ({
@@ -12,9 +12,19 @@ export const Providers = ({
   bootstrap?: CakeBootstrap;
 }) => {
   return (
-    <CakeProvider bootstrap={bootstrap}>
+    <CakeProvider
+      bootstrap={bootstrap}
+      config={{
+        watchtower: {
+          enabled: true,
+          sensitivity: "medium",
+          targets: ["hero", "metrics", "gallery", "ultra"]
+        }
+      }}
+    >
+      <CakeWatch />
       {children}
-      <CakeDevTools />
+      <CakeDevTools position="top-right" />
     </CakeProvider>
   );
 };
