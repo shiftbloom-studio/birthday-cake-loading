@@ -35,6 +35,8 @@ const playChime = async () => {
   };
 };
 
+// Intentionally blocks the main thread with a busy loop to simulate jank in this demo.
+// Do not copy this pattern into production code.
 const simulateJank = (ms = 260) => {
   const start = performance.now();
   while (performance.now() - start < ms) {
@@ -123,7 +125,7 @@ const SignalTable = ({ signals }: { signals: Record<string, unknown> }) => {
 
   const formatValue = (value: unknown) => {
     if (value === null || value === undefined || value === "") return "—";
-    if (typeof value === "number") return String(Math.round(value * 100) / 100);
+    if (typeof value === "number") return String(Number.parseFloat(value.toFixed(2)));
     return String(value);
   };
 
