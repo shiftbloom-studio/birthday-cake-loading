@@ -182,7 +182,7 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
     observer.observe(target);
 
     return () => {
-      if (observer.unobserve) {
+      if (target && observer.unobserve) {
         observer.unobserve(target);
       }
     };
