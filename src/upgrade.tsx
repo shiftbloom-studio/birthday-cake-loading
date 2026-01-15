@@ -195,7 +195,8 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
       <React.Suspense fallback={fallback}>
         {React.createElement(
           LazyComponent,
-          props ?? ({} as P)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (props ?? ({} as P)) as any
         )}
       </React.Suspense>
     ) : null;
