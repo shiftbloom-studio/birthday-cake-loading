@@ -88,8 +88,7 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
 
   const normalized = React.useMemo(() => normalizeStrategy(strategy), [strategy]);
   const LazyComponent = React.useMemo(
-    (): React.LazyExoticComponent<React.ComponentType<P>> | null =>
-      canUpgrade ? React.lazy(loader) : null,
+    () => (canUpgrade ? React.lazy(loader) : null),
     [canUpgrade, loader]
   );
 
@@ -105,6 +104,8 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
       setTriggered(false);
     }
   }, [canUpgrade]);
+
+  const observerRef = React.useRef<IntersectionObserver | null>(null);
 
   React.useEffect(() => {
     if (!canUpgrade || triggered) {
@@ -122,37 +123,69 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
     }
 
     if (normalized.type === "idle") {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const anyWindow = window as any;
-      if (typeof anyWindow.requestIdleCallback === "function") {
-        const idleId = anyWindow.requestIdleCallback(() => setTriggered(true), {
+      const idleWindow = window as Window & {
+        requestIdleCallback?: (
+          callback: IdleRequestCallback,
+          options?: { timeout?: number }
+        ) => number;
+        cancelIdleCallback?: (handle: number) => void;
+      };
+      if (typeof idleWindow.requestIdleCallback === "function") {
+        const idleId = idleWindow.requestIdleCallback(() => setTriggered(true), {
           timeout: normalized.timeoutMs
         });
-        return () => anyWindow.cancelIdleCallback?.(idleId);
+        return () => idleWindow.cancelIdleCallback?.(idleId);
       }
       const id = window.setTimeout(() => setTriggered(true), 1);
       return () => window.clearTimeout(id);
     }
 
     if (normalized.type === "visible") {
-      if (!target) {
-        return;
-      }
       if (typeof IntersectionObserver === "undefined") {
         setTriggered(true);
         return;
       }
+
       const observer = new IntersectionObserver((entries) => {
         if (entries.some((e) => e.isIntersecting)) {
           setTriggered(true);
           observer.disconnect();
         }
       });
-      observer.observe(target);
-      return () => observer.disconnect();
+
+      observerRef.current = observer;
+
+      return () => {
+        observer.disconnect();
+        observerRef.current = null;
+      };
     }
 
     // interaction: handled by event props
+  }, [canUpgrade, normalized, triggered]);
+
+  React.useEffect(() => {
+    if (!canUpgrade || triggered) {
+      return;
+    }
+
+    if (normalized.type !== "visible") {
+      return;
+    }
+
+    const observer = observerRef.current;
+
+    if (!observer || !target) {
+      return;
+    }
+
+    observer.observe(target);
+
+    return () => {
+      if (target && observer.unobserve) {
+        observer.unobserve(target);
+      }
+    };
   }, [canUpgrade, normalized, target, triggered]);
 
   const shouldRender = canUpgrade && (normalized.type === "immediate" || triggered);
@@ -161,8 +194,9 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
     shouldRender && LazyComponent ? (
       <React.Suspense fallback={fallback}>
         {React.createElement(
-          LazyComponent as unknown as React.ComponentType<P>,
-          props ?? ({} as P)
+          LazyComponent,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (props ?? ({} as P)) as any
         )}
       </React.Suspense>
     ) : null;
@@ -223,16 +257,26 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
         fallback={fallback}
         containerAs={Container}
         containerProps={mergedProps}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        containerRef={normalized.type === "visible" ? (setTarget as any) : undefined}
+        containerRef={
+          normalized.type === "visible"
+            ? (node: HTMLElement | null) => {
+                setTarget(node);
+              }
+            : undefined
+        }
       />
     );
   }
 
   return (
     <Container
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ref={normalized.type === "visible" ? (setTarget as any) : undefined}
+      ref={
+        normalized.type === "visible"
+          ? (node: HTMLElement | null) => {
+              setTarget(node);
+            }
+          : undefined
+      }
       {...mergedProps}
     >
       {primary ?? fallback}
