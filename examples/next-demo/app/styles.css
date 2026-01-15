@@ -11,6 +11,7 @@
   --radius-lg: 22px;
   --radius-md: 16px;
   --radius-sm: 12px;
+  --z-overlay: 9999;
 
   --accent: #94a3b8;
   --accent2: #38bdf8;
@@ -62,7 +63,7 @@ body {
   text-decoration: none;
   transform: translateY(-140%);
   transition: transform 140ms ease;
-  z-index: 2147483647;
+  z-index: var(--z-overlay);
 }
 
 .skipLink:focus {
