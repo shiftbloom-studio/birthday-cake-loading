@@ -1,5 +1,19 @@
 # @shiftbloom-studio/birthday-cake-loading
 
+## 0.3.0
+
+### Minor Changes
+
+- Enhance type safety, testing infrastructure, and demo capabilities:
+
+  - **Type Safety**: Add type assertions in upgrade.tsx to resolve TypeScript linting errors and improve type checking
+  - **Testing**: Add comprehensive unit tests for Watchtower jank detection and browser compatibility signals, improve test mocks with jest.spyOn, add global PerformanceObserver and RAF mocks to test setup
+  - **Demo Enhancements**: Add server snapshot component, interaction preview upgrades, rich metrics, ultra celebration effects, and visible gallery components to next-demo
+  - **Code Quality**: Configure ESLint for underscore-prefixed parameters, fix z-index stacking issues with CSS variables, improve watchtower test maintainability
+  - **CI/CD**: Add Semgrep security scanning, fix GitHub Actions permissions
+  - **Dependencies**: Add TypeScript and related type definitions as dev dependencies
+  - **Style**: Add demo warning comments and improve number formatting
+
 ## 0.2.8
 
 ### Patch Changes
