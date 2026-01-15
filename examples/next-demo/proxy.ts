@@ -13,7 +13,6 @@ const VARY =
   "Sec-CH-UA-Mobile, Sec-CH-Prefers-Reduced-Motion, Sec-CH-Prefers-Reduced-Data, ECT, Downlink, RTT, Device-Memory, DPR, Viewport-Width, Viewport-Height";
 
 export function proxy(_request: NextRequest) {
-  void _request;
   const response = NextResponse.next();
   response.headers.set("Accept-CH", ACCEPT_CH);
   response.headers.set("Permissions-Policy", PERMISSIONS_POLICY);
