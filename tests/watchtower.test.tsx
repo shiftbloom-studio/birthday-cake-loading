@@ -4,26 +4,11 @@ import "@testing-library/jest-dom";
 import { CakeProvider } from "../src/context";
 import { CakeWatchtower, useCakeWatchtower } from "../src/watchtower";
 
+const HIGH_SENSITIVITY_RECOVERY_MS = 3600; // Recovery threshold is 3500ms; use 3600ms to ensure we've passed it
+
 // --- Mocks ---
 
-class MockPerformanceObserver {
-  callback: PerformanceObserverCallback;
-  constructor(callback: PerformanceObserverCallback) {
-    this.callback = callback;
-  }
-  observe() { }
-  disconnect() { }
-  trigger(entries: Partial<PerformanceEntry>[]) {
-    this.callback(
-      {
-        getEntries: () => entries as PerformanceEntry[],
-        getEntriesByName: () => [],
-        getEntriesByType: () => [],
-      } as PerformanceObserverEntryList,
-      this as unknown as PerformanceObserver
-    );
-  }
-}
+// PerformanceObserver is mocked globally in setupTests.ts.
 
 // Helper to simulate frame drops and time passing
 const createFrameSimulator = (
@@ -65,40 +50,27 @@ const createFrameSimulator = (
 };
 
 describe("CakeWatchtower", () => {
-  let rafCallback: ((time: number) => void) | null = null;
-  let currentTime = 0;
-
-  // Refs for helper (so it accesses the current variable scope)
-  const rafCallbackRef = { get current() { return rafCallback; } };
-  const timeRef = {
-    get current() { return currentTime; },
-    set current(val) { currentTime = val; }
-  };
+  // Refs for helper following the conventional React ref shape
+  const rafCallbackRef: { current: ((time: number) => void) | null } = { current: null };
+  const timeRef: { current: number } = { current: 0 };
 
   const simulator = createFrameSimulator(rafCallbackRef, timeRef);
-
-  beforeAll(() => {
-    // Safely assign PerformanceObserver if it doesn't exist
-    if (!window.PerformanceObserver) {
-      window.PerformanceObserver = MockPerformanceObserver as unknown as typeof PerformanceObserver;
-    }
-  });
 
   beforeEach(() => {
     jest.useFakeTimers();
 
     // Reset state
-    rafCallback = null;
-    currentTime = 0;
+    rafCallbackRef.current = null;
+    timeRef.current = 0;
 
     // Mock requestAnimationFrame using spyOn
     jest.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
-      rafCallback = cb as (time: number) => void;
+      rafCallbackRef.current = cb as (time: number) => void;
       return 1; // dummy ID
     });
 
     jest.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {
-      rafCallback = null;
+      rafCallbackRef.current = null;
     });
 
     // Mock performance.now
@@ -107,17 +79,16 @@ describe("CakeWatchtower", () => {
       // Fallback for environments without performance
       Object.defineProperty(window, 'performance', {
         writable: true,
-        value: { now: () => currentTime }
+        value: { now: () => timeRef.current }
       });
     }
 
-    jest.spyOn(performance, "now").mockImplementation(() => currentTime);
+    jest.spyOn(performance, "now").mockImplementation(() => timeRef.current);
   });
 
   afterEach(() => {
     jest.useRealTimers();
     jest.restoreAllMocks();
-    rafCallback = null;
   });
 
   const TestComponent = ({ watchKey }: { watchKey?: string }) => {
@@ -165,8 +136,8 @@ describe("CakeWatchtower", () => {
     await simulator.triggerJank();
     expect(screen.getByTestId("status")).toHaveTextContent("JANKY");
 
-    // Recovery MS for high is 3500ms
-    await simulator.advanceTime(3600);
+    // Advance past the high-sensitivity recovery threshold
+    await simulator.advanceTime(HIGH_SENSITIVITY_RECOVERY_MS);
 
     expect(screen.getByTestId("status")).toHaveTextContent("SMOOTH");
   });
