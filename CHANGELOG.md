@@ -1,5 +1,14 @@
 # @shiftbloom-studio/birthday-cake-loading
 
+## 0.3.1
+
+### Patch Changes
+
+- Refresh repository dependencies and update the Next.js demo app to `next@16.2.1`.
+
+  This release contains maintenance-only changes since 2026-01-16, including refreshed lockfiles
+  and development dependency updates. No public API changes are included.
+
 ## 0.3.0
 
 ### Minor Changes
