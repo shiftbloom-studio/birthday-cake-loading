@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import type { CakeFeatureKey, CakeTier } from "@shiftbloom-studio/birthday-cake-loading";
 import { CAKE_TIERS, CakeLayer, useCake } from "@shiftbloom-studio/birthday-cake-loading";
 import { CakeUpgrade } from "@shiftbloom-studio/birthday-cake-loading/upgrade";
@@ -583,6 +584,12 @@ export const Demo = () => {
           <a href="https://github.com/shiftbloom-studio/birthday-cake-loading" target="_blank" rel="noreferrer">
             GitHub
           </a>
+          {" • "}
+          <span className="footerLegal">
+            <Link href="/impressum">Impressum</Link>
+            {" • "}
+            <Link href="/datenschutz">Datenschutz</Link>
+          </span>
           {" • "}
           <span>
             Override tier:{" "}

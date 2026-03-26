@@ -556,3 +556,124 @@ html[data-bcl-motion="true"] .sprinkle {
     transform: translate3d(40px, 0, 0) rotate(360deg);
   }
 }
+
+/* ── Legal pages ─────────────────────────────────── */
+
+.legalPage {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 42px 0 64px;
+}
+
+.legalBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 120ms ease;
+}
+
+.legalBack:hover {
+  color: var(--text);
+}
+
+.legalTitle {
+  font-size: clamp(28px, 3.5vw, 38px);
+  letter-spacing: -0.02em;
+  margin: 18px 0 4px;
+  line-height: 1.1;
+}
+
+.legalSubtitle {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 28px;
+}
+
+.legalSection {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.legalSection h2 {
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+}
+
+.legalSection h3 {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 18px 0 8px;
+}
+
+.legalSection p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 0 0 10px;
+}
+
+.legalSection ul {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+  padding-left: 20px;
+  margin: 0 0 10px;
+}
+
+.legalSection li {
+  margin-bottom: 8px;
+}
+
+.legalSection a {
+  color: color-mix(in oklab, var(--accent2), white 10%);
+  text-decoration: none;
+}
+
+.legalSection a:hover {
+  text-decoration: underline;
+}
+
+.legalSection code {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+}
+
+.legalFooter {
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--muted2);
+  font-size: 12px;
+}
+
+.legalFooter a {
+  color: color-mix(in oklab, var(--accent2), white 10%);
+  text-decoration: none;
+}
+
+.legalFooter a:hover {
+  text-decoration: underline;
+}
+
+.footerLegal {
+  display: inline-flex;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.footerLegal a {
+  color: var(--muted2);
+  text-decoration: none;
+}
+
+.footerLegal a:hover {
+  color: color-mix(in oklab, var(--accent2), white 10%);
+  text-decoration: underline;
+}
