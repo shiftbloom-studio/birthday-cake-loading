@@ -13,8 +13,8 @@
 [![npm version](https://img.shields.io/npm/v/@shiftbloom-studio/birthday-cake-loading.svg)](https://www.npmjs.com/package/@shiftbloom-studio/birthday-cake-loading)
 [![npm downloads](https://img.shields.io/npm/dm/@shiftbloom-studio/birthday-cake-loading.svg)](https://www.npmjs.com/package/@shiftbloom-studio/birthday-cake-loading)
 [![license](https://img.shields.io/npm/l/@shiftbloom-studio/birthday-cake-loading.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/shiftbloom-studio/birthday-cake-loading?style=social)](https://github.com/shiftbloom-studio/birthday-cake-loading)
-[![CI](https://img.shields.io/github/actions/workflow/status/shiftbloom-studio/birthday-cake-loading/ci.yml)](https://github.com/shiftbloom-studio/birthday-cake-loading/actions)
+[![GitHub stars](https://img.shields.io/github/stars/fabianzimber/birthday-cake-loading?style=social)](https://github.com/fabianzimber/birthday-cake-loading)
+[![CI](https://img.shields.io/github/actions/workflow/status/fabianzimber/birthday-cake-loading/ci.yml)](https://github.com/fabianzimber/birthday-cake-loading/actions)
 
 ## 🚀 Quickstart
 
