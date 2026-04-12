@@ -1,5 +1,11 @@
 # @shiftbloom-studio/birthday-cake-loading
 
+## 0.3.3
+
+### Patch Changes
+
+- Align the repository metadata with the Apache-2.0 license and refresh the published package metadata.
+
 ## 0.3.2
 
 ### Patch Changes
