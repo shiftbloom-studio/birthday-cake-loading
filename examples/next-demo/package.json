@@ -9,14 +9,14 @@
     "start": "next start"
   },
   "dependencies": {
-    "@shiftbloom-studio/birthday-cake-loading": "^0.2.8",
+    "@shiftbloom-studio/birthday-cake-loading": "^0.3.1",
     "next": "16.2.3",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react": "19.2.5",
+    "react-dom": "19.2.5"
   },
   "devDependencies": {
-    "@types/node": "^25.0.3",
-    "@types/react": "^19.2.7",
-    "typescript": "^5.9.3"
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
+    "typescript": "^6.0.2"
   }
 }
