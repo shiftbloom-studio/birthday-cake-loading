@@ -12,12 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
       pull-requests: write
-    env:
-      # Support both common secret names; also ensure NODE_AUTH_TOKEN is set
-      # because actions/setup-node writes an .npmrc that references it.
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN || secrets.NODE_AUTH_TOKEN }}
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN || secrets.NODE_AUTH_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.2
@@ -61,16 +57,8 @@ jobs:
             echo "Version $package_version is already on npm; skipping eager auth validation."
           else
             echo "needs_publish=true" >> "$GITHUB_OUTPUT"
-            echo "Version $package_version is not on npm yet; npm auth must succeed."
+            echo "Version $package_version is not on npm yet; trusted publishing will be used."
           fi
-
-      - name: Check npm auth token is present
-        if: steps.release_state.outputs.needs_publish == 'true'
-        run: node -e "if(!process.env.NPM_TOKEN){console.error('Missing npm token. Add a repo secret named NPM_TOKEN (or NODE_AUTH_TOKEN) with an npm Automation token.'); process.exit(1)}"
-
-      - name: Verify npm authentication
-        if: steps.release_state.outputs.needs_publish == 'true'
-        run: npm whoami
 
       - name: Create Release Pull Request or Publish
         uses: changesets/action@v1
@@ -81,7 +69,4 @@ jobs:
           title: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Keep explicit for Changesets, even though it's also set at job level.
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN || secrets.NODE_AUTH_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN || secrets.NODE_AUTH_TOKEN }}
 

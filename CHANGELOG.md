@@ -1,5 +1,11 @@
 # @shiftbloom-studio/birthday-cake-loading
 
+## 0.3.2
+
+### Patch Changes
+
+- Switch npm publishing to GitHub Actions trusted publishing and refresh the package release metadata.
+
 ## 0.3.1
 
 ### Patch Changes
