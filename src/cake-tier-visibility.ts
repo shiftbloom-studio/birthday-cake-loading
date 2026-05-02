@@ -45,5 +45,6 @@ export const ensureCakeTierVisibilityStyles = () => {
   style.id = STYLE_ID;
   style.dataset.bcl = "tier-visibility";
   style.textContent = rules.join("\n");
-  document.head.appendChild(style);
+  const head = document.head ?? document.getElementsByTagName("head")[0] ?? document.documentElement;
+  head.appendChild(style);
 };

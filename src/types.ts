@@ -34,7 +34,6 @@ export interface CakeSignals {
   prefersContrastMore?: boolean;
 }
 
-
 export interface CakeBootstrap {
   /**
    * Optional precomputed signals (e.g. from Client Hints headers on the server).

@@ -138,13 +138,13 @@ const matchesCommonConditions = (signals: CakeSignals, when: CakeSignalMatrixCon
   ) return false;
 
   if (
-    typeof (when as CakeSignalMatrixCondition & { online?: boolean }).online === "boolean" &&
-    !matchesBoolean((signals as CakeSignals & { online?: boolean }).online, (when as CakeSignalMatrixCondition & { online?: boolean }).online as boolean)
+    typeof when.online === "boolean" &&
+    !matchesBoolean(signals.online, when.online)
   ) return false;
 
   if (
-    typeof (when as CakeSignalMatrixCondition & { prefersContrastMore?: boolean }).prefersContrastMore === "boolean" &&
-    !matchesBoolean((signals as CakeSignals & { prefersContrastMore?: boolean }).prefersContrastMore, (when as CakeSignalMatrixCondition & { prefersContrastMore?: boolean }).prefersContrastMore as boolean)
+    typeof when.prefersContrastMore === "boolean" &&
+    !matchesBoolean(signals.prefersContrastMore, when.prefersContrastMore)
   ) return false;
 
   return true;
