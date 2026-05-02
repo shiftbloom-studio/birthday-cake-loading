@@ -20,7 +20,7 @@ export const DEFAULT_CONFIG: CakeConfig = {
     sensitivity: "medium" 
   },
   advanced: {
-    signalMatrix: false
+    signalMatrix: true
   },
   debug: false,
   watchSignals: true

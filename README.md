@@ -16,6 +16,60 @@
 [![GitHub stars](https://img.shields.io/github/stars/shiftbloom-studio/birthday-cake-loading?style=social)](https://github.com/shiftbloom-studio/birthday-cake-loading)
 [![CI](https://img.shields.io/github/actions/workflow/status/shiftbloom-studio/birthday-cake-loading/ci.yml)](https://github.com/shiftbloom-studio/birthday-cake-loading/actions)
 
+## ⚡ 30-second setup (existing project, no Provider/Layer)
+
+**Before (`app/page.tsx`):**
+
+```tsx
+import Hero from "./_components/hero";
+import Gallery from "./_components/gallery";
+import Footer from "./_components/footer";
+
+export default function Page() {
+  return (
+    <main>
+      <Hero />
+      <Gallery />
+      <Footer />
+    </main>
+  );
+}
+```
+
+**After (`app/page.tsx`) with data attributes + runtime init:**
+
+```tsx
+"use client";
+
+import { useEffect } from "react";
+import { initCakeRuntime } from "@shiftbloom-studio/birthday-cake-loading";
+import Hero from "./_components/hero";
+import HeroLite from "./_components/hero-lite";
+import Gallery from "./_components/gallery";
+import GalleryLite from "./_components/gallery-lite";
+import Footer from "./_components/footer";
+
+export default function Page() {
+  useEffect(() => initCakeRuntime(), []);
+
+  return (
+    <main>
+      <section data-cake-tier="rich+"><Hero /></section>
+      <section data-cake-tier="lite-"><HeroLite /></section>
+
+      <Gallery cakeTier="rich+" />
+      <GalleryLite cakeTier="lite-" />
+
+      <Footer />
+    </main>
+  );
+}
+```
+
+`initCakeRuntime()` automatically injects default CSS for `[data-cake-tier]` and `[caketier]` selectors, so no extra classes or CSS are required.
+
+This keeps existing component structure and removes the need for `CakeProvider` / `CakeLayer` in simple projects.
+
 ## 🚀 Quickstart
 
 ```bash
@@ -132,6 +186,10 @@ an **optional, coarse signal matrix** that nudges tiers without invasive fingerp
 
 The built-in matrix uses only **non-unique** signals (reduced motion/data, coarse
 memory/CPU, mobile hint, and network class) and can be overridden by ID.
+
+By default, BCL now enables the signal matrix with conservative defaults (offline, save-data + low bandwidth, reduced-motion + high contrast, and mobile low-memory/network protections). Most apps can ship with zero custom rules and only override for special cases.
+
+BCL also publishes runtime state to `<html data-bcl-*>` (tier, readiness, motion, data-saving, connectivity, etc.), which makes CSS-only layering straightforward for existing projects without reworking component trees.
 
 ## 🔌 Server bootstrap (Next.js)
 

@@ -154,6 +154,8 @@ export const CakeProvider = ({
     html.dataset.bclPrivacy = String(state.features.privacyBanner);
     html.dataset.bclRichImages = String(state.features.richImages);
     html.dataset.bclSaveData = String(Boolean(state.signals.saveData));
+    html.dataset.bclOnline = String(state.signals.online ?? true);
+    html.dataset.bclContrastMore = String(Boolean(state.signals.prefersContrastMore));
 
     if (state.override) {
       html.dataset.bclOverride = state.override;
