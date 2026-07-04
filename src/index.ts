@@ -36,3 +36,7 @@ export type { CakeUpgradeContainerTag, CakeUpgradeProps, CakeUpgradeStrategy } f
 export { CakeDevTools } from "./devtools";
 export type { CakeDevToolsProps } from "./devtools";
 export { CakeWatch, CakeWatchtower } from "./watchtower";
+
+export { initCakeRuntime } from "./runtime";
+export { ensureCakeTierVisibilityStyles } from "./cake-tier-visibility";
+export type { CakeTierSelector } from "./cake-tier-visibility";
