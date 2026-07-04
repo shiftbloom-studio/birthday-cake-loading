@@ -30,6 +30,8 @@ export interface CakeSignals {
   prefersReducedMotion?: boolean;
   prefersReducedData?: boolean;
   userAgentMobile?: boolean;
+  online?: boolean;
+  prefersContrastMore?: boolean;
 }
 
 export interface CakeBootstrap {
@@ -85,6 +87,8 @@ export interface CakeSignalMatrixCondition {
   prefersReducedData?: boolean;
   saveData?: boolean;
   userAgentMobile?: boolean;
+  online?: boolean;
+  prefersContrastMore?: boolean;
   effectiveType?: ConnectionType | ConnectionType[];
   maxDeviceMemoryGB?: number;
   minDeviceMemoryGB?: number;

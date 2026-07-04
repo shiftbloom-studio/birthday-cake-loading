@@ -16,6 +16,32 @@ const TIER_RANK: Record<CakeTier, number> = {
 
 const DEFAULT_SIGNAL_MATRIX_RULES: CakeSignalMatrixRule[] = [
   {
+    id: "offline-always-base",
+    description: "Use baseline when browser reports no network connectivity.",
+    when: {
+      online: false
+    },
+    adjust: { setTier: "base" }
+  },
+  {
+    id: "save-data-low-downlink",
+    description: "Cap tier on explicit data saving with low downlink.",
+    when: {
+      saveData: true,
+      maxDownlinkMbps: 1.2
+    },
+    adjust: { maxTier: "lite" }
+  },
+  {
+    id: "reduced-motion-high-contrast",
+    description: "Treat reduced motion + high contrast as strong low-motion preference.",
+    when: {
+      prefersReducedMotion: true,
+      prefersContrastMore: true
+    },
+    adjust: { maxTier: "lite" }
+  },
+  {
     id: "reduced-motion-mobile-low-memory",
     description: "Conservative downgrade for reduced motion + low-memory mobile devices.",
     when: {
@@ -109,6 +135,16 @@ const matchesCommonConditions = (signals: CakeSignals, when: CakeSignalMatrixCon
   if (
     typeof when.userAgentMobile === "boolean" &&
     !matchesBoolean(signals.userAgentMobile, when.userAgentMobile)
+  ) return false;
+
+  if (
+    typeof when.online === "boolean" &&
+    !matchesBoolean(signals.online, when.online)
+  ) return false;
+
+  if (
+    typeof when.prefersContrastMore === "boolean" &&
+    !matchesBoolean(signals.prefersContrastMore, when.prefersContrastMore)
   ) return false;
 
   return true;

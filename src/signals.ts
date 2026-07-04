@@ -36,10 +36,16 @@ export const detectSignals = (): CakeSignals => {
     typeof window.matchMedia === "function" &&
     window.matchMedia("(prefers-reduced-data: reduce)").matches;
 
-  const uaData = (navigator as Navigator & { userAgentData?: { mobile?: boolean } })
-    .userAgentData;
+  const uaData = (navigator as Navigator & { userAgentData?: { mobile?: boolean } }).userAgentData;
+  const userAgent = (navigator as Navigator & { userAgent?: string }).userAgent;
+  const userAgentMobileFallback = typeof userAgent === "string"
+    ? /Android|iPhone|iPad|iPod|IEMobile|Opera Mini|Mobile/i.test(userAgent)
+    : undefined;
 
   const effectiveType = connection?.effectiveType;
+  const prefersContrastMore =
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-contrast: more)").matches;
 
   return {
     saveData: connection?.saveData,
@@ -53,7 +59,9 @@ export const detectSignals = (): CakeSignals => {
     screenHeight: window.screen?.height,
     prefersReducedMotion,
     prefersReducedData,
-    userAgentMobile: uaData?.mobile
+    userAgentMobile: uaData?.mobile ?? userAgentMobileFallback,
+    online: navigator.onLine,
+    prefersContrastMore
   };
 };
 
@@ -68,6 +76,9 @@ export const subscribeToSignalChanges = (callback: () => void) => {
     : null;
   const reducedDataQuery = window.matchMedia
     ? window.matchMedia("(prefers-reduced-data: reduce)")
+    : null;
+  const contrastQuery = window.matchMedia
+    ? window.matchMedia("(prefers-contrast: more)")
     : null;
 
   const addMediaListener = (mql: MediaQueryList | null, cb: () => void) => {
@@ -108,6 +119,7 @@ export const subscribeToSignalChanges = (callback: () => void) => {
 
   addMediaListener(reducedMotionQuery, callback);
   addMediaListener(reducedDataQuery, callback);
+  addMediaListener(contrastQuery, callback);
 
   let resizeRaf: number | null = null;
   const onResize = () => {
@@ -122,6 +134,10 @@ export const subscribeToSignalChanges = (callback: () => void) => {
 
   window.addEventListener("resize", onResize);
   window.addEventListener("orientationchange", onResize);
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
+  document.addEventListener("visibilitychange", callback);
+  window.addEventListener("pageshow", callback);
 
   return () => {
     if (typeof connection?.removeEventListener === "function") {
@@ -132,9 +148,14 @@ export const subscribeToSignalChanges = (callback: () => void) => {
 
     removeMediaListener(reducedMotionQuery, callback);
     removeMediaListener(reducedDataQuery, callback);
+    removeMediaListener(contrastQuery, callback);
 
     window.removeEventListener("resize", onResize);
     window.removeEventListener("orientationchange", onResize);
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
+    document.removeEventListener("visibilitychange", callback);
+    window.removeEventListener("pageshow", callback);
 
     if (resizeRaf !== null) {
       window.cancelAnimationFrame(resizeRaf);
