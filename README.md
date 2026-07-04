@@ -56,9 +56,11 @@ export default function Page() {
 
   return (
     <main>
+      {/* Either without component-specific property */}
       <section data-cake-tier="rich+"><Hero /></section>
       <section data-cake-tier="lite-"><HeroLite /></section>
 
+      {/* Or by using automatic component property */}
       <Gallery cakeTier="rich+" />
       <GalleryLite cakeTier="lite-" />
 
