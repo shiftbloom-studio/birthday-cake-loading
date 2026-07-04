@@ -103,10 +103,12 @@ export default function Page() {
     >
       <CakeWatch />
       <main>
+        {/* You can optionally tier whole bundles of content (CakeLayer) */}
         <CakeLayer minTier="rich" watchKey="hero" fallback={<div>Static hero</div>}>
           <div>Animated hero</div>
         </CakeLayer>
 
+        {/* You can also modify tier-upgrade behaviour (e.g. Mobile User moves from slow 3G to 5G  */}
         <CakeUpgrade
           strategy="idle"
           minTier="rich"
