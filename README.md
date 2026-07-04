@@ -21,6 +21,8 @@
 **Before (`app/page.tsx`):**
 
 ```tsx
+"use client";
+
 import Hero from "./_components/hero";
 import Gallery from "./_components/gallery";
 import Footer from "./_components/footer";
