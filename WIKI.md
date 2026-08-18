@@ -1,9 +1,17 @@
 # Birthday-Cake Loading (BCL) Repository Wiki
 
-Comprehensive reference for the `@shiftbloom-studio/birthday-cake-loading` monorepo: architecture, public API, internals, scripts, and examples.
+This file is the wiki Home. The GitHub wiki welcome line (“Welcome to the birthday-cake-loading wiki!”) is a stub — use the links below instead of treating that page as the source of truth.
+
+- [README](./README.md) — 30-second setup, quickstart, CakeWatchtower
+- [Recipes](#recipes) — guides that already exist in the repo
+- [CONTRIBUTING](./CONTRIBUTING.md) — clone, install, run the demo, first evening
+- [Next.js demo](./examples/next-demo/README.md) — `examples/next-demo`
+
+Comprehensive reference for the `@shiftbloom-studio/birthday-cake-loading` package: architecture, public API, internals, scripts, and examples. Behavior is defined in `src/` and the files linked below.
 
 ## Table of Contents
 
+- [Recipes](#recipes)
 - [Project Overview](#project-overview)
 - [Core Concepts](#core-concepts)
 - [Architecture & Data Flow](#architecture--data-flow)
@@ -27,6 +35,13 @@ Comprehensive reference for the `@shiftbloom-studio/birthday-cake-loading` monor
 - [Contributing](#contributing)
 - [Security](#security)
 - [License](#license)
+
+## Recipes
+
+These are the recipes that exist in the repo today (same list as [README.md § Recipes](./README.md#recipes)):
+
+- [CakeWatch Quickstart](./docs/recipe-cakewatch.md) — minimal `CakeWatch` setup, jank notes, and `CakeLayer` fallbacks
+- [Next.js demo](./examples/next-demo/README.md) — run `examples/next-demo` with `npm install` and `npm run dev` in that directory
 
 ## Project Overview
 
@@ -75,12 +90,15 @@ Signals → Tier → Features → Layer/Upgrade gating
 │   ├── tier.ts            # Tier derivation
 │   ├── types.ts           # Shared type definitions
 │   └── upgrade.tsx        # CakeUpgrade component
+├── docs/                 # Short recipes
+│   └── recipe-cakewatch.md
 ├── examples/next-demo/    # Next.js App Router demo
 ├── tests/                 # Jest test suite
 ├── scripts/               # Build helpers
 ├── tsup.config.ts         # Build configuration
 ├── package.json           # Package metadata + scripts
 ├── README.md              # Quickstart and API overview
+├── WIKI.md               # This wiki Home (in-repo source)
 ├── CONTRIBUTING.md        # Development + contribution guide
 ├── CHANGELOG.md           # Release notes
 └── SECURITY.md            # Security policy
@@ -191,6 +209,8 @@ From `@shiftbloom-studio/birthday-cake-loading/devtools` (`src/devtools.tsx`):
 - Props:
   - `initiallyOpen?: boolean`
   - `position?: "bottom-left" | "bottom-right" | "top-left" | "top-right"`
+
+`CakeWatch` / `CakeWatchtower` is exported from the main package entry. For the copy-paste setup that already lives in the repo, use [docs/recipe-cakewatch.md](./docs/recipe-cakewatch.md) and the [README CakeWatchtower section](./README.md#-cakewatchtower-runtime-jank-guard).
 
 ## Configuration
 
@@ -306,7 +326,7 @@ Common commands:
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for local setup and expectations.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for local setup, the First evening path, and expectations.
 
 ## Security
 
