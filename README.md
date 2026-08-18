@@ -250,3 +250,7 @@ npm test
 ## 📜 License
 
 Apache License 2.0. See [LICENSE](LICENSE).
+
+
+## Recipes
+- [CakeWatch Quickstart](docs/recipe-cakewatch.md) - Minimal setup, jank tuning, and CakeLayer fallback guide.
