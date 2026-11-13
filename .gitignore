@@ -3,8 +3,7 @@ node_modules
 dist
 coverage
 .DS_Store
-.env.local
-.env
+.env*
 
 # OpenMemory - IDE/Assistant specific rules
 AGENTS.md
