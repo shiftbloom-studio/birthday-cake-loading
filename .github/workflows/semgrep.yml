@@ -14,9 +14,7 @@ name: Semgrep
 jobs:
   semgrep:
     name: semgrep/ci
-    runs-on:
-      group: Default
-      labels: [self-hosted, linux, x64]
+    runs-on: ubuntu-latest
     permissions:
       contents: read
     env:
