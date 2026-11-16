@@ -15,9 +15,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on:
-      group: Default
-      labels: [self-hosted, linux, x64]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
