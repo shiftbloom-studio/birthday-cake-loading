@@ -586,9 +586,9 @@ export const Demo = () => {
           </a>
           {" • "}
           <span className="footerLegal">
-            <Link href="/impressum">Impressum</Link>
+            <Link href="/imprint">Imprint</Link>
             {" • "}
-            <Link href="/datenschutz">Datenschutz</Link>
+            <Link href="/privacy">Privacy</Link>
           </span>
           {" • "}
           <span>

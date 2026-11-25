@@ -677,3 +677,20 @@ html[data-bcl-motion="true"] .sprinkle {
   color: color-mix(in oklab, var(--accent2), white 10%);
   text-decoration: underline;
 }
+
+.legalTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.legalAddress {
+  font-style: normal;
+  line-height: 1.6;
+}
+
+.legalWarn {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 200, 0, 0.12);
+}
