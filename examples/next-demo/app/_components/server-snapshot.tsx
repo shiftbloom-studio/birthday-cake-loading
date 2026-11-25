@@ -26,26 +26,25 @@ export const ServerSnapshot = async () => {
   return (
     <section className="section" aria-labelledby="server-title">
       <h2 className="sectionTitle" id="server-title">
-        5) Server bootstrap (SSR)
+        The first guess happens on the server
       </h2>
       <p className="sectionLead">
-        On the server, BCL can precompute signals and a tier from request headers (Client Hints). This keeps SSR and
-        hydration consistent and avoids guessing.
+        Before any JavaScript runs, the Worker reads Client Hints from the request headers and picks a starting tier.
+        Browsers only send most hints from the second request on, so reload once if the table is mostly dashes.
       </p>
 
       <div className="grid">
         <div className="card">
-          <h3 className="cardTitle">Computed on the server</h3>
+          <h3 className="cardTitle">What the server decided</h3>
           <p className="cardBody">
-            Tier: <strong>{bootstrap.tier}</strong> • Features:{" "}
+            Tier <strong>{bootstrap.tier}</strong>. Features on:{" "}
             {Object.entries(serverFeatures)
-              .map(([k, v]) => `${k}=${v ? "on" : "off"}`)
-              .join(" • ")}
+              .filter(([, v]) => v)
+              .map(([k]) => k)
+              .join(", ") || "none"}
           </p>
-          <details style={{ marginTop: 12 }}>
-            <summary style={{ cursor: "pointer", color: "rgba(255,255,255,0.86)" }}>
-              View request headers used
-            </summary>
+          <details>
+            <summary>Show the request headers it used</summary>
             <pre className="code">
               <code>
                 {HEADER_KEYS.map(({ label, key }) => `${label}: ${h.get(key) ?? "—"}`).join("\n")}
@@ -55,9 +54,9 @@ export const ServerSnapshot = async () => {
         </div>
 
         <div className="card">
-          <h3 className="cardTitle">Bootstrap JSON</h3>
+          <h3 className="cardTitle">The bootstrap object</h3>
           <p className="cardBody">
-            The exact object you can pass to <code>CakeProvider</code> as <code>bootstrap</code>.
+            Pass this to <code>CakeProvider</code> as <code>bootstrap</code> and the client starts from the same tier.
           </p>
           <pre className="code">
             <code>{JSON.stringify(bootstrap, null, 2)}</code>

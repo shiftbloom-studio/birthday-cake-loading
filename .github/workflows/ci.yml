@@ -44,3 +44,29 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  demo:
+    name: Demo (Workers build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: examples/next-demo
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Setup Node
+        uses: actions/setup-node@v6.3.0
+        with:
+          node-version: 26
+          cache: npm
+          cache-dependency-path: examples/next-demo/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Build for Cloudflare Workers
+        run: npm run build:vinext

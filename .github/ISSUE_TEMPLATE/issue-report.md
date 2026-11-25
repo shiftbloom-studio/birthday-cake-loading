@@ -3,7 +3,6 @@ name: Issue Report
 about: Report a bug or request a issue for birthday-cake-loading
 title: "[ISSUE ] Short description of the issue"
 labels: bug
-assignees: ""
 
 ---
 

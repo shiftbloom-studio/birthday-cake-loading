@@ -34,7 +34,7 @@ export default function RichMetrics({ label }: { label: string }) {
       <div className="metricRow">
         <div className="metric">
           <div className="metricValue">{value}%</div>
-          <div className="metricLabel">headroom</div>
+          <div className="metricLabel">counted up on load</div>
         </div>
         <div className="metric">
           <div className="metricValue">{tier}</div>
@@ -43,9 +43,9 @@ export default function RichMetrics({ label }: { label: string }) {
       </div>
 
       <div className="metaRow">
-        <span>ECT: {signals.effectiveType ?? "—"}</span>
-        <span>Memory: {signals.deviceMemoryGB ? `${signals.deviceMemoryGB}GB` : "—"}</span>
-        <span>Cores: {signals.hardwareConcurrency ?? "—"}</span>
+        <span>ect {signals.effectiveType ?? "—"}</span>
+        <span>memory {signals.deviceMemoryGB ? `${signals.deviceMemoryGB}GB` : "—"}</span>
+        <span>cores {signals.hardwareConcurrency ?? "—"}</span>
       </div>
     </div>
   );

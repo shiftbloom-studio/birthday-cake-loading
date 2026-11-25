@@ -18,7 +18,7 @@
     "type": "git",
     "url": "git+https://github.com/shiftbloom-studio/birthday-cake-loading.git"
   },
-  "license": "Apache-2.0",
+  "license": "AGPL-3.0-or-later",
   "author": "",
   "publishConfig": {
     "access": "public"
@@ -76,29 +76,31 @@
   },
   "devDependencies": {
     "@changesets/changelog-git": "^0.2.1",
-    "@changesets/cli": "^2.30.0",
+    "@changesets/cli": "^2.31.1",
     "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "^16.3.3",
     "@types/jest": "^30.0.0",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "eslint": "^9.39.4",
+    "@types/react": "^19.3.3",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "globals": "^17.5.0",
-    "jest": "^30.3.0",
-    "jest-environment-jsdom": "^30.3.0",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "ts-jest": "^29.4.9",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "ts-jest": "^29.4.15",
     "tsup": "^8.5.1",
-    "typescript": "^6.0.2",
-    "typescript-eslint": "^8.58.1"
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.74.0"
   },
   "overrides": {
-    "glob": "^10.3.10",
+    "glob": "^14.0.6",
     "rimraf": "^5.0.0",
-    "jsdom": "^26.1.0"
+    "jsdom": "^26.1.0",
+    "minimatch": "^11.0.1",
+    "esbuild": "^0.28.1"
   }
 }

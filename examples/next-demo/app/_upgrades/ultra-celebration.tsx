@@ -3,7 +3,7 @@
 import React from "react";
 import { useCakeFeatures } from "@shiftbloom-studio/birthday-cake-loading";
 
-const COLORS = ["#38bdf8", "#fb7185", "#a78bfa", "#f59e0b", "#22c55e"];
+const COLORS = ["#FF2E52", "#FF8FAB", "#C81040", "#FFC2D3", "#FF7E9E"];
 
 type Piece = {
   leftPct: number;
@@ -35,26 +35,18 @@ export default function UltraCelebration({ message }: { message: string }) {
   const pieces = React.useMemo(() => makePieces(seed, 18), [seed]);
 
   return (
-    <div className="card upgradeCard cardEmphasis" style={{ overflow: "hidden" }}>
+    <div className="card upgradeCard cardEmphasis">
       <div className="upgradeTitle">
         <strong>{message}</strong>
         <span>{motion ? "motion" : "static"}</span>
       </div>
 
       <p className="cardBody">
-        Ultra is the “go wild” tier. This component still respects reduced-motion by rendering without animations when
-        needed.
+        Ultra is for fast devices with nothing holding them back. Even here, reduced motion wins and the seeds stay
+        still.
       </p>
 
-      <div
-        style={{
-          position: "relative",
-          minHeight: 120,
-          borderRadius: 16,
-          border: "1px solid rgba(255,255,255,0.12)",
-          background: "rgba(0,0,0,0.25)"
-        }}
-      >
+      <div className="stage">
         <div className="confetti" aria-hidden>
           {pieces.map((p, i) => (
             <span
@@ -63,35 +55,25 @@ export default function UltraCelebration({ message }: { message: string }) {
               style={{
                 left: `${p.leftPct}%`,
                 top: 0,
-                background: `linear-gradient(180deg, ${p.color}, rgba(255,255,255,0.85))`,
+                background: p.color,
                 animationDelay: `${p.delayMs}ms`,
                 animationDuration: `${p.durationMs}ms`,
-                transform: `translate3d(0,-20px,0) rotate(${p.rotateDeg}deg)`,
-                opacity: motion ? 0.9 : 0.35
+                                opacity: motion ? 0.9 : 0.35
               }}
             />
           ))}
         </div>
 
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "grid",
-            placeItems: "center",
-            padding: 12,
-            textAlign: "center"
-          }}
-        >
-          <div style={{ fontWeight: 780, letterSpacing: "-0.01em" }}>Cinematic sprinkle shower</div>
-          <div style={{ color: "rgba(255,255,255,0.70)", fontSize: 12, marginTop: 6, lineHeight: 1.5 }}>
-            {motion ? "Animating…" : "Reduced motion detected — no animation."}
+        <div className="stageText">
+          <div className="insetTitle">18 seeds, one shower</div>
+          <div className="insetNote">
+            {motion ? "Press the button for another round." : "Reduced motion is on, so nothing moves."}
           </div>
         </div>
       </div>
 
       <button type="button" className="button" onClick={() => setSeed((v) => v + 1)}>
-        Reroll confetti
+        Drop them again
       </button>
     </div>
   );

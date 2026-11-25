@@ -3,7 +3,6 @@ name: Feature Reuqest
 about: Suggest a new feature or improvement for birthday-cake-loading
 title: "[Request] Short description of the feature"
 labels: request
-assignees: ""
 
 ---
 

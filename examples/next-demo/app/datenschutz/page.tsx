@@ -1,234 +1,111 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { operator, OperatorAddress, OperatorEmail, OperatorPhone } from "../_legal/operator";
+import { pageMetadata } from "../_lib/seo";
+import { LegalPage, OperatorAddress, OperatorEmail } from "../_legal/legal";
+import { operator } from "../_legal/operator";
 
-export const metadata: Metadata = {
-  title: "Datenschutzerklärung — Birthday-Cake Loading Demo",
-  description:
-    "Datenschutzerklärung gemäß DSGVO für die Birthday-Cake Loading Demo von shiftbloom studio.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Datenschutzerklärung",
+  description: "Was die Birthday-Cake Loading Demo verarbeitet und warum.",
+  path: "/datenschutz",
+  languages: { en: "/privacy", de: "/datenschutz" },
+  locale: "de_DE"
+});
 
 export default function DatenschutzPage() {
   return (
-    <main id="content" className="container">
-      <div className="legalPage">
-        <Link href="/" className="legalBack">
-          ← Zurück zur Demo
-        </Link>
+    <LegalPage lang="de" kind="privacy" title="Datenschutzerklärung">
+      <section className="legalSection">
+        <p>
+          Diese Seite ist eine technische Demo der Open-Source-Bibliothek Birthday-Cake Loading. Es gibt keine
+          Konten, keine Werbung, keine Analyse und kein Tracking. Hier steht, was beim Aufruf trotzdem verarbeitet
+          wird.
+        </p>
+      </section>
 
-        <h1 className="legalTitle">Datenschutzerklärung</h1>
-        <p className="legalSubtitle">Stand: März 2026</p>
+      <section className="legalSection">
+        <h2>Verantwortlicher</h2>
+        <OperatorAddress lang="de" />
+        <p>
+          E-Mail: <OperatorEmail />
+        </p>
+      </section>
 
-        {/* 1. Verantwortlicher */}
-        <section className="legalSection">
-          <h2>1. Verantwortlicher</h2>
-          <OperatorAddress />
-          <p>
-            E-Mail: <OperatorEmail />
-            <OperatorPhone />
-          </p>
-        </section>
+      <section className="legalSection">
+        <h2>Hosting</h2>
+        <p>
+          Cloudflare, Inc., 101 Townsend St., San Francisco, CA 94107, USA, liefert diese Seite in unserem Auftrag
+          aus und betreibt den Worker, der sie rendert. Dazu verarbeitet Cloudflare deine IP-Adresse, die aufgerufene
+          Seite, den Zeitpunkt und die Header, die dein Browser mitsendet, etwa den User-Agent. Ohne diese Daten kann
+          die Seite nicht angezeigt werden.
+        </p>
+        <p>
+          Anfragen an unseren Worker werden protokolliert, samt IP-Adresse, dem ungefähren Standort, den Cloudflare
+          daraus ableitet, der aufgerufenen Adresse und den Request-Headern. Wir nutzen die Protokolle nur, um Fehler
+          zu beheben und Missbrauch zu verhindern, und sie werden nach spätestens 7 Tagen gelöscht.
+        </p>
+        <p>
+          Rechtsgrundlage ist unser berechtigtes Interesse an einem sicheren und zuverlässigen Betrieb (Art. 6 Abs. 1
+          lit. f DSGVO). Cloudflare verarbeitet die Daten als unser Auftragsverarbeiter auf Grundlage eines
+          Auftragsverarbeitungsvertrags (Art. 28 DSGVO). Cloudflare, Inc. ist nach dem EU-U.S. Data Privacy Framework
+          zertifiziert, für das ein Angemessenheitsbeschluss der Europäischen Kommission besteht (Art. 45 DSGVO); der
+          Vertrag enthält zusätzlich die EU-Standardvertragsklauseln. Mehr dazu in der{" "}
+          <a href="https://www.cloudflare.com/de-de/privacypolicy/" target="_blank" rel="noreferrer">
+            Datenschutzerklärung von Cloudflare
+          </a>
+          .
+        </p>
+      </section>
 
-        {/* 2. Überblick */}
-        <section className="legalSection">
-          <h2>2. Überblick der Verarbeitungen</h2>
-          <p>
-            Diese Datenschutzerklärung informiert Sie über die Art, den Umfang
-            und den Zweck der Verarbeitung personenbezogener Daten innerhalb
-            dieser Website. Diese Website ist eine technische Demo für die
-            Open-Source-Bibliothek &bdquo;Birthday-Cake Loading&ldquo; und
-            verarbeitet nur die für den Betrieb technisch notwendigen Daten.
-          </p>
-        </section>
+      <section className="legalSection">
+        <h2>Schriften</h2>
+        <p>
+          Alle Schriften werden von dieser Domain ausgeliefert. Dein Browser kontaktiert keinen Schriftanbieter; unser
+          Worker lädt die Dateien einmal und speichert sie zwischen.
+        </p>
+      </section>
 
-        {/* 3. Rechtsgrundlagen */}
-        <section className="legalSection">
-          <h2>3. Rechtsgrundlagen</h2>
-          <p>
-            Die Verarbeitung personenbezogener Daten erfolgt auf Grundlage
-            folgender Rechtsgrundlagen:
-          </p>
-          <ul>
-            <li>
-              <strong>
-                Art. 6 Abs. 1 lit. f DSGVO (Berechtigtes Interesse):
-              </strong>{" "}
-              Bereitstellung und Sicherstellung der technischen
-              Funktionsfähigkeit der Website.
-            </li>
-            <li>
-              <strong>Art. 6 Abs. 1 lit. a DSGVO (Einwilligung):</strong> Sofern
-              Sie eine Einwilligung erteilt haben, z.&thinsp;B. für optionale
-              Funktionen.
-            </li>
-          </ul>
-        </section>
+      <section className="legalSection">
+        <h2>Client Hints und Gerätesignale</h2>
+        <p>
+          Die Demo bittet deinen Browser um <strong>HTTP Client Hints</strong> (etwa <code>Save-Data</code>,{" "}
+          <code>Device-Memory</code> oder <code>ECT</code>). Unterstützt dein Browser sie, sendet er sie bei der
+          nächsten Anfrage mit, und der Worker wählt damit einmalig eine Start-Stufe für diese Seite. Im Browser liest
+          die Bibliothek ähnliche Signale (Verbindungstyp, reduzierte Bewegung, Arbeitsspeicher), um zu entscheiden,
+          welche Erweiterungen geladen werden. Nichts davon wird gespeichert, mit anderen Daten zusammengeführt oder
+          genutzt, um dich wiederzuerkennen. Abgesehen von den oben beschriebenen Protokollen verlässt es die Seite
+          nicht.
+        </p>
+      </section>
 
-        {/* 4. Hosting */}
-        <section className="legalSection">
-          <h2>4. Hosting</h2>
-          <p>
-            Diese Website wird bei <strong>Vercel Inc.</strong> (440 N Barranca
-            Ave #4133, Covina, CA 91723, USA) gehostet. Vercel verarbeitet dabei
-            Zugriffsdaten (IP-Adresse, Zeitpunkt des Zugriffs, angeforderte
-            Seite, Browser-Typ) in Server-Logfiles. Die Verarbeitung erfolgt auf
-            Grundlage unseres berechtigten Interesses an einer effizienten und
-            sicheren Bereitstellung der Website (Art. 6 Abs. 1 lit. f DSGVO).
-          </p>
-          <p>
-            Die Datenübermittlung in die USA erfolgt auf Basis des EU-US Data
-            Privacy Framework. Weitere Informationen finden Sie in der{" "}
-            <a
-              href="https://vercel.com/legal/privacy-policy"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Datenschutzerklärung von Vercel
-            </a>
-            .
-          </p>
-        </section>
+      <section className="legalSection">
+        <h2>Cookies und Speicher</h2>
+        <p>
+          Die Seite setzt keine Cookies. Wenn du die Stufe im DevTools-Panel überschreibst, merkt sich dein Browser
+          die Wahl im Session Storage, bis du den Tab schließt. Sie wird nie an uns übertragen. Das Speichern ist für
+          die Funktion, die du nutzt, unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG).
+        </p>
+      </section>
 
-        {/* 5. Zugriffsdaten */}
-        <section className="legalSection">
-          <h2>5. Erfassung von Zugriffsdaten (Server-Logfiles)</h2>
-          <p>
-            Bei jedem Zugriff auf diese Website werden automatisch folgende
-            Informationen erfasst:
-          </p>
-          <ul>
-            <li>IP-Adresse des anfragenden Geräts</li>
-            <li>Datum und Uhrzeit des Zugriffs</li>
-            <li>Name und URL der abgerufenen Seite</li>
-            <li>Übertragene Datenmenge</li>
-            <li>Browsertyp und -version</li>
-            <li>Betriebssystem</li>
-            <li>Referrer-URL (zuvor besuchte Seite)</li>
-          </ul>
-          <p>
-            Diese Daten werden für die technische Bereitstellung der Website
-            benötigt und nach spätestens 30 Tagen automatisch gelöscht. Eine
-            Zusammenführung mit anderen Datenquellen findet nicht statt.
-          </p>
-        </section>
+      <section className="legalSection">
+        <h2>Links zu anderen Seiten</h2>
+        <p>
+          Die Demo verlinkt auf GitHub und npm. Diese Anbieter erhalten erst Daten von dir, wenn du einem Link
+          folgst, und verarbeiten sie nach ihren eigenen Datenschutzerklärungen.
+        </p>
+      </section>
 
-        {/* 6. Client Hints */}
-        <section className="legalSection">
-          <h2>6. Client Hints und Gerätedaten</h2>
-          <p>
-            Diese Demo-Website nutzt <strong>HTTP Client Hints</strong>{" "}
-            (z.&thinsp;B. <code>Save-Data</code>, <code>Device-Memory</code>,{" "}
-            <code>ECT</code>), um die Darstellung der Seite an die Fähigkeiten
-            Ihres Geräts anzupassen (Progressive Enhancement). Diese Daten
-            werden ausschließlich clientseitig im Browser verarbeitet und{" "}
-            <strong>nicht an Server übertragen oder gespeichert</strong>. Es
-            erfolgt kein Tracking oder Fingerprinting.
-          </p>
-        </section>
-
-        {/* 7. Cookies */}
-        <section className="legalSection">
-          <h2>7. Cookies</h2>
-          <p>
-            Diese Website verwendet <strong>keine Cookies</strong> für Tracking-
-            oder Analysezwecke. Es werden ausschließlich technisch notwendige
-            Cookies verwendet, die für den Betrieb der Website erforderlich sind
-            (z.&thinsp;B. Session-Handling durch den Hosting-Anbieter). Diese
-            Cookies werden auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO gesetzt.
-          </p>
-        </section>
-
-        {/* 8. Keine Analysetools */}
-        <section className="legalSection">
-          <h2>8. Analyse- und Tracking-Tools</h2>
-          <p>
-            Diese Website verwendet{" "}
-            <strong>keine Analyse- oder Tracking-Tools</strong> wie Google
-            Analytics, Matomo oder ähnliche Dienste. Es findet kein
-            Nutzer-Tracking statt.
-          </p>
-        </section>
-
-        {/* 9. Externe Links */}
-        <section className="legalSection">
-          <h2>9. Links zu externen Websites</h2>
-          <p>
-            Diese Website enthält Links zu externen Seiten (z.&thinsp;B. GitHub,
-            npm). Beim Anklicken dieser Links verlassen Sie unsere Website. Wir
-            haben keinen Einfluss auf die Datenschutzpraktiken dieser externen
-            Anbieter. Bitte informieren Sie sich direkt bei den jeweiligen
-            Anbietern über deren Datenschutzbestimmungen.
-          </p>
-        </section>
-
-        {/* 10. Betroffenenrechte */}
-        <section className="legalSection">
-          <h2>10. Ihre Rechte</h2>
-          <p>Sie haben gemäß DSGVO folgende Rechte:</p>
-          <ul>
-            <li>
-              <strong>Auskunftsrecht (Art. 15 DSGVO):</strong> Sie können
-              Auskunft über Ihre bei uns verarbeiteten personenbezogenen Daten
-              verlangen.
-            </li>
-            <li>
-              <strong>Berichtigungsrecht (Art. 16 DSGVO):</strong> Sie können
-              die Berichtigung unrichtiger Daten verlangen.
-            </li>
-            <li>
-              <strong>Löschungsrecht (Art. 17 DSGVO):</strong> Sie können die
-              Löschung Ihrer Daten verlangen, sofern keine gesetzliche
-              Aufbewahrungspflicht besteht.
-            </li>
-            <li>
-              <strong>Einschränkung der Verarbeitung (Art. 18 DSGVO):</strong>{" "}
-              Sie können die Einschränkung der Verarbeitung Ihrer Daten
-              verlangen.
-            </li>
-            <li>
-              <strong>Datenübertragbarkeit (Art. 20 DSGVO):</strong> Sie können
-              verlangen, dass wir Ihnen Ihre Daten in einem maschinenlesbaren
-              Format übermitteln.
-            </li>
-            <li>
-              <strong>Widerspruchsrecht (Art. 21 DSGVO):</strong> Sie können der
-              Verarbeitung Ihrer Daten jederzeit widersprechen.
-            </li>
-          </ul>
-          <p>
-            Zur Ausübung Ihrer Rechte wenden Sie sich bitte an:{" "}
-            <OperatorEmail />
-          </p>
-        </section>
-
-        {/* 11. Beschwerderecht */}
-        <section className="legalSection">
-          <h2>11. Beschwerderecht bei einer Aufsichtsbehörde</h2>
-          <p>
-            Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde
-            über die Verarbeitung Ihrer personenbezogenen Daten zu beschweren.
-            Zuständig ist die Datenschutz-Aufsichtsbehörde am Sitz des Betreibers.
-          </p>
-          {operator.authority ? <p>{operator.authority}</p> : null}
-        </section>
-
-        {/* 12. Änderungen */}
-        <section className="legalSection">
-          <h2>12. Änderungen dieser Datenschutzerklärung</h2>
-          <p>
-            Wir behalten uns vor, diese Datenschutzerklärung anzupassen, um sie
-            stets den aktuellen rechtlichen Anforderungen entsprechen zu lassen
-            oder um Änderungen unserer Leistungen umzusetzen. Für Ihren erneuten
-            Besuch gilt dann die neue Datenschutzerklärung.
-          </p>
-        </section>
-
-        <div className="legalFooter">
-          <Link href="/impressum">Impressum</Link>
-          {" • "}
-          <Link href="/">Zurück zur Demo</Link>
-        </div>
-      </div>
-    </main>
+      <section className="legalSection">
+        <h2>Deine Rechte</h2>
+        <p>
+          Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung
+          der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und auf Widerspruch gegen Verarbeitungen, die auf
+          berechtigtem Interesse beruhen (Art. 21). Schreib uns dazu an <OperatorEmail />.
+        </p>
+        <p>
+          Außerdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde beschweren
+          {operator.authority ? <>, zum Beispiel bei {operator.authority}</> : null}.
+        </p>
+      </section>
+    </LegalPage>
   );
 }

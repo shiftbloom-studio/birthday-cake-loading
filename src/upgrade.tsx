@@ -99,11 +99,11 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
     setTriggered(true);
   }, []);
 
-  React.useEffect(() => {
-    if (!canUpgrade) {
-      setTriggered(false);
-    }
-  }, [canUpgrade]);
+  // Reset the trigger when upgrading becomes impossible (adjusting state during
+  // render instead of in an effect avoids an extra commit).
+  if (!canUpgrade && triggered) {
+    setTriggered(false);
+  }
 
   const observerRef = React.useRef<IntersectionObserver | null>(null);
 
@@ -113,7 +113,7 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
     }
 
     if (normalized.type === "immediate") {
-      setTriggered(true);
+      // Rendered right away via `shouldRender`; nothing to schedule.
       return;
     }
 
@@ -142,6 +142,8 @@ export const CakeUpgrade = <P extends object = Record<string, never>>({
 
     if (normalized.type === "visible") {
       if (typeof IntersectionObserver === "undefined") {
+        // Feature detection only works after mount; fall back to loading right away.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setTriggered(true);
         return;
       }

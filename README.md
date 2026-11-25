@@ -249,7 +249,9 @@ npm test
 
 ## 📜 License
 
-Apache License 2.0. See [LICENSE](LICENSE).
+GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`). See [LICENSE](LICENSE).
+
+Releases up to and including 0.3.3 were published under the Apache License 2.0 and stay available under those terms.
 
 
 ## Recipes

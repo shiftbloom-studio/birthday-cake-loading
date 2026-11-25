@@ -1,0 +1,7 @@
+# Birthday-Cake Loading is open source documentation. Search engines, AI
+# answer engines and AI training crawlers are all welcome.
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Allow: /
+
+Sitemap: https://birthday-cake.shiftbloom.studio/sitemap.xml
