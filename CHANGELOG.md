@@ -1,5 +1,15 @@
 # @shiftbloom-studio/birthday-cake-loading
 
+## 0.4.0
+
+### Minor Changes
+
+- 43498f2: The package is now licensed under AGPL-3.0-or-later. Versions up to and including 0.3.3 remain available under the Apache License 2.0.
+
+### Patch Changes
+
+- 937cbfd: Reset `CakeUpgrade` and watchtower state during render instead of in an effect, which saves an extra commit when an upgrade becomes impossible or the watchtower is turned off.
+
 ## 0.3.3
 
 ### Patch Changes
