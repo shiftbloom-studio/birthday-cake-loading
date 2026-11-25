@@ -12,8 +12,8 @@ If you believe you’ve found a security issue, please **do not** open a public 
 
 Instead, use one of the following:
 
-- GitHub Security Advisories (preferred)
-- Email: `fabian@shiftbloom.studio`
+- [GitHub private vulnerability reporting](https://github.com/shiftbloom-studio/birthday-cake-loading/security/advisories/new) (preferred)
+- Email: `security@shiftbloom.studio`
 
 ## Secrets
 
