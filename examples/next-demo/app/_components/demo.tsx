@@ -264,8 +264,8 @@ export const Demo = () => {
         <a className="brand" href="https://shiftbloom.studio" aria-label="shiftbloom studio">
           <Bloom />
           <span className="wordmark">
-            shiftbloom <span>studio</span>
-            <i aria-hidden="true" />
+            shiftbloom <span className="studio">studio</span>
+            <span className="seed">.</span>
           </span>
         </a>
         <nav className="topLinks" aria-label="Project links">

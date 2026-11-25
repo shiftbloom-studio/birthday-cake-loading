@@ -3,7 +3,7 @@
 // font URLs to /fonts/fs/*, which are proxied too. The font files are not in the
 // repository because their license doesn't allow redistribution.
 const FONT_CSS =
-  "https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=general-sans@400,500,600&display=swap";
+  "https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&f[]=general-sans@400,500,600&display=swap";
 
 export async function GET() {
   const res = await fetch(FONT_CSS);
