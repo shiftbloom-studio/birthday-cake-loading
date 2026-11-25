@@ -185,11 +185,9 @@ export const CakeWatchtower = () => {
     [enabled]
   );
 
-  React.useEffect(() => {
-    if (!enabled) {
-      setJanky(false);
-    }
-  }, [enabled]);
+  if (!enabled && janky) {
+    setJanky(false);
+  }
 
   React.useEffect(() => {
     const snapshot: WatchtowerSnapshot = {

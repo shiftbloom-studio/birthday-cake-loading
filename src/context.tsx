@@ -129,6 +129,8 @@ export const CakeProvider = ({
     if (!autoDetect) {
       return;
     }
+    // Reads browser-only signals after mount; this is a sync with an external system.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refresh();
   }, [autoDetect, refresh]);
 

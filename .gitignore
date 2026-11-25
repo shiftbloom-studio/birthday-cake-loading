@@ -4,10 +4,11 @@ dist
 coverage
 .DS_Store
 .env*
+!.env.example
 
 # OpenMemory - IDE/Assistant specific rules
-AGENTS.md
 AGENTS.md
 
 
 openmemory.md
+*.tsbuildinfo
