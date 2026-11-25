@@ -121,23 +121,40 @@ code {
   border-bottom: 1px solid var(--ink-08);
 }
 
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.bloom {
+  flex: none;
+}
+
 .wordmark {
   font-family: var(--display);
   font-weight: 600;
-  font-size: 20px;
-  letter-spacing: -0.01em;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: -0.02em;
   color: var(--ink);
-  text-decoration: none;
+  white-space: nowrap;
 }
 
 .wordmark span {
   font-weight: 400;
-  color: var(--ink-60);
+  color: rgba(26, 18, 22, 0.6);
 }
 
+/* The period is a Bloom Red seed, not a glyph. */
 .wordmark i {
-  font-style: normal;
-  color: var(--bloom);
+  display: inline-block;
+  width: 0.2em;
+  height: 0.2em;
+  margin-left: 0.06em;
+  border-radius: 999px;
+  background: var(--bloom);
 }
 
 .topLinks {

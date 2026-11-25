@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { CakeFeatureKey, CakeTier } from "@shiftbloom-studio/birthday-cake-loading";
 import { CAKE_TIERS, CakeLayer, useCake } from "@shiftbloom-studio/birthday-cake-loading";
 import { CakeUpgrade } from "@shiftbloom-studio/birthday-cake-loading/upgrade";
+import { Bloom } from "./bloom";
 
 const playChime = async () => {
   const AudioContextConstructor =
@@ -260,9 +261,12 @@ export const Demo = () => {
   return (
     <>
       <header className="topbar">
-        <a className="wordmark" href="https://shiftbloom.studio" aria-label="shiftbloom studio">
-          shiftbloom <span>studio</span>
-          <i>.</i>
+        <a className="brand" href="https://shiftbloom.studio" aria-label="shiftbloom studio">
+          <Bloom />
+          <span className="wordmark">
+            shiftbloom <span>studio</span>
+            <i aria-hidden="true" />
+          </span>
         </a>
         <nav className="topLinks" aria-label="Project links">
           <a href="https://github.com/shiftbloom-studio/birthday-cake-loading" target="_blank" rel="noreferrer">
