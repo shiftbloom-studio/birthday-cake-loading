@@ -33,5 +33,6 @@
   },
   "overrides": {
     "fflate": "^0.8.2"
-  }
+  },
+  "license": "AGPL-3.0-or-later"
 }
