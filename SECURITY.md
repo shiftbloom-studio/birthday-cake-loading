@@ -13,7 +13,7 @@ If you believe you’ve found a security issue, please **do not** open a public 
 Instead, use one of the following:
 
 - [GitHub private vulnerability reporting](https://github.com/shiftbloom-studio/birthday-cake-loading/security/advisories/new) (preferred)
-- Email: `security@shiftbloom.studio`
+- Email: `safety@shiftbloom.studio`
 
 ## Secrets
 
