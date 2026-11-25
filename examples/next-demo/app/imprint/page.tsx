@@ -51,7 +51,7 @@ export default function ImprintPage() {
           <a href="https://github.com/shiftbloom-studio/birthday-cake-loading" target="_blank" rel="noreferrer">
             GitHub
           </a>
-          . This site is not affiliated with Vercel, Cloudflare or any other company it mentions.
+          . This site is not affiliated with Cloudflare or any other company it mentions.
         </p>
       </section>
     </LegalPage>

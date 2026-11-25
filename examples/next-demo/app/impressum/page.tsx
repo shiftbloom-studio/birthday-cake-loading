@@ -54,7 +54,7 @@ export default function ImpressumPage() {
           <a href="https://github.com/shiftbloom-studio/birthday-cake-loading" target="_blank" rel="noreferrer">
             GitHub
           </a>
-          . Die Seite steht in keiner Verbindung zu Vercel, Cloudflare oder anderen genannten Unternehmen.
+          . Die Seite steht in keiner Verbindung zu Cloudflare oder anderen genannten Unternehmen.
         </p>
       </section>
     </LegalPage>
