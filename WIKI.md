@@ -1,11 +1,11 @@
 # Birthday-Cake Loading (BCL) Repository Wiki
 
-This file is the wiki Home. The GitHub wiki welcome line (“Welcome to the birthday-cake-loading wiki!”) is a stub — use the links below instead of treating that page as the source of truth.
+This file is the wiki Home. The GitHub wiki welcome line (“Welcome to the birthday-cake-loading wiki!”) is a stub - use the links below instead of treating that page as the source of truth.
 
-- [README](./README.md) — 30-second setup, quickstart, CakeWatchtower
-- [Recipes](#recipes) — guides that already exist in the repo
-- [CONTRIBUTING](./CONTRIBUTING.md) — clone, install, run the demo, first evening
-- [Next.js demo](./examples/next-demo/README.md) — `examples/next-demo`
+- [README](./README.md) - 30-second setup, quickstart, CakeWatchtower
+- [Recipes](#recipes) - guides that already exist in the repo
+- [CONTRIBUTING](./CONTRIBUTING.md) - clone, install, run the demo, first evening
+- [Next.js demo](./examples/next-demo/README.md) - `examples/next-demo`
 
 Comprehensive reference for the `@shiftbloom-studio/birthday-cake-loading` package: architecture, public API, internals, scripts, and examples. Behavior is defined in `src/` and the files linked below.
 
@@ -40,8 +40,8 @@ Comprehensive reference for the `@shiftbloom-studio/birthday-cake-loading` packa
 
 These are the recipes that exist in the repo today (same list as [README.md § Recipes](./README.md#recipes)):
 
-- [CakeWatch Quickstart](./docs/recipe-cakewatch.md) — minimal `CakeWatch` setup, jank notes, and `CakeLayer` fallbacks
-- [Next.js demo](./examples/next-demo/README.md) — run `examples/next-demo` with `npm install` and `npm run dev` in that directory
+- [CakeWatch Quickstart](./docs/recipe-cakewatch.md) - minimal `CakeWatch` setup, jank notes, and `CakeLayer` fallbacks
+- [Next.js demo](./examples/next-demo/README.md) - run `examples/next-demo` with `npm install` and `npm run dev` in that directory
 
 ## Project Overview
 
@@ -334,4 +334,4 @@ See [SECURITY.md](./SECURITY.md) for the vulnerability disclosure policy.
 
 ## License
 
-GPL‑3.0 — see [LICENSE](./LICENSE).
+GPL‑3.0 - see [LICENSE](./LICENSE).

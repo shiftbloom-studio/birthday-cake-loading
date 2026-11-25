@@ -22,10 +22,10 @@ npm run dev
 
 Docs live in the repo (not on the stub GitHub wiki Home):
 
-- [README.md](./README.md) — quickstart and the [CakeWatch recipe](./docs/recipe-cakewatch.md)
-- [WIKI.md](./WIKI.md) — architecture and API
-- [docs/](./docs/) — short recipes
-- [examples/next-demo/README.md](./examples/next-demo/README.md) — demo notes
+- [README.md](./README.md) - quickstart and the [CakeWatch recipe](./docs/recipe-cakewatch.md)
+- [WIKI.md](./WIKI.md) - architecture and API
+- [docs/](./docs/) - short recipes
+- [examples/next-demo/README.md](./examples/next-demo/README.md) - demo notes
 
 Pick a `good first issue`, comment that you want it, then open a focused PR.
 

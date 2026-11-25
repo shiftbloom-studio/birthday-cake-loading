@@ -1,4 +1,4 @@
-# Birthday-Cake Loading — Next.js Demo
+# Birthday-Cake Loading - Next.js Demo
 
 This is a Next.js App Router demo for [`@shiftbloom-studio/birthday-cake-loading`](https://www.npmjs.com/package/@shiftbloom-studio/birthday-cake-loading) that shows:
 
@@ -18,7 +18,7 @@ npm run dev
 ### Demo tips
 
 - Open the **BCL DevTools** (top-right) to override tiers and inspect live signals/features.
-- Click **Simulate jank** to trigger a long task — watched layers will temporarily swap back to their fallbacks.
+- Click **Simulate jank** to trigger a long task - watched layers will temporarily swap back to their fallbacks.
 
 ## Deploy to Cloudflare Workers
 

@@ -43,9 +43,9 @@ export default function RichMetrics({ label }: { label: string }) {
       </div>
 
       <div className="metaRow">
-        <span>ect {signals.effectiveType ?? "—"}</span>
-        <span>memory {signals.deviceMemoryGB ? `${signals.deviceMemoryGB}GB` : "—"}</span>
-        <span>cores {signals.hardwareConcurrency ?? "—"}</span>
+        <span>ect {signals.effectiveType ?? "-"}</span>
+        <span>memory {signals.deviceMemoryGB ? `${signals.deviceMemoryGB}GB` : "-"}</span>
+        <span>cores {signals.hardwareConcurrency ?? "-"}</span>
       </div>
     </div>
   );

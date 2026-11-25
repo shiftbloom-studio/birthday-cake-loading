@@ -47,7 +47,7 @@ export const ServerSnapshot = async () => {
             <summary>Show the request headers it used</summary>
             <pre className="code">
               <code>
-                {HEADER_KEYS.map(({ label, key }) => `${label}: ${h.get(key) ?? "—"}`).join("\n")}
+                {HEADER_KEYS.map(({ label, key }) => `${label}: ${h.get(key) ?? "-"}`).join("\n")}
               </code>
             </pre>
           </details>
