@@ -121,22 +121,40 @@ code {
   border-bottom: 1px solid var(--ink-08);
 }
 
-.wordmark {
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 20px;
-  letter-spacing: -0.01em;
-  color: var(--ink);
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   text-decoration: none;
 }
 
-.wordmark span {
-  font-weight: 400;
-  color: var(--ink-60);
+.bloom {
+  flex: none;
 }
 
-.wordmark i {
-  font-style: normal;
+.wordmark {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .wordmark {
+    font-size: 1.4rem;
+  }
+}
+
+.wordmark .studio {
+  font-weight: 400;
+  color: rgba(26, 18, 22, 0.6);
+}
+
+/* The seed period is always Bloom Red. */
+.wordmark .seed {
   color: var(--bloom);
 }
 
