@@ -1,0 +1,39 @@
+# Birthday-Cake Loading
+
+> Birthday-Cake Loading (npm: @shiftbloom-studio/birthday-cake-loading) is an open source TypeScript library for capability-first progressive enhancement in React and Next.js. It reads Save-Data, prefers-reduced-motion and prefers-reduced-data, device memory, CPU cores and network quality (Client Hints on the server, browser APIs on the client), assigns one of four tiers (base, lite, rich, ultra) and renders or lazy-loads heavier layers only when the device can afford them. This site is its live demo: the page starts as plain HTML and stacks layers on top for the visitor's tier.
+
+- Install: `npm install @shiftbloom-studio/birthday-cake-loading`
+- Source and full README: https://github.com/shiftbloom-studio/birthday-cake-loading
+- Package: https://www.npmjs.com/package/@shiftbloom-studio/birthday-cake-loading
+- License: AGPL-3.0-or-later (releases up to 0.3.3 were Apache-2.0). Made by shiftbloom studio: https://shiftbloom.studio
+
+## How the tier is chosen
+
+Save-Data or very low memory gives base. Low memory, few cores or a constrained network gives lite. High memory and many cores give ultra. Everything else is rich. Each tier maps to feature flags such as motion, richImages, audio and smoothScroll.
+
+## Entry points
+
+- `@shiftbloom-studio/birthday-cake-loading`: CakeProvider, CakeLayer (render by minimum tier), CakeUpgrade (lazy-load by tier, e.g. on idle), CakeWatch (swaps watched layers back to their fallbacks while frames drop or long tasks pile up), useCakeFeatures, initCakeRuntime (no-provider mode with `data-cake-tier="rich+"` attributes)
+- `@shiftbloom-studio/birthday-cake-loading/server`: getServerCakeBootstrapFromHeaders and getServerFeatures for Next.js server components
+- `@shiftbloom-studio/birthday-cake-loading/devtools`: CakeDevTools, an in-app panel with a session tier override
+
+## Minimal example
+
+```tsx
+"use client";
+import { CakeProvider, CakeLayer } from "@shiftbloom-studio/birthday-cake-loading";
+
+export default function Page() {
+  return (
+    <CakeProvider>
+      <CakeLayer minTier="rich" fallback={<img src="/hero.jpg" alt="" />}>
+        <AnimatedHero />
+      </CakeLayer>
+    </CakeProvider>
+  );
+}
+```
+
+## Pages
+
+- [Live demo](https://birthday-cake.shiftbloom.studio/): shows the tier your device got, the signals behind it and the layers it unlocked.

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./styles.css";
 import { Providers } from "./providers";
+import { homeDescription, homeTitle, siteName, siteUrl, socialImage, structuredData, studioName, studioUrl } from "./_lib/seo";
 import { headers } from "next/headers";
 import {
   getServerCakeBootstrapFromHeaders,
@@ -8,8 +9,24 @@ import {
 } from "@shiftbloom-studio/birthday-cake-loading/server";
 
 export const metadata: Metadata = {
-  title: "Birthday-Cake Loading demo",
-  description: "A page that checks what your device can handle before it adds anything. Live demo of @shiftbloom-studio/birthday-cake-loading."
+  metadataBase: siteUrl,
+  title: { default: homeTitle, template: `%s · ${siteName}` },
+  description: homeDescription,
+  applicationName: `${siteName} demo`,
+  authors: [{ name: studioName, url: studioUrl }],
+  publisher: studioName,
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true, googleBot: { "max-image-preview": "large", "max-snippet": -1 } },
+  openGraph: {
+    type: "website",
+    siteName,
+    locale: "en_US",
+    url: "/",
+    title: homeTitle,
+    description: homeDescription,
+    images: [socialImage]
+  },
+  twitter: { card: "summary_large_image", title: homeTitle, description: homeDescription, images: [socialImage.url] }
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -35,6 +52,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="stylesheet" href="/fonts/brand.css" />
       </head>
       <body>
+        <script
+          type="application/ld+json"
+          // Static strings only; "<" is escaped so the JSON can never close the script tag.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData()).replace(/</g, "\\u003c") }}
+        />
         <a className="skipLink" href="#content">
           Skip to content
         </a>

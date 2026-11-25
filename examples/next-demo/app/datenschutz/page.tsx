@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "../_lib/seo";
 import { LegalPage, OperatorAddress, OperatorEmail } from "../_legal/legal";
 import { operator } from "../_legal/operator";
 
-export const metadata: Metadata = {
-  title: "Datenschutzerklärung — Birthday-Cake Loading Demo",
+export const metadata: Metadata = pageMetadata({
+  title: "Datenschutzerklärung",
   description: "Was die Birthday-Cake Loading Demo verarbeitet und warum.",
-  alternates: { languages: { en: "/privacy", de: "/datenschutz" } }
-};
+  path: "/datenschutz",
+  languages: { en: "/privacy", de: "/datenschutz" },
+  locale: "de_DE"
+});
 
 export default function DatenschutzPage() {
   return (
