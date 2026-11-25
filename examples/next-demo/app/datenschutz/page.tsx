@@ -54,6 +54,14 @@ export default function DatenschutzPage() {
       </section>
 
       <section className="legalSection">
+        <h2>Schriften</h2>
+        <p>
+          Alle Schriften werden von dieser Domain ausgeliefert. Dein Browser kontaktiert keinen Schriftanbieter; unser
+          Worker lädt die Dateien einmal und speichert sie zwischen.
+        </p>
+      </section>
+
+      <section className="legalSection">
         <h2>Client Hints und Gerätesignale</h2>
         <p>
           Die Demo bittet deinen Browser um <strong>HTTP Client Hints</strong> (etwa <code>Save-Data</code>,{" "}

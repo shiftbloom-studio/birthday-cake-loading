@@ -51,6 +51,14 @@ export default function PrivacyPage() {
       </section>
 
       <section className="legalSection">
+        <h2>Fonts</h2>
+        <p>
+          All fonts are served from this domain. Your browser does not contact a font provider; our Worker fetches the
+          files once and caches them.
+        </p>
+      </section>
+
+      <section className="legalSection">
         <h2>Client Hints and device signals</h2>
         <p>
           The demo asks your browser for <strong>HTTP Client Hints</strong> (for example <code>Save-Data</code>,{" "}
