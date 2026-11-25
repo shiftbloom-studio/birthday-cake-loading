@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { operator, OperatorAddress, OperatorEmail, OperatorPhone } from "../_legal/operator";
 
 export const metadata: Metadata = {
   title: "Datenschutzerklärung — Birthday-Cake Loading Demo",
@@ -21,19 +22,10 @@ export default function DatenschutzPage() {
         {/* 1. Verantwortlicher */}
         <section className="legalSection">
           <h2>1. Verantwortlicher</h2>
+          <OperatorAddress />
           <p>
-            Fabian Zimber
-            <br />
-            shiftbloom studio
-            <br />
-            Hamburg, Deutschland
-            <br />
-            E-Mail:{" "}
-            <a href="mailto:fabian@shiftbloom.studio">
-              fabian@shiftbloom.studio
-            </a>
-            <br />
-            Telefon: <a href="tel:+491638552708">+49 (0) 163 8552 708</a>
+            E-Mail: <OperatorEmail />
+            <OperatorPhone />
           </p>
         </section>
 
@@ -205,9 +197,7 @@ export default function DatenschutzPage() {
           </ul>
           <p>
             Zur Ausübung Ihrer Rechte wenden Sie sich bitte an:{" "}
-            <a href="mailto:fabian@shiftbloom.studio">
-              fabian@shiftbloom.studio
-            </a>
+            <OperatorEmail />
           </p>
         </section>
 
@@ -217,24 +207,9 @@ export default function DatenschutzPage() {
           <p>
             Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde
             über die Verarbeitung Ihrer personenbezogenen Daten zu beschweren.
-            Die für Hamburg zuständige Aufsichtsbehörde ist:
+            Zuständig ist die Datenschutz-Aufsichtsbehörde am Sitz des Betreibers.
           </p>
-          <p>
-            Der Hamburgische Beauftragte für Datenschutz und
-            Informationsfreiheit
-            <br />
-            Ludwig-Erhard-Str. 22, 7. OG
-            <br />
-            20459 Hamburg
-            <br />
-            <a
-              href="https://datenschutz-hamburg.de"
-              target="_blank"
-              rel="noreferrer"
-            >
-              https://datenschutz-hamburg.de
-            </a>
-          </p>
+          {operator.authority ? <p>{operator.authority}</p> : null}
         </section>
 
         {/* 12. Änderungen */}

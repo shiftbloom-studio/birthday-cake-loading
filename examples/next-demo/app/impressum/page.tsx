@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { operator, OperatorAddress, OperatorEmail, OperatorPhone } from "../_legal/operator";
 
 export const metadata: Metadata = {
   title: "Impressum — Birthday-Cake Loading Demo",
@@ -19,33 +20,20 @@ export default function ImpressumPage() {
 
         <section className="legalSection">
           <h2>Diensteanbieter</h2>
-          <p>
-            Fabian Zimber
-            <br />
-            shiftbloom studio
-            <br />
-            Hamburg, Deutschland
-          </p>
+          <OperatorAddress />
         </section>
 
         <section className="legalSection">
           <h2>Kontakt</h2>
           <p>
-            E-Mail:{" "}
-            <a href="mailto:fabian@shiftbloom.studio">fabian@shiftbloom.studio</a>
-            <br />
-            Telefon:{" "}
-            <a href="tel:+491638552708">+49 (0) 163 8552 708</a>
+            E-Mail: <OperatorEmail />
+            <OperatorPhone />
           </p>
         </section>
 
         <section className="legalSection">
           <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
-          <p>
-            Fabian Zimber
-            <br />
-            Hamburg, Deutschland
-          </p>
+          <p>{operator.name ?? "–"}</p>
         </section>
 
         <section className="legalSection">
