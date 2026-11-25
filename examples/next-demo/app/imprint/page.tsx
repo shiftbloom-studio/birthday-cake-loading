@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "../_lib/seo";
 import { LegalPage, OperatorAddress, OperatorEmail, OperatorPhone } from "../_legal/legal";
 import { operator } from "../_legal/operator";
 
-export const metadata: Metadata = {
-  title: "Imprint — Birthday-Cake Loading Demo",
+export const metadata: Metadata = pageMetadata({
+  title: "Imprint",
   description: "Legal notice for the Birthday-Cake Loading demo.",
-  alternates: { languages: { en: "/imprint", de: "/impressum" } }
-};
+  path: "/imprint",
+  languages: { en: "/imprint", de: "/impressum" },
+  locale: "en_US"
+});
 
 export default function ImprintPage() {
   return (
