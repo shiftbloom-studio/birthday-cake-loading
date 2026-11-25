@@ -8,8 +8,8 @@ import {
 } from "@shiftbloom-studio/birthday-cake-loading/server";
 
 export const metadata: Metadata = {
-  title: "Birthday-Cake Loading — Next.js Demo",
-  description: "Capability-first progressive enhancement demo for @shiftbloom-studio/birthday-cake-loading."
+  title: "Birthday-Cake Loading demo",
+  description: "A page that checks what your device can handle before it adds anything. Live demo of @shiftbloom-studio/birthday-cake-loading."
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -31,6 +31,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       data-bcl-ect={bootstrap.signals.effectiveType}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="stylesheet" href="/fonts/brand.css" />
+      </head>
       <body>
         <a className="skipLink" href="#content">
           Skip to content

@@ -54,13 +54,9 @@ const Chip = ({ label, on }: { label: string; on: boolean }) => (
 
 const TierPill = ({ tier, override }: { tier: CakeTier; override?: CakeTier }) => (
   <div className="pill">
-    <strong>Tier</strong>
+    <strong>tier</strong>
     <span className="pillValue">{tier}</span>
-    {override ? (
-      <span className="pillValue" style={{ opacity: 0.75 }}>
-        ({override})
-      </span>
-    ) : null}
+    {override ? <span>forced</span> : null}
   </div>
 );
 
@@ -80,33 +76,21 @@ const Code = ({ children }: { children: string }) => (
   </pre>
 );
 
-const StaticHeroVisual = () => (
-  <div className="heroVisualInner" aria-hidden>
-    <div className="cake" />
-  </div>
-);
-
-const AnimatedHeroVisual = () => (
-  <div className="heroVisualInner" aria-hidden>
-    <div className="cake">
-      <div className="sprinkles" aria-hidden>
-        {Array.from({ length: 16 }).map((_, i) => (
-          <span
-            key={i}
-            className="sprinkle"
-            style={{
-              left: `${(i * 17) % 100}%`,
-              top: `${(i * 29) % 100}%`,
-              transform: `rotate(${(i * 33) % 360}deg)`,
-              animationDelay: `${(i % 7) * 120}ms`,
-              animationDuration: `${4200 + (i % 6) * 420}ms`
-            }}
-          />
+const CakeVisual = ({ tier, moving }: { tier: CakeTier; moving: boolean }) => {
+  const reached = CAKE_TIERS.indexOf(tier);
+  return (
+    <div className="heroVisualInner" aria-hidden>
+      <div className={`cake ${moving ? "cakeMoving" : ""}`}>
+        {CAKE_TIERS.map((layer, i) => (
+          <div key={layer} data-layer={layer} className={`cakeLayer ${i <= reached ? "cakeLayerOn" : ""}`}>
+            {layer}
+          </div>
         ))}
+        <span className="cakeSeed" />
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const SignalTable = ({ signals }: { signals: Record<string, unknown> }) => {
   const rows: Array<[string, unknown]> = [
@@ -150,30 +134,24 @@ const SignalTable = ({ signals }: { signals: Record<string, unknown> }) => {
   );
 };
 
+const RICH_TILES = ["#FF2E52", "#FF8FAB", "#FFE9EF", "#C81040", "#1A1216", "#FFC2D3"];
+
 const RichImagesSwap = () => (
   <CakeLayer
     feature="richImages"
     fallback={
       <div className="card upgradeCard">
         <div className="upgradeTitle">
-          <strong>Feature gate: richImages</strong>
+          <strong>richImages</strong>
           <span>fallback</span>
         </div>
         <p className="cardBody">
-          Keep imagery conservative on the lowest tier. When <code>richImages</code> becomes true (lite+), you can safely
-          upgrade image density and presentation.
+          Three grey boxes stand in for small, cheap images. From the lite tier on, <code>richImages</code> turns true
+          and the full set loads.
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginTop: 10 }}>
+        <div className="tiles">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              style={{
-                minHeight: 54,
-                borderRadius: 14,
-                border: "1px solid rgba(255,255,255,0.10)",
-                background: "rgba(255,255,255,0.05)"
-              }}
-            />
+            <div key={i} className="tile" />
           ))}
         </div>
       </div>
@@ -181,25 +159,16 @@ const RichImagesSwap = () => (
   >
     <div className="card upgradeCard cardEmphasis">
       <div className="upgradeTitle">
-        <strong>Feature gate: richImages</strong>
-        <span>enabled</span>
+        <strong>richImages</strong>
+        <span>on</span>
       </div>
       <p className="cardBody">
-        Rich imagery is allowed. This is where you can increase image quality, enable richer art-direction, or swap to
-        heavier components.
+        <code>richImages</code> is on, so this card shows six tiles instead of three. In a real page this is where the
+        2x images or the autoplaying video go.
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginTop: 10 }}>
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div
-            key={i}
-            style={{
-              minHeight: 54,
-              borderRadius: 14,
-              border: "1px solid rgba(255,255,255,0.12)",
-              background:
-                "radial-gradient(120px 120px at 30% 30%, rgba(56,189,248,0.26), transparent 60%), radial-gradient(120px 120px at 70% 70%, rgba(251,113,133,0.22), transparent 60%), rgba(255,255,255,0.06)"
-            }}
-          />
+      <div className="tiles">
+        {RICH_TILES.map((color, i) => (
+          <div key={i} className="tile tileRich" style={{ background: color }} />
         ))}
       </div>
     </div>
@@ -216,50 +185,38 @@ const PrivacyBannerSwap = () => {
       fallback={
         <div className="card upgradeCard">
           <div className="upgradeTitle">
-            <strong>Feature gate: privacyBanner</strong>
+            <strong>privacyBanner</strong>
             <span>fallback</span>
           </div>
           <p className="cardBody">
-            In low-data contexts, keep consent UX minimal. When allowed, you can render a richer preferences banner.
+            On slow connections or with Save-Data on, the consent prompt stays a single line of text.
           </p>
         </div>
       }
     >
       <div className="card upgradeCard cardEmphasis">
         <div className="upgradeTitle">
-          <strong>Feature gate: privacyBanner</strong>
-          <span>enabled</span>
+          <strong>privacyBanner</strong>
+          <span>on</span>
         </div>
         <p className="cardBody">
-          Render a richer consent UI only when BCL says it is safe (rich+ and not Save-Data).
+          From the rich tier, and only without Save-Data, the full preferences panel renders.
         </p>
 
-        <div
-          style={{
-            marginTop: 10,
-            display: "grid",
-            gap: 10,
-            borderRadius: 16,
-            border: "1px solid rgba(255,255,255,0.12)",
-            padding: 12,
-            background: "rgba(0,0,0,0.25)"
-          }}
-        >
-          <label style={{ display: "flex", gap: 10, alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontWeight: 650 }}>Analytics</span>
+        <div className="inset">
+          <label className="toggleRow">
+            <span>Analytics</span>
             <input type="checkbox" checked={analytics} onChange={(e) => setAnalytics(e.target.checked)} />
           </label>
-          <label style={{ display: "flex", gap: 10, alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontWeight: 650 }}>Personalization</span>
+          <label className="toggleRow">
+            <span>Personalization</span>
             <input
               type="checkbox"
               checked={personalization}
               onChange={(e) => setPersonalization(e.target.checked)}
             />
           </label>
-          <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, lineHeight: 1.45 }}>
-            (Demo UI — wire this up to your real consent system.)
-          </div>
+          <div className="insetNote">These switches do nothing here. Connect them to your own consent tool.</div>
         </div>
       </div>
     </CakeLayer>
@@ -302,26 +259,46 @@ export const Demo = () => {
 
   return (
     <>
+      <header className="topbar">
+        <a className="wordmark" href="https://shiftbloom.studio" aria-label="shiftbloom studio">
+          shiftbloom <span>studio</span>
+          <i>.</i>
+        </a>
+        <nav className="topLinks" aria-label="Project links">
+          <a href="https://github.com/shiftbloom-studio/birthday-cake-loading" target="_blank" rel="noreferrer">
+            github
+          </a>
+          <a
+            href="https://www.npmjs.com/package/@shiftbloom-studio/birthday-cake-loading"
+            target="_blank"
+            rel="noreferrer"
+          >
+            npm
+          </a>
+        </nav>
+      </header>
+
       <section className="hero" aria-label="Birthday-Cake Loading demo">
         <div className="heroInner">
           <div>
             <div className="eyebrow">
               <span className="eyebrowDot" aria-hidden />
-              Next.js 16 • React 19 • BCL
+              birthday-cake-loading demo
             </div>
 
-            <h1 className="heroTitle">Capability-first progressive enhancement.</h1>
+            <h1 className="heroTitle">This page checks what your device can handle before it adds anything.</h1>
             <p className="heroLead">
-              Ship a baseline-first page, then selectively upgrade visuals and interactivity when the device (and user
-              preferences) say it is safe.
+              It starts as plain HTML that works on a ten-year-old phone. Then the library reads signals like your
+              connection speed and Save-Data, picks one of four tiers and stacks layers on top. Yours landed on{" "}
+              <strong>{cake.tier}</strong>.
             </p>
 
             <div className="heroActions" role="group" aria-label="Demo actions">
               <button className="button buttonPrimary" type="button" onClick={() => scrollTo("upgrades")}>
-                Jump to upgrades
+                See the upgrades
               </button>
               <button className="button" type="button" onClick={() => simulateJank()}>
-                Simulate jank (watchtower)
+                Block the main thread for 260 ms
               </button>
               <button
                 className="button"
@@ -329,17 +306,17 @@ export const Demo = () => {
                 onClick={() => void playChime()}
                 disabled={!cake.features.audio}
                 aria-disabled={!cake.features.audio}
-                title={cake.features.audio ? "Plays a short WebAudio chime." : "Audio is disabled for this tier/signals."}
+                title={cake.features.audio ? "Plays a short tone through WebAudio." : "Audio is off for this tier."}
               >
-                Play chime
+                Play a sound
               </button>
               <button
                 className="button"
                 type="button"
                 onClick={() => void copyDebug()}
-                title="Copy tier/features/signals JSON"
+                title="Copies tier, features and signals as JSON"
               >
-                {copied ? "Copied!" : "Copy state"}
+                {copied ? "Copied" : "Copy state as JSON"}
               </button>
             </div>
 
@@ -355,19 +332,21 @@ export const Demo = () => {
               feature="motion"
               fallback={
                 <>
-                  <StaticHeroVisual />
+                  <CakeVisual tier={cake.tier} moving={false} />
                   <div className="heroVisualCaption">
-                    <strong>Base visual</strong>
-                    <span>Static (fast, always available).</span>
+                    <strong>Still version</strong>
+                    <span>Shown when motion is off, for example with reduced motion turned on.</span>
                   </div>
                 </>
               }
             >
               <>
-                <AnimatedHeroVisual />
+                <CakeVisual tier={cake.tier} moving />
                 <div className="heroVisualCaption">
-                  <strong>Motion visual</strong>
-                  <span>Gated by the `motion` feature (respects reduced motion).</span>
+                  <strong>Animated version</strong>
+                  <span>
+                    Rendered because <code>motion</code> is on. Each filled layer is a tier your device reached.
+                  </span>
                 </div>
               </>
             </CakeLayer>
@@ -377,17 +356,17 @@ export const Demo = () => {
 
       <section className="section" aria-labelledby="layers-title">
         <h2 className="sectionTitle" id="layers-title">
-          1) Render by tier with <code>CakeLayer</code>
+          Layers by tier with <code>CakeLayer</code>
         </h2>
         <p className="sectionLead">
-          Each layer has a built-in baseline fallback. Try overriding tiers via the BCL DevTools (top-right) to see the
-          swaps.
+          Every layer renders its fallback first. Open the panel in the top right corner, force a different tier and
+          watch the cards below swap.
         </p>
 
         <div className="grid">
           <div className="card cardEmphasis">
-            <h3 className="cardTitle">Base (always)</h3>
-            <p className="cardBody">Readable layout, crisp typography, no assumptions.</p>
+            <h3 className="cardTitle">Base</h3>
+            <p className="cardBody">Always rendered. Text and layout, nothing that needs a fast device.</p>
           </div>
 
           <CakeLayer
@@ -396,14 +375,14 @@ export const Demo = () => {
               <div className="card">
                 <h3 className="cardTitle">Lite layer</h3>
                 <p className="cardBody">
-                  Locked until the tier reaches <strong>lite</strong>.
+                  Waiting for the <strong>lite</strong> tier.
                 </p>
               </div>
             }
           >
             <div className="card cardEmphasis">
               <h3 className="cardTitle">Lite layer</h3>
-              <p className="cardBody">Now we can safely opt into richer imagery and minor UX polish.</p>
+              <p className="cardBody">Better images and small touches, like hover states that animate.</p>
             </div>
           </CakeLayer>
 
@@ -413,14 +392,14 @@ export const Demo = () => {
               <div className="card">
                 <h3 className="cardTitle">Rich layer</h3>
                 <p className="cardBody">
-                  Locked until the tier reaches <strong>rich</strong>.
+                  Waiting for the <strong>rich</strong> tier.
                 </p>
               </div>
             }
           >
             <div className="card cardEmphasis">
               <h3 className="cardTitle">Rich layer</h3>
-              <p className="cardBody">Eligible for client-side upgrades and premium interactions.</p>
+              <p className="cardBody">Client-side upgrades and heavier interaction are fair game now.</p>
             </div>
           </CakeLayer>
 
@@ -430,14 +409,14 @@ export const Demo = () => {
               <div className="card">
                 <h3 className="cardTitle">Ultra layer</h3>
                 <p className="cardBody">
-                  Locked until the tier reaches <strong>ultra</strong>.
+                  Waiting for the <strong>ultra</strong> tier.
                 </p>
               </div>
             }
           >
             <div className="card cardEmphasis">
               <h3 className="cardTitle">Ultra layer</h3>
-              <p className="cardBody">Top-tier device: you can afford the cinematic extras.</p>
+              <p className="cardBody">The extras nobody needs, for the devices that can afford them.</p>
             </div>
           </CakeLayer>
         </div>
@@ -453,11 +432,11 @@ export const Demo = () => {
 
       <section className="section" id="upgrades" aria-labelledby="upgrades-title">
         <h2 className="sectionTitle" id="upgrades-title">
-          2) Lazy-load enhancements with <code>CakeUpgrade</code>
+          Code that loads later with <code>CakeUpgrade</code>
         </h2>
         <p className="sectionLead">
-          Use strategies like <strong>idle</strong>, <strong>visible</strong>, and <strong>interaction</strong> so upgrades
-          load only when needed.
+          <code>CakeUpgrade</code> waits for a trigger before it imports a component. Each card below uses a different
+          one, and none of their code is in the first download.
         </p>
 
         <div className="grid">
@@ -473,7 +452,7 @@ export const Demo = () => {
                   <strong>Idle upgrade</strong>
                   <span>strategy: idle • gate: motion</span>
                 </div>
-                <p className="cardBody">Waits for idle time before loading. Great for non-critical polish.</p>
+                <p className="cardBody">Loads once the browser has nothing else to do, or after 1.2 seconds at the latest.</p>
               </div>
             }
           />
@@ -489,7 +468,7 @@ export const Demo = () => {
                   <strong>Visible upgrade</strong>
                   <span>strategy: visible • gate: rich+</span>
                 </div>
-                <p className="cardBody">Loads only once the card scrolls near the viewport.</p>
+                <p className="cardBody">Loads when this card comes within 260 px of the viewport.</p>
               </div>
             }
           />
@@ -498,14 +477,14 @@ export const Demo = () => {
             minTier="rich"
             strategy="interaction"
             loader={() => import("../_upgrades/interaction-preview")}
-            props={{ prompt: "This module is loaded only after a pointer/focus interaction." }}
+            props={{ prompt: "You pointed at the card, so this component was fetched just now." }}
             fallback={
               <div className="card upgradeCard">
                 <div className="upgradeTitle">
                   <strong>Interaction upgrade</strong>
                   <span>strategy: interaction • gate: rich+</span>
                 </div>
-                <p className="cardBody">Hover, focus, or click to trigger the import.</p>
+                <p className="cardBody">Point at this card or tab to it, and the import starts.</p>
               </div>
             }
           />
@@ -515,14 +494,14 @@ export const Demo = () => {
             watchKey="ultra"
             strategy={{ type: "timeout", ms: 700 }}
             loader={() => import("../_upgrades/ultra-celebration")}
-            props={{ message: "Ultra tier unlocked 🎂" }}
+            props={{ message: "Ultra tier" }}
             fallback={
               <div className="card upgradeCard">
                 <div className="upgradeTitle">
-                  <strong>Ultra celebration</strong>
+                  <strong>Ultra tier</strong>
                   <span>strategy: timeout • gate: ultra</span>
                 </div>
-                <p className="cardBody">A small delight reserved for the highest tier.</p>
+                <p className="cardBody">Only on ultra, 700 ms after the page settles.</p>
               </div>
             }
           />
@@ -542,22 +521,22 @@ export const Demo = () => {
 
       <section className="section" aria-labelledby="signals-title">
         <h2 className="sectionTitle" id="signals-title">
-          3) Signals and feature gates
+          What your browser reported
         </h2>
         <p className="sectionLead">
-          BCL derives features from capability + preferences. For example: <code>motion</code> is off when reduced-motion is
-          on.
+          These values decide the tier. A dash means your browser didn&apos;t share it. With reduced motion turned on,{" "}
+          <code>motion</code> stays off however fast the device is.
         </p>
         <SignalTable signals={cake.signals as unknown as Record<string, unknown>} />
       </section>
 
       <section className="section" aria-labelledby="features-title">
         <h2 className="sectionTitle" id="features-title">
-          4) Feature-first gates
+          Gating on one feature
         </h2>
         <p className="sectionLead">
-          Sometimes you want to gate on a concrete feature (like <code>richImages</code> or <code>privacyBanner</code>)
-          instead of thinking in tiers. BCL lets you do that.
+          Sometimes a tier is too coarse and the real question is narrower, like whether heavy images make sense on
+          this connection. <code>CakeLayer</code> also takes a single feature.
         </p>
 
         <div className="grid">
@@ -565,59 +544,52 @@ export const Demo = () => {
           <PrivacyBannerSwap />
         </div>
       </section>
-
-      <section className="footer" aria-label="Footer">
-        <div>
-          Try the built-in DevTools (top-right) to override tiers. This demo also enables the Watchtower: click{" "}
-          <strong>Simulate jank</strong> and watched layers (hero/metrics/gallery/ultra) will temporarily swap back to
-          their fallbacks.
-        </div>
-        <div style={{ marginTop: 8 }}>
-          <a
-            href="https://www.npmjs.com/package/@shiftbloom-studio/birthday-cake-loading"
-            target="_blank"
-            rel="noreferrer"
-          >
-            npm package
-          </a>
-          {" • "}
-          <a href="https://github.com/shiftbloom-studio/birthday-cake-loading" target="_blank" rel="noreferrer">
-            GitHub
-          </a>
-          {" • "}
-          <span className="footerLegal">
-            <Link href="/imprint">Imprint</Link>
-            {" • "}
-            <Link href="/privacy">Privacy</Link>
-          </span>
-          {" • "}
-          <span>
-            Override tier:{" "}
-            <select
-              value={cake.override ?? "auto"}
-              onChange={(e) => {
-                const v = e.target.value;
-                cake.setTierOverride(v === "auto" ? undefined : (v as CakeTier));
-              }}
-              style={{
-                marginLeft: 6,
-                background: "rgba(255,255,255,0.06)",
-                color: "rgba(255,255,255,0.86)",
-                border: "1px solid rgba(255,255,255,0.14)",
-                borderRadius: 10,
-                padding: "6px 10px"
-              }}
-            >
-              <option value="auto">auto</option>
-              {CAKE_TIERS.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-          </span>
-        </div>
-      </section>
     </>
+  );
+};
+
+export const DemoFooter = () => {
+  const cake = useCake();
+  return (
+    <footer className="footer" aria-label="Footer">
+      <div>
+        The hero, the metrics, the gallery and the ultra card are watched. Press <strong>Block the main thread</strong>{" "}
+        and they drop back to their fallbacks for a few seconds, then recover.
+      </div>
+      <div className="footerLinks">
+        <a
+          href="https://www.npmjs.com/package/@shiftbloom-studio/birthday-cake-loading"
+          target="_blank"
+          rel="noreferrer"
+        >
+          npm
+        </a>
+        <a href="https://github.com/shiftbloom-studio/birthday-cake-loading" target="_blank" rel="noreferrer">
+          source on github
+        </a>
+        <span className="footerLegal">
+          <Link href="/imprint">imprint</Link>
+          <Link href="/privacy">privacy</Link>
+        </span>
+        <label>
+          force tier
+          <select
+            className="select"
+            value={cake.override ?? "auto"}
+            onChange={(e) => {
+              const v = e.target.value;
+              cake.setTierOverride(v === "auto" ? undefined : (v as CakeTier));
+            }}
+          >
+            <option value="auto">auto</option>
+            {CAKE_TIERS.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+    </footer>
   );
 };

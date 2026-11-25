@@ -1,4 +1,4 @@
-import { Demo } from "./_components/demo";
+import { Demo, DemoFooter } from "./_components/demo";
 import { ServerSnapshot } from "./_components/server-snapshot";
 
 export default function Page() {
@@ -6,6 +6,7 @@ export default function Page() {
     <main id="content" className="container">
       <Demo />
       <ServerSnapshot />
+      <DemoFooter />
     </main>
   );
 }
