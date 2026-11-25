@@ -284,9 +284,9 @@ Feature derivation (`src/features.ts`) builds flags from tier + signals:
 
 **Next.js demo** (`examples/next-demo/`):
 
-- App Router demo with `middleware.ts` to send Client Hints.
+- App Router demo with `proxy.ts` to send Client Hints.
 - Local dev: `npm install` + `npm run dev` in that directory.
-- Vercel root directory should be `examples/next-demo`.
+- Deploys to Cloudflare Workers via vinext; see `examples/next-demo/README.md`.
 
 ## Testing
 
