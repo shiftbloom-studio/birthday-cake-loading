@@ -24,7 +24,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=24"
   },
   "type": "module",
   "main": "dist/index.cjs",
