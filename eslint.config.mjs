@@ -1,3 +1,4 @@
+import { fixupPluginRules } from '@eslint/compat';
 import js from '@eslint/js';
 import globals from 'globals';
 import react from 'eslint-plugin-react';
@@ -14,7 +15,8 @@ export default tseslint.config(
             globals: globals.browser,
         },
         plugins: {
-            react: react,
+            // eslint-plugin-react 7.x still calls context methods that ESLint 10 removed.
+            react: fixupPluginRules(react),
             'react-hooks': reactHooks,
         },
         rules: {

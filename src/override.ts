@@ -16,7 +16,7 @@ export const getTierOverride = (): CakeTier | undefined => {
     return undefined;
   }
 
-  let stored: string | null = null;
+  let stored: string | null;
   try {
     stored = sessionStorage.getItem(CAKE_TIER_OVERRIDE_KEY);
   } catch {
