@@ -77,12 +77,14 @@
   "devDependencies": {
     "@changesets/changelog-git": "^1.0.0",
     "@changesets/cli": "^3.0.3",
+    "@eslint/compat": "^2.1.1",
+    "@eslint/js": "^10.0.1",
     "@testing-library/jest-dom": "^8.0.0",
     "@testing-library/react": "^16.3.3",
     "@types/jest": "^30.0.0",
     "@types/react": "^19.3.3",
     "@types/react-dom": "^19.3.0",
-    "eslint": "^9.39.5",
+    "eslint": "^10.15.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
@@ -101,6 +103,9 @@
     "rimraf": "^5.0.0",
     "jsdom": "^26.1.0",
     "minimatch": "^11.0.1",
-    "esbuild": "^0.28.1"
+    "esbuild": "^0.28.1",
+    "eslint-plugin-react": {
+      "eslint": "$eslint"
+    }
   }
 }
