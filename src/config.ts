@@ -8,7 +8,8 @@ export const DEFAULT_CONFIG: CakeConfig = {
     ultraMemoryGB: 8,
     ultraCpuCores: 8,
     minDownlinkMbps: 1.5,
-    maxRttMs: 300
+    maxRttMs: 300,
+    lowBatteryLevel: 0.2
   },
   features: {
     allowMotionOnLite: false,
