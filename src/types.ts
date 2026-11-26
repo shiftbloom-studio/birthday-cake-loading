@@ -32,6 +32,8 @@ export interface CakeSignals {
   userAgentMobile?: boolean;
   online?: boolean;
   prefersContrastMore?: boolean;
+  batteryLevel?: number;
+  charging?: boolean;
 }
 
 export interface CakeBootstrap {
@@ -61,6 +63,7 @@ export interface CakeTierConfig {
   ultraCpuCores: number;
   minDownlinkMbps: number;
   maxRttMs: number;
+  lowBatteryLevel: number | false;
 }
 
 export interface CakeFeatureConfig {
