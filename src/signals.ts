@@ -2,6 +2,10 @@ import type { CakeSignals } from "./types";
 import { isConnectionType } from "./types";
 
 export const hasWindow = () => typeof window !== "undefined";
+// The Battery Status API is async, while detectSignals() is sync, so the
+// latest battery reading is cached here once subscribeToSignalChanges() has
+// asked for it. A later detectSignals() then picks it up.
+let battery: Pick<CakeSignals, "batteryLevel" | "charging"> = {};
 
 export const readConnection = () => {
   if (!hasWindow()) {
@@ -61,7 +65,8 @@ export const detectSignals = (): CakeSignals => {
     prefersReducedData,
     userAgentMobile: uaData?.mobile ?? userAgentMobileFallback,
     online: navigator.onLine,
-    prefersContrastMore
+    prefersContrastMore,
+    ...battery
   };
 };
 
@@ -120,6 +125,7 @@ export const subscribeToSignalChanges = (callback: () => void) => {
   addMediaListener(reducedMotionQuery, callback);
   addMediaListener(reducedDataQuery, callback);
   addMediaListener(contrastQuery, callback);
+  const stopBattery = watchBattery(callback);
 
   let resizeRaf: number | null = null;
   const onResize = () => {
@@ -149,6 +155,7 @@ export const subscribeToSignalChanges = (callback: () => void) => {
     removeMediaListener(reducedMotionQuery, callback);
     removeMediaListener(reducedDataQuery, callback);
     removeMediaListener(contrastQuery, callback);
+    stopBattery();
 
     window.removeEventListener("resize", onResize);
     window.removeEventListener("orientationchange", onResize);
@@ -163,3 +170,42 @@ export const subscribeToSignalChanges = (callback: () => void) => {
     }
   };
 };
+
+function watchBattery(callback: () => void): () => void {
+  // Battery: the API is async and only exists in Chromium-based browsers, so
+  // the fields start out unknown and are filled in here. The callback re-runs
+  // detectSignals(), which reads the cached values.
+  let batteryManager: BatteryManager | undefined;
+  let stopped = false;
+  const onBatteryChange = () => {
+    if (!batteryManager) {
+      return;
+    }
+    battery = { batteryLevel: batteryManager.level, charging: batteryManager.charging };
+    callback();
+  };
+  if (typeof navigator.getBattery !== "function") {
+    return () => undefined;
+  }
+  navigator
+    .getBattery()
+    .then((manager) => {
+      if (stopped) {
+        return;
+      }
+      batteryManager = manager;
+      battery = { batteryLevel: manager.level, charging: manager.charging };
+      manager.addEventListener("levelchange", onBatteryChange);
+      manager.addEventListener("chargingchange", onBatteryChange);
+      callback();
+    })
+    .catch(() => undefined);
+  return () => {
+    stopped = true;
+    if (!batteryManager) {
+      return;
+    }
+    batteryManager.removeEventListener("levelchange", onBatteryChange);
+    batteryManager.removeEventListener("chargingchange", onBatteryChange);
+  };
+}
