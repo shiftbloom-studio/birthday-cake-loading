@@ -31,7 +31,7 @@ jobs:
           cache: npm
 
       - name: Install
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Lint
         run: npm run lint
@@ -63,10 +63,10 @@ jobs:
           cache-dependency-path: examples/next-demo/package-lock.json
 
       - name: Install
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Typecheck
-        run: npx tsc --noEmit
+        run: ./node_modules/.bin/tsc --noEmit
 
       - name: Build for Cloudflare Workers
         run: npm run build:vinext

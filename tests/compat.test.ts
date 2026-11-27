@@ -61,6 +61,7 @@ describe("Browser Compatibility (Hostile Environment)", () => {
     // Let's assume the code checks `typeof window !== 'undefined'`.
     // We can't easily delete global.window in JSDOM safely without breaking Jest.
     // Instead we test the "happy path" of missing features which is the reality for 99% of "compatibility" issues.
+    expect(() => detectSignals()).not.toThrow();
   });
   
   test("should safe-guard against random missing sub-properties", () => {
