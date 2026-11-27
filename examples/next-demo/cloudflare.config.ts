@@ -17,7 +17,8 @@ export default defineConfig({
     previewUrls: false,
     observability: {
       enabled: true,
-      logs: { enabled: true, invocationLogs: true }
+      logs: { enabled: true, invocationLogs: true },
+      issues: { enabled: true }
     },
     assets: {
       htmlHandling: "none",
