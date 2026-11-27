@@ -6,7 +6,7 @@ const TIER_RANK: Record<CakeTier, number> = {
   base: 0,
   lite: 1,
   rich: 2,
-  ultra: 3,
+  ultra: 3
 };
 
 const is2G = (effectiveType?: CakeSignals["effectiveType"]) =>
@@ -64,7 +64,7 @@ export const resolveCakeTier = (
   // the tier, and lowBatteryLevel: false turns the rule off.
   const lowBatteryLevel = tiering.lowBatteryLevel;
   if (
-    lowBatteryLevel !== false &&
+    typeof lowBatteryLevel === "number" &&
     typeof signals.batteryLevel === "number" &&
     signals.charging === false &&
     signals.batteryLevel <= lowBatteryLevel
