@@ -171,11 +171,20 @@ export const subscribeToSignalChanges = (callback: () => void) => {
   };
 };
 
+// The Battery Status API is not part of TypeScript's DOM library, so declare
+// the small part of it this file uses.
+type BatteryManagerLike = {
+  level: number;
+  charging: boolean;
+  addEventListener: (type: "levelchange" | "chargingchange", listener: () => void) => void;
+  removeEventListener: (type: "levelchange" | "chargingchange", listener: () => void) => void;
+};
+
 function watchBattery(callback: () => void): () => void {
   // Battery: the API is async and only exists in Chromium-based browsers, so
   // the fields start out unknown and are filled in here. The callback re-runs
   // detectSignals(), which reads the cached values.
-  let batteryManager: BatteryManager | undefined;
+  let batteryManager: BatteryManagerLike | undefined;
   let stopped = false;
   const onBatteryChange = () => {
     if (!batteryManager) {
@@ -184,10 +193,14 @@ function watchBattery(callback: () => void): () => void {
     battery = { batteryLevel: batteryManager.level, charging: batteryManager.charging };
     callback();
   };
-  if (typeof navigator.getBattery !== "function") {
+  const navigatorWithBattery = navigator as Navigator & {
+    getBattery?: () => Promise<BatteryManagerLike>;
+  };
+
+  if (typeof navigatorWithBattery.getBattery !== "function") {
     return () => undefined;
   }
-  navigator
+  navigatorWithBattery
     .getBattery()
     .then((manager) => {
       if (stopped) {
