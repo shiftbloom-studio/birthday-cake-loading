@@ -41,9 +41,11 @@ const playChime = async () => {
 // Do not copy this pattern into production code.
 const simulateJank = (ms = 260) => {
   const start = performance.now();
+  let sink = 0;
   while (performance.now() - start < ms) {
-    Math.sqrt(Math.random());
+    sink += Math.sqrt(Math.random());
   }
+  return sink;
 };
 
 const Chip = ({ label, on }: { label: string; on: boolean }) => (
