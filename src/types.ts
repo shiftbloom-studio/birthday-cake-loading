@@ -63,7 +63,7 @@ export interface CakeTierConfig {
   ultraCpuCores: number;
   minDownlinkMbps: number;
   maxRttMs: number;
-  lowBatteryLevel: number | false;
+  lowBatteryLevel?: number | false;
 }
 
 export interface CakeFeatureConfig {
