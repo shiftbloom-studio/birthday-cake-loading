@@ -147,7 +147,7 @@ export default function Page() {
 
 ```mermaid
 flowchart TD
-  A[Signals: data saver, memory, CPU, network] --> B{Save-Data or very low memory?}
+  A[Signals: data saver, memory, CPU, network, battery] --> B{Save-Data or very low memory?}
   B -- yes --> C[base]
   B -- no --> D{Low memory/cores or constrained network?}
   D -- yes --> E[lite]
@@ -155,6 +155,7 @@ flowchart TD
   F -- yes --> G[ultra]
   F -- no --> H[rich]
 ```
+A low battery (at or below `tiering.lowBatteryLevel`, 0.2 by default) while not charging steps the tier down one step; set `lowBatteryLevel: false` to turn it off.
 
 ## 📡 Signal flow
 
